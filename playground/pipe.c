@@ -1,5 +1,6 @@
 #include <errno.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 
 int	main(void)
@@ -19,6 +20,8 @@ int	main(void)
 	char buf[100];
 
 	ret = read(fd[0], buf, 99);
+	if (ret < 0)
+		exit(1);
 	buf[ret] = '\0';
 	printf("fd[0] : %d errno : %d\n", ret, errno);
 	printf("buf : %s\n", buf);
