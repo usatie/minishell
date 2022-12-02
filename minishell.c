@@ -21,6 +21,8 @@ bool	is_builtin(const char *cmd)
 	return (false);
 }
 
+int	status;
+
 void	exec_builtin(const char *line)
 {
 	if (strcmp(line, "exit") == 0)
@@ -31,12 +33,12 @@ void	exec_builtin(const char *line)
 	// TODO: export
 	// TODO: unset
 	// TODO: env
-	system(line);
+	status = system(line);
 }
 
 void	exec_non_builtin(const char *line)
 {
-	system(line);
+	status = system(line);
 }
 
 void	exec(const char *line)
@@ -59,5 +61,5 @@ int	main(void)
 		if (*line)
 			exec(line);
 	}
-	return (0);
+	return (status >> 8);
 }
