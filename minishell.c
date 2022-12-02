@@ -6,12 +6,13 @@
 #include <string.h>
 #include <unistd.h>
 
+#define PROMPT "minishell > "
+
 int	main(void)
 {
 	char	*line;
-	char	*prompt;
 
-	prompt = "minishell > ";
-	line = readline(prompt);
-	printf("%s\n", line);
+	line = readline(PROMPT);
+	// printf("%s\n", line);
+	free(line);
 }

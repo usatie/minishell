@@ -6,9 +6,7 @@ assert() {
 	actual=$?
 	echo "$1" | bash >cmp 2>/dev/null
 	expected=$?
-	diff out cmp || terminate=1
-	echo -n "diff OK"
-
+	diff out cmp && echo -n "diff OK" || terminate=1
 	if [ "$actual" = "$expected" ]; then
 		echo ", status OK"
 	else
@@ -21,6 +19,7 @@ assert() {
 	fi
 }
 
+assert ""
 assert "exit"
 assert "pwd"
 assert "ls | grep .c"
