@@ -1,7 +1,14 @@
-#!/bin/bash
+#!/bin/bash -e
 
-echo "exit" | ./minishell > out
-echo "exit" | bash > cmp
-diff out cmp
+assert() {
+	echo -n "$1:"
+	echo "$1" | ./minishell > out
+	echo "$1" | bash > cmp
+	diff out cmp
+	echo "OK"
+}
+
+assert "exit"
+assert "pwd"
 
 echo "OK :D"
