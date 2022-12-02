@@ -10,7 +10,9 @@ int	main(void)
 	while (1)
 	{
 		line = readline("minishell-0.1$ ");
-		if (line && *line)
+		if (line == NULL)
+			break ;
+		if (*line)
 		{
 			if (strcmp(line, "exit") == 0)
 				exit(0);
