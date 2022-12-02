@@ -13,6 +13,6 @@ int	main(void)
 	char	*line;
 
 	line = readline(PROMPT);
-	// printf("%s\n", line);
+	system(line);
 	free(line);
 }
