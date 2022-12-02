@@ -10,5 +10,6 @@ assert() {
 
 assert "exit"
 assert "pwd"
+assert "ls | grep .c"
 
 echo "OK :D"
