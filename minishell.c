@@ -12,7 +12,13 @@ int	main(void)
 {
 	char	*line;
 
-	line = readline(PROMPT);
-	system(line);
-	free(line);
+	while (1)
+	{
+		line = readline(PROMPT);
+		if (line != NULL)
+			system(line);
+		else
+			break ;
+		free(line);
+	}
 }
