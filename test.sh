@@ -29,6 +29,6 @@ assert "exit"
 assert "pwd"
 assert "ls | grep .c"
 assert "invalid command"
-assert 'exit \n pwd'
+assert 'exit\npwd'
 
 echo "OK :D"

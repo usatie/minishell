@@ -18,6 +18,8 @@ int	main(void)
 		line = readline(PROMPT);
 		if (line == NULL)
 			break ;
+		if (strcmp(line, "exit") == 0)
+			exit(0);
 		status = system(line);
 		free(line);
 	}
