@@ -1,14 +1,17 @@
 #!/bin/bash
 
 assert() {
-	echo -n "$1:"
-	echo "$1" | ./minishell >out 2>/dev/null
+	printf "%-30s:" "\"$1\""
+	echo -e "$1" | ./minishell >out 2>/dev/null
 	actual=$?
-	echo "$1" | bash >cmp 2>/dev/null
+	echo -e "$1" | bash >cmp 2>/dev/null
 	expected=$?
-	cat out
-	cat cmp
-	diff out cmp && echo -n "diff OK" || terminate=1
+	diff out cmp >/dev/null && echo -n "diff OK" || terminate=1
+	if [ "$terminate" = "1" ]; then
+		echo "diff NG"
+		exit
+	fi
+
 	if [ "$actual" = "$expected" ]; then
 		echo ", status OK"
 	else
@@ -26,6 +29,6 @@ assert "exit"
 assert "pwd"
 assert "ls | grep .c"
 assert "invalid command"
-assert 'exit\n pwd'
+assert 'exit \n pwd'
 
 echo "OK :D"
