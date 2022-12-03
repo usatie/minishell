@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-
 int globvar = 6;
 
 int main()
@@ -12,7 +11,7 @@ int main()
 
     var = 88;
     puts("before vfolk");
-    // warning : vfork() od deprevated
+    // warning : vfork() is deprecated
     if ((pid = vfork()) < 0)
     {
         puts("vfork() Error!");
