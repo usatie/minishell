@@ -15,10 +15,9 @@ int	main(void)
 	while (1)
 	{
 		line = readline(PROMPT);
-		if (line != NULL)
-			system(line);
-		else
+		if (line == NULL)
 			break ;
+		system(line);
 		free(line);
 	}
 }
