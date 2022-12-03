@@ -11,13 +11,15 @@
 int	main(void)
 {
 	char	*line;
+	int		status;
 
 	while (1)
 	{
 		line = readline(PROMPT);
 		if (line == NULL)
 			break ;
-		system(line);
+		status = system(line);
 		free(line);
 	}
+	return (status >> 8);
 }
