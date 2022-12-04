@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 14:21:05 by susami            #+#    #+#             */
-/*   Updated: 2022/12/04 15:30:34 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/04 16:37:01 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,41 @@
 #include <unistd.h>
 #include <limits.h>
 
+#include "minishell.h"
+
 #define PROMPT "minishell > "
+
+t_token	*new_token(char *pos, size_t len)
+{
+	t_token	*tok;
+
+	tok = calloc(sizeof(t_token), 1);
+	tok->pos = pos;
+	tok->len = len;
+	return (tok);
+}
+
+// "cat -e Makefile"
+//  ^   ^  ^
+t_token	*tokenize(char *line)
+{
+	t_token	*tok;
+	size_t	len;
+
+	// skip white space
+	while (*line == ' ')
+		line++;
+	// count len of token
+	len = 0;
+	while (line[len] && line[len] != ' ')
+		len++;
+	// return if token not found
+	if (len == 0)
+		return (NULL);
+	tok = new_token(line, len);
+	tok->next = tokenize(line + len);
+	return (tok);
+}
 
 // find_path("cat") -> "/bin/cat"
 char	*find_path(char *cmd)
@@ -31,7 +65,10 @@ char	*find_path(char *cmd)
 	if (cmd[0] != '/')
 		strcpy(path, "/bin/");
 	strcat(path, cmd);
-	return (path);
+	if (access(path, X_OK) == 0)
+		return (path);
+	free(path);
+	return (NULL);
 }
 
 // Return exit status
@@ -49,11 +86,18 @@ int	ft_system(char *cmd)
 	size_t		i;
 
 	tok = tokenize(cmd);
-	path = find_path(tok->str);
+	if (tok == NULL)
+		return (0);
+	// line = " cat -e Makefile"
+	// tok->pos = "cat -e Makefile"
+	// tok->len = 3
+	path = find_path(strndup(tok->pos, tok->len));
+	if (path == NULL)
+		return (127 << 8);
 	i = 0;
 	while (tok)
 	{
-		argv[i] = tok->str;
+		argv[i] = strndup(tok->pos, tok->len);
 		i++;
 		tok = tok->next;
 	}
@@ -62,8 +106,13 @@ int	ft_system(char *cmd)
 	if (child_pid < 0)
 		return (-1);
 	else if (child_pid == 0)
-		execve(path, argv, environ);
-	waitpid(child_pid, &status, 0);
+	{
+		if (execve(path, argv, environ) < 0)
+			printf("execve failed.\n");
+		exit(1);
+	}
+	if (waitpid(child_pid, &status, 0) < 0)
+		printf("waitpid failed.\n");
 	return (status);
 }
 
@@ -82,5 +131,5 @@ int	main(void)
 		status = ft_system(line);
 		free(line);
 	}
-	return (status >> 8);
+	return (WEXITSTATUS(status));
 }

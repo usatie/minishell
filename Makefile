@@ -1,10 +1,11 @@
-NAME	= minishell
-CC      = cc
-CFLAGS	= -Wall -Werror -Wextra # compiler flags
-LIBS    = -lreadline            # linker flags
-SRCS    = src/minishell.c
-OBJDIR  = obj
-OBJS    = $(SRCS:src/%.c=$(OBJDIR)/%.o)
+NAME	  = minishell
+CC        = cc
+CFLAGS	  = -Wall -Werror -Wextra # compiler flags
+INCLUDES  = -I include
+LIBS      = -lreadline            # linker flags
+SRCS      = src/minishell.c
+OBJDIR    = obj
+OBJS      = $(SRCS:src/%.c=$(OBJDIR)/%.o)
 
 all: $(NAME)
 
@@ -13,7 +14,7 @@ $(NAME): $(OBJS)
 
 $(OBJDIR)/%.o: src/%.c
 	mkdir -p $(OBJDIR)
-	$(CC) $^ -o $@ -c $(CFLAGS)
+	$(CC) $^ -o $@ -c $(CFLAGS) $(INCLUDES)
 
 test: $(NAME)
 	./tests/test.sh

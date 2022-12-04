@@ -20,7 +20,7 @@ assert() {
 	if [ "$actual" = "$expected" ]; then
 		echo ", status OK"
 	else
-		echo ", status NG"
+		echo ", status NG. Expected $expected, actual is $actual"
 		terminate=1
 	fi
 
