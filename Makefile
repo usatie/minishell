@@ -5,6 +5,6 @@ $(NAME): minishell.c
 	gcc minishell.c -o $(NAME) -lreadline $(CFLAGS)
 
 test: $(NAME)
-	bash test.sh
+	./tests/test.sh
 
 .PHONY: test
