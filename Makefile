@@ -1,8 +1,10 @@
 NAME	= minishell
 CFLAGS	= -Wall -Werror -Wextra
+SRCS    = src/minishell.c
+OBJS    = $(SRCS:%.c=%.o)
 
-$(NAME): minishell.c
-	gcc minishell.c -o $(NAME) -lreadline $(CFLAGS)
+$(NAME): $(OBJS)
+	gcc $(OBJS) -o $(NAME) -lreadline $(CFLAGS)
 
 test: $(NAME)
 	./tests/test.sh
