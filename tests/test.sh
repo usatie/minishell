@@ -11,7 +11,7 @@ assert() {
 	actual=$?
 	echo -e "$1" | bash >cmp 2>/dev/null
 	expected=$?
-	diff out cmp >/dev/null && echo -n "diff OK" || terminate=1
+	diff out cmp && echo -n "diff OK" || terminate=1
 	if [ "$terminate" = "1" ]; then
 		echo "diff NG"
 		cleanup
@@ -32,9 +32,11 @@ assert() {
 assert ""
 assert "exit"
 assert "pwd"
-assert "ls | grep .c"
 assert "invalid command"
 assert 'exit\npwd'
+assert 'cat Makefile'
+assert 'cat -e Makefile'
+# assert "ls -l"  # This test fails because out and cmp affects the output of `ls`
 
 echo "OK :D"
 cleanup

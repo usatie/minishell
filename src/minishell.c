@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 14:21:05 by susami            #+#    #+#             */
-/*   Updated: 2022/12/04 15:11:11 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/04 15:30:34 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,22 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <limits.h>
 
 #define PROMPT "minishell > "
+
+// find_path("cat") -> "/bin/cat"
+char	*find_path(char *cmd)
+{
+	char	*path;
+
+	path = malloc(PATH_MAX);
+	path[0] = '\0';
+	if (cmd[0] != '/')
+		strcpy(path, "/bin/");
+	strcat(path, cmd);
+	return (path);
+}
 
 // Return exit status
 // The system() function returns the exit status of the shell as returned by 
@@ -29,17 +43,26 @@ int	ft_system(char *cmd)
 	extern char	**environ;
 	int			status;
 	pid_t		child_pid;
-	char		*argv[4];
+	char		*argv[100];
+	char		*path;
+	t_token		*tok;
+	size_t		i;
 
-	argv[0] = "sh";
-	argv[1] = "-c";
-	argv[2] = cmd;
-	argv[3] = NULL;
+	tok = tokenize(cmd);
+	path = find_path(tok->str);
+	i = 0;
+	while (tok)
+	{
+		argv[i] = tok->str;
+		i++;
+		tok = tok->next;
+	}
+	argv[i] = NULL;
 	child_pid = fork();
 	if (child_pid < 0)
 		return (-1);
 	else if (child_pid == 0)
-		execve("/bin/sh", argv, environ);
+		execve(path, argv, environ);
 	waitpid(child_pid, &status, 0);
 	return (status);
 }
