@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 14:21:05 by susami            #+#    #+#             */
-/*   Updated: 2022/12/04 14:35:40 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/04 15:11:11 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,61 +20,28 @@
 
 #define PROMPT "minishell > "
 
-// line = " exit  | echo   'hello' >out "
-// tok1.str ^
-// tok1.len 4
-// tok1.next tok2
-//
-// tok2           ^
-// tok2.len 1
-// tok2.next tok3
-//
-// tok3             ^
-// tok3.len 4
-// tok3.next tok4
-//
-// ...
-//
-// lexer/tokenizer  : {"exit", "|", "echo", "'hello'"}
-// parser           : { {"cmd" : "exit", "argv": {"exit", NULL}, ""....},
-//                      {"cmd" : "echo", "argv": {"echo", "'hello'", NULL},
-//                      "1": "out", "0": "stdin", "2": "stderr"} }
-
-typedef struct s_token	t_token;
-
-struct s_token {
-	char	*str;
-	size_t	len;
-	t_token	*next;
-};
-
-t_token	*new_token(char *str, size_t len)
+// Return exit status
+// The system() function returns the exit status of the shell as returned by 
+// waitpid(2), or -1 if an error occurred when invoking fork(2) or waitpid(2). 
+// A return value of 127 means the execution of the shell failed.
+int	ft_system(char *cmd)
 {
-	t_token	*tok;
+	extern char	**environ;
+	int			status;
+	pid_t		child_pid;
+	char		*argv[4];
 
-	tok = calloc(sizeof(t_token), 1);
-	tok->str = str;
-	tok->len = len;
-	return (tok);
-}
-
-t_token	*tokenize(char *line);
-
-t_token	*tokenize(char *line)
-{
-	t_token	*tok;
-	size_t	len;
-
-	while (*line == ' ')
-		line++;
-	len = 0;
-	while (line[len] != ' ' && line[len] != '\0')
-		len++;
-	if (len == 0)
-		return (NULL);
-	tok = new_token(line, len);
-	tok->next = tokenize(line + len);
-	return (tok);
+	argv[0] = "sh";
+	argv[1] = "-c";
+	argv[2] = cmd;
+	argv[3] = NULL;
+	child_pid = fork();
+	if (child_pid < 0)
+		return (-1);
+	else if (child_pid == 0)
+		execve("/bin/sh", argv, environ);
+	waitpid(child_pid, &status, 0);
+	return (status);
 }
 
 int	main(void)
@@ -87,15 +54,9 @@ int	main(void)
 		line = readline(PROMPT);
 		if (line == NULL)
 			break ;
-		t_token	*tok = tokenize(line);
-		while (tok)
-		{
-			printf("[%s], %zu\n", tok->str, tok->len);
-			tok = tok->next;
-		}
 		if (strcmp(line, "exit") == 0)
 			exit(0);
-		status = system(line);
+		status = ft_system(line);
 		free(line);
 	}
 	return (status >> 8);
