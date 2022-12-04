@@ -6,8 +6,7 @@ RM = rm -rf
 
 
 SRCS =  cpyerr_sys.c \
-		cpypr_exit.c \
-	   
+		cpywait.c \
 
 
 OBJS = $(SRCS:.c=.o)
