@@ -2,6 +2,7 @@
 minishell
 cmp
 out
+*.swp
 
 # Prerequisites
 *.d
