@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 14:21:05 by susami            #+#    #+#             */
-/*   Updated: 2022/12/04 16:37:01 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/05 13:39:23 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,13 +107,13 @@ int	ft_system(char *cmd)
 		return (-1);
 	else if (child_pid == 0)
 	{
-		if (execve(path, argv, environ) < 0)
-			printf("execve failed.\n");
-		exit(1);
+		execve(path, argv, environ);
+		exit(127);
 	}
 	if (waitpid(child_pid, &status, 0) < 0)
-		printf("waitpid failed.\n");
-	return (status);
+		return (-1);
+	else
+		return (status);
 }
 
 int	main(void)
