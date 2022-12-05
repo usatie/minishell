@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 14:21:05 by susami            #+#    #+#             */
-/*   Updated: 2022/12/05 14:59:19 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/05 15:02:22 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,6 +134,8 @@ int	main(void)
 		line = readline(PROMPT);
 		if (line == NULL)
 			break ;
+		if (*line)
+			add_history(line);
 		if (strcmp(line, "exit") == 0)
 			exit(0);
 		status = ft_system(line);
