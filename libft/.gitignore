@@ -1,0 +1,13 @@
+*
+!.gitignore
+!ft_*.c
+!*.h
+!Makefile
+!include
+!ft_printf
+!ft_argparse
+!ft_error_functions
+!get_next_line
+!test.sh
+!test-all.sh
+!rsync.sh

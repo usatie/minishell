@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 14:21:05 by susami            #+#    #+#             */
-/*   Updated: 2022/12/05 13:39:23 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/05 13:56:26 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include <unistd.h>
 #include <limits.h>
 
+#include "libft.h"
 #include "minishell.h"
 
 #define PROMPT "minishell > "
@@ -59,14 +60,20 @@ t_token	*tokenize(char *line)
 char	*find_path(char *cmd)
 {
 	char	*path;
+	char	*envpath;
+	char	**paths;
 
-	path = malloc(PATH_MAX);
-	path[0] = '\0';
-	if (cmd[0] != '/')
-		strcpy(path, "/bin/");
-	strcat(path, cmd);
-	if (access(path, X_OK) == 0)
-		return (path);
+	path = calloc(sizeof(char), PATH_MAX);
+
+	envpath = getenv("PATH");
+	paths = ft_split(envpath, ':');
+	for (int i = 0; paths[i]; i++) {
+		strcpy(path, paths[i]);
+		strcat(path, "/");
+		strcat(path, cmd);
+		if (access(path, X_OK) == 0)
+			return (path);
+	}
 	free(path);
 	return (NULL);
 }
