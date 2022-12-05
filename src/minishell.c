@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 14:21:05 by susami            #+#    #+#             */
-/*   Updated: 2022/12/05 15:02:22 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/05 15:44:15 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,18 +24,22 @@
 
 #define PROMPT "minishell > "
 
-t_token	*new_token(char *pos, size_t len)
+t_token	*new_token(char *pos, size_t len, t_token_type type)
 {
 	t_token	*tok;
 
 	tok = calloc(sizeof(t_token), 1);
 	tok->pos = pos;
 	tok->len = len;
+	tok->type = type;
 	return (tok);
 }
 
 // "cat -e Makefile"
 //  ^   ^  ^
+
+// 'echo "hello"'
+//  ^    ^ 
 t_token	*tokenize(char *line)
 {
 	t_token	*tok;
@@ -44,15 +48,23 @@ t_token	*tokenize(char *line)
 	// skip white space
 	while (*line == ' ')
 		line++;
+	if (*line == '\0')
+		return (NULL);
 	// count len of token
 	len = 0;
-	while (line[len] && line[len] != ' ')
-		len++;
-	// return if token not found
-	if (len == 0)
-		return (NULL);
-	tok = new_token(line, len);
-	tok->next = tokenize(line + len);
+	// Single character punctuator
+	if (strchr("\"'|<>", *line) != NULL)
+	{
+		tok = new_token(line, 1, TK_PUNCT);
+		tok->next = tokenize(line + 1);
+	}
+	else // Identifier
+	{
+		while (line[len] && line[len] != ' ' && strchr("\"'|<>", line[len]) == NULL)
+			len++;
+		tok = new_token(line, len, TK_IDENT);
+		tok->next = tokenize(line + len);
+	}
 	return (tok);
 }
 
@@ -105,6 +117,11 @@ int	ft_system(char *cmd)
 	i = 0;
 	while (tok)
 	{
+		if (tok->type == TK_PUNCT)
+		{
+			tok = tok->next;
+			continue ;
+		}
 		argv[i] = strndup(tok->pos, tok->len);
 		i++;
 		tok = tok->next;
