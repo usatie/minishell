@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#include "apue.h"
+#include "../apue.h"
 
 void pr_exit(int status)
 {
