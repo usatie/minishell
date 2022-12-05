@@ -37,6 +37,7 @@ assert 'exit\npwd'
 assert 'cat Makefile'
 assert 'cat -e Makefile'
 assert 'grep mini Makefile'
+assert '/bin/cat Makefile'
 # assert "ls -l"  # This test fails because out and cmp affects the output of `ls`
 
 echo "OK :D"
