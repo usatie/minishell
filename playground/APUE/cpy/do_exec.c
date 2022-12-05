@@ -13,7 +13,7 @@ int main(){
     }
 
     else if (pid == 0){
-        if (execl("/home/sar/bin/testinterp", "testinterp", "myarg1", "MYARG2", (char *)0) < 0){
+        if (execl("/Users/hato/programming/42-CURSUS/code/hello_minishell/playground/APUE/bin/testinterp", "testinterp", "myarg1", "MYARG2", (char *)0) < 0){
             err_sys("execel error");
         }
     }
