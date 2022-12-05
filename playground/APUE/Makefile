@@ -1,12 +1,12 @@
 NAME	= apue
 
-CC = gcc
+CC 		= gcc
 CFLAGS	= # -Wall -Werror -Wextra
-RM = rm -rf
+RM 		= rm -rf
 
 
-SRCS =  cpyerr_sys.c \
-		cpyexec.c \
+SRCS 	= cpy/err_sys.c \
+		  own/echoall.c \
 		# cpywait.c \
 
 
