@@ -5,8 +5,9 @@ CFLAGS	= # -Wall -Werror -Wextra
 RM 		= rm -rf
 
 
-SRCS 	= cpy/err_sys.c \
-		  own/echoall.c \
+SRCS 	= cpy/do_exec.c \
+		  cpy/err_sys.c \
+		#   own/echoall.c \
 		# cpywait.c \
 
 
