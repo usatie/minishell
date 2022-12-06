@@ -30,8 +30,15 @@ t_token	*tokenize(char *line)
 	while (*line)
 	{
 		// space
-		while (isspace(*line))
-			line++;
+		if (isspace(*line))
+		{
+			start = line;
+			while (isspace(*line))
+				line++;
+			cur->next = new_token(line, line - start, TK_SPACE);
+			cur = cur->next;
+			continue ;
+		}
 		// Single character punctuator
 		if (strchr("|<>", *line) != NULL)
 		{
