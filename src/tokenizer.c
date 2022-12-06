@@ -61,6 +61,28 @@ t_token	*tokenize(char *line)
 			cur = cur->next;
 			continue ;
 		}
+		// Double Quotes
+		if (*line == '"')
+		{
+			// echo "hello"
+			// ^    ^
+			// tok->pos = "\"hello""
+			// tok->content = "hello"
+			start = line;
+			line++;
+			while (*line != '\0' && *line != '"')
+				line++;
+			if (*line != '"')
+			{
+				printf("Error\n");
+				exit(1);
+			}
+			line++;
+			cur->next = new_token(start, line - start, TK_DOUBLE_QUOTES);
+			cur->next->content = strndup(start + 1, line - start - 2); // Exclude quotes
+			cur = cur->next;
+			continue ;
+		}
 		// Identifier
 		start = line;
 		while (*line != '\0' && !isspace(*line))

@@ -6,7 +6,7 @@ cleanup() {
 }
 
 assert() {
-	printf "%-30s:" "\"$1\""
+	printf "%-30s:" "[$1]"
 	echo -e "$1" | ./minishell >out 2>/dev/null
 	actual=$?
 	echo -e "$1" | bash >cmp 2>/dev/null
@@ -40,6 +40,9 @@ assert 'grep mini Makefile'
 assert '/bin/cat Makefile'
 assert './tests/hello.sh'
 assert "echo 'hello'"
+assert 'echo "hello"'
+assert "echo '\"hello\"'"
+assert "echo \"'hello'\""
 # assert "ls -l"  # This test fails because out and cmp affects the output of `ls`
 
 echo "OK :D"
