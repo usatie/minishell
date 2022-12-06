@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 14:21:05 by susami            #+#    #+#             */
-/*   Updated: 2022/12/06 15:42:11 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/06 16:37:07 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,29 @@
 
 #define PROMPT "minishell > "
 
+// find_path("cat") -> "/bin/cat"
+char	*find_path(char *cmd)
+{
+	char	*path;
+	char	*envpath;
+	char	**paths;
+
+	if (access(cmd, X_OK) == 0)
+		return (cmd);
+	path = calloc(sizeof(char), PATH_MAX);
+	envpath = getenv("PATH");
+	paths = ft_split(envpath, ':');
+	for (int i = 0; paths[i]; i++) {
+		strcpy(path, paths[i]);
+		strcat(path, "/");
+		strcat(path, cmd);
+		if (access(path, X_OK) == 0)
+			return (path);
+	}
+	free(path);
+	return (NULL);
+}
+
 // Return exit status
 // The system() function returns the exit status of the shell as returned by 
 // waitpid(2), or -1 if an error occurred when invoking fork(2) or waitpid(2). 
@@ -40,6 +63,11 @@ int	ft_system(char *cmd)
 	if (tok == NULL)
 		return (0);
 	node = parse(tok);
+	if (node == NULL)
+		return (127 << 8);
+	if (node->cmd == NULL)
+		return (0);
+	node->path = find_path(node->cmd);
 	if (node == NULL)
 		return (127 << 8);
 	child_pid = fork();

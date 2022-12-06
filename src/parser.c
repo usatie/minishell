@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 15:34:36 by susami            #+#    #+#             */
-/*   Updated: 2022/12/06 15:43:07 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/06 16:38:14 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,43 +18,20 @@
 #include "libft.h"
 #include "minishell.h"
 
-t_node	*new_node(char *path, char **argv)
+t_node	*new_node(char *cmd, char **argv)
 {
 	t_node	*node;
 
-	node = malloc(sizeof(t_node));
-	node->path = path;
+	node = calloc(sizeof(t_node), 1);
+	node->cmd = cmd;
 	node->argv = argv;
 	return (node);
 }
 
-// find_path("cat") -> "/bin/cat"
-char	*find_path(char *cmd)
-{
-	char	*path;
-	char	*envpath;
-	char	**paths;
-
-	if (access(cmd, X_OK) == 0)
-		return (cmd);
-	path = calloc(sizeof(char), PATH_MAX);
-	envpath = getenv("PATH");
-	paths = ft_split(envpath, ':');
-	for (int i = 0; paths[i]; i++) {
-		strcpy(path, paths[i]);
-		strcat(path, "/");
-		strcat(path, cmd);
-		if (access(path, X_OK) == 0)
-			return (path);
-	}
-	free(path);
-	return (NULL);
-}
-
 t_node	*parse(t_token *tok)
 {
-	char		*argv[100];
-	char		*path;
+	char		*argv[100] = {};
+	char		*cmd;
 	size_t		i;
 
 	// line = " cat -e Makefile"
@@ -62,21 +39,22 @@ t_node	*parse(t_token *tok)
 	// tok->len = 3
 	while (tok->type == TK_PUNCT || tok->type == TK_SPACE)
 		tok = tok->next;
-	path = find_path(tok->content);
-	if (path == NULL)
-		return (NULL);
+	cmd = tok->content;
 	i = 0;
-	while (tok)
+	while (tok->type != TK_EOF)
 	{
 		if (tok->type == TK_PUNCT || tok->type == TK_SPACE)
 		{
 			tok = tok->next;
+			i++;
 			continue ;
 		}
-		argv[i] = tok->content;
-		i++;
+		if (argv[i] == NULL)
+			argv[i] = tok->content;
+		else
+			argv[i] = ft_strjoin(argv[i], tok->content);
 		tok = tok->next;
 	}
-	argv[i] = NULL;
-	return (new_node(path, argv));
+	argv[i+1] = NULL;
+	return (new_node(cmd, argv));
 }

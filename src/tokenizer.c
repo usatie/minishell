@@ -92,7 +92,7 @@ t_token	*tokenize(char *line)
 		}
 		// Identifier
 		start = line;
-		while (*line != '\0' && !isspace(*line))
+		while (*line != '\0' && !isspace(*line) && *line != '\'' && *line != '"')
 			line++;
 		if (line - start > 0)
 		{
@@ -104,6 +104,7 @@ t_token	*tokenize(char *line)
 		printf("Error\n");
 		exit(1);
 	}
+	cur->next = new_token(line, 0, TK_EOF);
 	return (head.next);
 }
 

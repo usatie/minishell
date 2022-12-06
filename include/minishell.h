@@ -6,13 +6,14 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/06 15:41:34 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/06 16:36:26 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# include <stdio.h>
 # include <stddef.h>
 
 typedef struct s_token		t_token;
@@ -24,6 +25,7 @@ enum e_token_type {
 	TK_SINGLE_QUOTES, // Single quoted string
 	TK_DOUBLE_QUOTES, // Double quoted string
 	TK_SPACE, // Space
+	TK_EOF, // EOF
 };
 
 struct s_token {
@@ -36,6 +38,7 @@ struct s_token {
 
 typedef struct s_node	t_node;
 struct s_node {
+	char	*cmd;
 	char	*path;
 	char	**argv;
 };

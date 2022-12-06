@@ -44,6 +44,7 @@ assert 'echo "hello"'
 assert "echo '\"hello\"'"
 assert "echo \"'hello'\""
 assert "     pwd   "
+assert "echo hello'world'\"42\""
 # assert "ls -l"  # This test fails because out and cmp affects the output of `ls`
 
 echo "OK :D"
