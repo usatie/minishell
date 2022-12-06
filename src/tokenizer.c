@@ -1,5 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
+#include <stdio.h>
 #include "minishell.h"
 
 t_token	*new_token(char *pos, size_t len, t_token_type type)
@@ -20,29 +22,57 @@ t_token	*new_token(char *pos, size_t len, t_token_type type)
 //  ^    ^ 
 t_token	*tokenize(char *line)
 {
-	t_token	*tok;
-	size_t	len;
+	t_token	head = {};
+	t_token	*cur;
+	char	*start;
 
-	// skip white space
-	while (*line == ' ')
-		line++;
-	if (*line == '\0')
-		return (NULL);
-	// count len of token
-	len = 0;
-	// Single character punctuator
-	if (strchr("\"'|<>", *line) != NULL)
+	cur = &head;
+	while (*line)
 	{
-		tok = new_token(line, 1, TK_PUNCT);
-		tok->next = tokenize(line + 1);
+		// space
+		if (isspace(*line))
+			line++;
+		// Single character punctuator
+		if (strchr("|<>", *line) != NULL)
+		{
+			cur->next = new_token(line, 1, TK_PUNCT);
+			cur = cur->next;
+			continue ;
+		}
+		// Single Quotes
+		if (*line == '\'')
+		{
+			// echo 'hello'
+			// ^    ^
+			// tok->pos = "'hello'"
+			// tok->content = "hello"
+			start = line;
+			line++;
+			while (*line != '\0' && *line != '\'')
+				line++;
+			if (*line != '\'')
+			{
+				printf("Error\n");
+				exit(1);
+			}
+			line++;
+			cur->next = new_token(start, line - start, TK_SINGLE_QUOTES);
+			cur->next->content = strndup(start + 1, line - start - 2); // Exclude quotes
+			cur = cur->next;
+			continue ;
+		}
+		// Identifier
+		start = line;
+		while (*line != '\0' && !isspace(*line))
+			line++;
+		if (line - start > 0)
+		{
+			cur->next = new_token(start, line - start, TK_IDENT);
+			cur->next->content = strndup(start, line - start);
+			cur = cur->next;
+			continue ;
+		}
 	}
-	else // Identifier
-	{
-		while (line[len] && line[len] != ' ' && strchr("\"'|<>", line[len]) == NULL)
-			len++;
-		tok = new_token(line, len, TK_IDENT);
-		tok->next = tokenize(line + len);
-	}
-	return (tok);
+	return (head.next);
 }
 

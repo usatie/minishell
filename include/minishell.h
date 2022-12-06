@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/06 13:52:52 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/06 14:20:42 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,12 @@ typedef enum e_token_type	t_token_type;
 enum e_token_type {
 	TK_IDENT, // Identifier
 	TK_PUNCT, // Punctuator
+	TK_SINGLE_QUOTES, // Single quoted string
 };
 
 struct s_token {
 	char			*pos;
+	char			*content; // Only for quoted string
 	size_t			len;
 	t_token_type	type;
 	t_token			*next;

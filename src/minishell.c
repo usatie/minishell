@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 14:21:05 by susami            #+#    #+#             */
-/*   Updated: 2022/12/06 13:52:34 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/06 14:21:07 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int	ft_system(char *cmd)
 	// line = " cat -e Makefile"
 	// tok->pos = "cat -e Makefile"
 	// tok->len = 3
-	path = find_path(strndup(tok->pos, tok->len));
+	path = find_path(tok->content);
 	if (path == NULL)
 		return (127 << 8);
 	i = 0;
@@ -78,7 +78,7 @@ int	ft_system(char *cmd)
 			tok = tok->next;
 			continue ;
 		}
-		argv[i] = strndup(tok->pos, tok->len);
+		argv[i] = tok->content;
 		i++;
 		tok = tok->next;
 	}
