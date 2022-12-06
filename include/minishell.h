@@ -6,12 +6,14 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/06 15:21:09 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/06 15:41:34 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
+
+# include <stddef.h>
 
 typedef struct s_token		t_token;
 typedef enum e_token_type	t_token_type;
@@ -32,6 +34,16 @@ struct s_token {
 	t_token			*next;
 };
 
+typedef struct s_node	t_node;
+struct s_node {
+	char	*path;
+	char	**argv;
+};
+
+
 // tokenizer.c
 t_token	*tokenize(char *line);
+
+// parser.c
+t_node	*parse(t_token *tok);
 #endif

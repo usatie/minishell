@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 14:21:05 by susami            #+#    #+#             */
-/*   Updated: 2022/12/06 15:30:02 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/06 15:42:11 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,29 +24,6 @@
 
 #define PROMPT "minishell > "
 
-// find_path("cat") -> "/bin/cat"
-char	*find_path(char *cmd)
-{
-	char	*path;
-	char	*envpath;
-	char	**paths;
-
-	if (access(cmd, X_OK) == 0)
-		return (cmd);
-	path = calloc(sizeof(char), PATH_MAX);
-	envpath = getenv("PATH");
-	paths = ft_split(envpath, ':');
-	for (int i = 0; paths[i]; i++) {
-		strcpy(path, paths[i]);
-		strcat(path, "/");
-		strcat(path, cmd);
-		if (access(path, X_OK) == 0)
-			return (path);
-	}
-	free(path);
-	return (NULL);
-}
-
 // Return exit status
 // The system() function returns the exit status of the shell as returned by 
 // waitpid(2), or -1 if an error occurred when invoking fork(2) or waitpid(2). 
@@ -56,41 +33,21 @@ int	ft_system(char *cmd)
 	extern char	**environ;
 	int			status;
 	pid_t		child_pid;
-	char		*argv[100];
-	char		*path;
 	t_token		*tok;
-	size_t		i;
+	t_node		*node;
 
 	tok = tokenize(cmd);
 	if (tok == NULL)
 		return (0);
-	// line = " cat -e Makefile"
-	// tok->pos = "cat -e Makefile"
-	// tok->len = 3
-	while (tok->type == TK_PUNCT || tok->type == TK_SPACE)
-		tok = tok->next;
-	path = find_path(tok->content);
-	if (path == NULL)
+	node = parse(tok);
+	if (node == NULL)
 		return (127 << 8);
-	i = 0;
-	while (tok)
-	{
-		if (tok->type == TK_PUNCT || tok->type == TK_SPACE)
-		{
-			tok = tok->next;
-			continue ;
-		}
-		argv[i] = tok->content;
-		i++;
-		tok = tok->next;
-	}
-	argv[i] = NULL;
 	child_pid = fork();
 	if (child_pid < 0)
 		return (-1);
 	else if (child_pid == 0)
 	{
-		execve(path, argv, environ);
+		execve(node->path, node->argv, environ);
 		exit(127);
 	}
 	if (waitpid(child_pid, &status, 0) < 0)

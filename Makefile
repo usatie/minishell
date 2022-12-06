@@ -6,7 +6,8 @@ LIBFTDIR  = libft
 LIBFT     = libft/libft.a
 LIBS      = -lreadline -lft -L libft          # linker flags
 SRCS      = src/minishell.c\
-            src/tokenizer.c
+            src/tokenizer.c\
+            src/parser.c
 OBJDIR    = obj
 OBJS      = $(SRCS:src/%.c=$(OBJDIR)/%.o)
 
