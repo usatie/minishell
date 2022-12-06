@@ -30,7 +30,7 @@ t_token	*tokenize(char *line)
 	while (*line)
 	{
 		// space
-		if (isspace(*line))
+		while (isspace(*line))
 			line++;
 		// Single character punctuator
 		if (strchr("|<>", *line) != NULL)
@@ -94,6 +94,8 @@ t_token	*tokenize(char *line)
 			cur = cur->next;
 			continue ;
 		}
+		printf("Error\n");
+		exit(1);
 	}
 	return (head.next);
 }
