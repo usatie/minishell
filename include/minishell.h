@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/05 15:31:20 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/06 13:52:52 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,4 +28,6 @@ struct s_token {
 	t_token			*next;
 };
 
+// tokenizer.c
+t_token	*tokenize(char *line);
 #endif
