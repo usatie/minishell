@@ -6,13 +6,12 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 14:21:05 by susami            #+#    #+#             */
-/*   Updated: 2022/12/06 16:37:07 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/08 22:26:34 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <errno.h>
 #include <readline/readline.h>
-#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -57,25 +56,23 @@ int	ft_system(char *cmd)
 	int			status;
 	pid_t		child_pid;
 	t_token		*tok;
-	t_node		*node;
+	t_command	*command;
 
 	tok = tokenize(cmd);
 	if (tok == NULL)
 		return (0);
-	node = parse(tok);
-	if (node == NULL)
+	command = parse(tok);
+	if (command == NULL)
 		return (127 << 8);
-	if (node->cmd == NULL)
+	if (command->argv[0] == NULL)
 		return (0);
-	node->path = find_path(node->cmd);
-	if (node == NULL)
-		return (127 << 8);
+	command->path = find_path(command->argv[0]);
 	child_pid = fork();
 	if (child_pid < 0)
 		return (-1);
 	else if (child_pid == 0)
 	{
-		execve(node->path, node->argv, environ);
+		execve(command->path, command->argv, environ);
 		exit(127);
 	}
 	if (waitpid(child_pid, &status, 0) < 0)

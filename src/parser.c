@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 15:34:36 by susami            #+#    #+#             */
-/*   Updated: 2022/12/06 16:38:14 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/08 22:20:57 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,35 +18,31 @@
 #include "libft.h"
 #include "minishell.h"
 
-t_node	*new_node(char *cmd, char **argv)
+t_command	*new_command(char **argv)
 {
-	t_node	*node;
+	t_command	*command;
 
-	node = calloc(sizeof(t_node), 1);
-	node->cmd = cmd;
-	node->argv = argv;
-	return (node);
+	command = calloc(sizeof(t_command), 1);
+	command->argv = argv;
+	return (command);
 }
 
-t_node	*parse(t_token *tok)
+t_command	*parse(t_token *tok)
 {
 	char		*argv[100] = {};
-	char		*cmd;
 	size_t		i;
 
 	// line = " cat -e Makefile"
 	// tok->pos = "cat -e Makefile"
 	// tok->len = 3
-	while (tok->type == TK_PUNCT || tok->type == TK_SPACE)
-		tok = tok->next;
-	cmd = tok->content;
 	i = 0;
 	while (tok->type != TK_EOF)
 	{
-		if (tok->type == TK_PUNCT || tok->type == TK_SPACE)
+		if (tok->type == TK_SPACE)
 		{
+			if (argv[i])
+				i++;
 			tok = tok->next;
-			i++;
 			continue ;
 		}
 		if (argv[i] == NULL)
@@ -56,5 +52,5 @@ t_node	*parse(t_token *tok)
 		tok = tok->next;
 	}
 	argv[i+1] = NULL;
-	return (new_node(cmd, argv));
+	return (new_command(argv));
 }

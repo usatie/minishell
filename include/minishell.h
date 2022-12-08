@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/06 16:36:26 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/08 22:21:16 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <stdio.h>
 # include <stddef.h>
+# include <stdbool.h>
 
 typedef struct s_token		t_token;
 typedef enum e_token_type	t_token_type;
@@ -36,9 +37,8 @@ struct s_token {
 	t_token			*next;
 };
 
-typedef struct s_node	t_node;
-struct s_node {
-	char	*cmd;
+typedef struct s_command	t_command;
+struct s_command {
 	char	*path;
 	char	**argv;
 };
@@ -48,5 +48,5 @@ struct s_node {
 t_token	*tokenize(char *line);
 
 // parser.c
-t_node	*parse(t_token *tok);
+t_command	*parse(t_token *tok);
 #endif
