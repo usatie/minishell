@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/08 22:21:16 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/08 23:45:16 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,20 +21,35 @@ typedef struct s_token		t_token;
 typedef enum e_token_type	t_token_type;
 
 enum e_token_type {
-	TK_IDENT, // Identifier
 	TK_PUNCT, // Punctuator
-	TK_SINGLE_QUOTES, // Single quoted string
-	TK_DOUBLE_QUOTES, // Double quoted string
-	TK_SPACE, // Space
+	TK_STRING, // String (plain text, single quotes, double quotes)
 	TK_EOF, // EOF
+};
+
+typedef struct s_str		t_str;
+typedef enum e_str_kind		t_str_kind;
+
+enum e_str_kind {
+	STR_PLAIN, // str
+	STR_SINGLE, // 'str'
+	STR_DOUBLE, // "str"
+};
+
+struct s_str {
+	t_str_kind	kind;
+	char		*pos;
+	size_t		len;
+	t_str		*next;
 };
 
 struct s_token {
 	char			*pos;
-	char			*content; // Only for quoted string
 	size_t			len;
 	t_token_type	type;
 	t_token			*next;
+
+	// Only for TK_STRING
+	t_str			*str;
 };
 
 typedef struct s_command	t_command;

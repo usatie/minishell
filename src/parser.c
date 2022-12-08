@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 15:34:36 by susami            #+#    #+#             */
-/*   Updated: 2022/12/08 22:20:57 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/08 23:48:48 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,13 @@
 #include "libft.h"
 #include "minishell.h"
 
+typedef enum e_node_kind	t_node_kind;
+enum e_node_kind {
+	ND_STR,
+	ND_PLAIN_STR,
+	ND_EXPANDABLE,
+};
+
 t_command	*new_command(char **argv)
 {
 	t_command	*command;
@@ -25,6 +32,42 @@ t_command	*new_command(char **argv)
 	command = calloc(sizeof(t_command), 1);
 	command->argv = argv;
 	return (command);
+}
+
+char	*strjoin_all(t_str *str)
+{
+	size_t	len;
+	char	*s;
+	t_str	*cur;
+
+	len = 0;
+	cur = str;
+	while (cur)
+	{
+		len += cur->len;
+		if (cur->kind != STR_PLAIN)
+			len -= 2;
+		cur = cur->next;
+	}
+	cur = str;
+	s = malloc(len + 1);
+	len = 0;
+	while (cur)
+	{
+		if (cur->kind == STR_PLAIN)
+		{
+			memcpy(s + len, cur->pos, cur->len);
+			len += cur->len;
+		}
+		else
+		{
+			memcpy(s + len, cur->pos + 1, cur->len - 2);
+			len += cur->len - 2;
+		}
+		cur = cur->next;
+	}
+	s[len] = '\0';
+	return (s);
 }
 
 t_command	*parse(t_token *tok)
@@ -38,18 +81,12 @@ t_command	*parse(t_token *tok)
 	i = 0;
 	while (tok->type != TK_EOF)
 	{
-		if (tok->type == TK_SPACE)
+		if (tok->type == TK_STRING)
 		{
-			if (argv[i])
-				i++;
+			argv[i] = strjoin_all(tok->str);
 			tok = tok->next;
-			continue ;
+			i++;
 		}
-		if (argv[i] == NULL)
-			argv[i] = tok->content;
-		else
-			argv[i] = ft_strjoin(argv[i], tok->content);
-		tok = tok->next;
 	}
 	argv[i+1] = NULL;
 	return (new_command(argv));
