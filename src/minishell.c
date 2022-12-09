@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 14:21:05 by susami            #+#    #+#             */
-/*   Updated: 2022/12/09 11:42:19 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/09 14:11:53 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <limits.h>
+#include <fcntl.h>
 
 #include "libft.h"
 #include "minishell.h"
@@ -46,18 +47,20 @@ char	*find_path(char *cmd)
 	return (NULL);
 }
 
-t_command	*new_command(char **argv)
+t_command	*new_command(char **argv, char *redirect_out)
 {
 	t_command	*command;
 
 	command = calloc(sizeof(t_command), 1);
 	command->argv = argv;
+	command->redirect_out = redirect_out;
 	return (command);
 }
 
 t_command	*gen_command(t_node *node)
 {
 	char	*argv[100] = {};
+	char	*redirect_out = NULL;
 	t_node	*elm;
 	size_t	i;
 
@@ -70,10 +73,14 @@ t_command	*gen_command(t_node *node)
 			argv[i] = convert_to_word(elm->str);
 			i++;
 		}
+		if (elm->kind == ND_REDIRECT_OUTPUT)
+		{
+			redirect_out = convert_to_word(elm->str);
+		}
 		elm = elm->next;
 	}
 	argv[i+1] = NULL;
-	return (new_command(argv));
+	return (new_command(argv, redirect_out));
 }
 
 // Return exit status
@@ -104,6 +111,8 @@ int	ft_system(char *cmd)
 		return (-1);
 	else if (child_pid == 0)
 	{
+		int fd = open(command->redirect_out, O_WRONLY);
+		dup2(fd, STDOUT_FILENO);
 		execve(command->path, command->argv, environ);
 		exit(127);
 	}

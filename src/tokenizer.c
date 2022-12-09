@@ -15,14 +15,14 @@ t_str	*new_str(char *pos, size_t len, t_str_kind kind)
 	return (s);
 }
 
-t_token	*new_token(char *pos, size_t len, t_token_type type)
+t_token	*new_token(char *pos, size_t len, t_token_kind kind)
 {
 	t_token	*tok;
 
 	tok = calloc(sizeof(t_token), 1);
 	tok->pos = pos;
 	tok->len = len;
-	tok->type = type;
+	tok->kind = kind;
 	return (tok);
 }
 

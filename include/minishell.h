@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/09 11:29:46 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/09 13:58:43 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@
 # include <stdbool.h>
 
 typedef struct s_token		t_token;
-typedef enum e_token_type	t_token_type;
+typedef enum e_token_kind	t_token_kind;
 
-enum e_token_type {
+enum e_token_kind {
 	TK_PUNCT, // Punctuator
 	TK_STRING, // String (plain text, single quotes, double quotes)
 	TK_EOF, // EOF
@@ -45,7 +45,7 @@ struct s_str {
 struct s_token {
 	char			*pos;
 	size_t			len;
-	t_token_type	type;
+	t_token_kind	kind;
 	t_token			*next;
 
 	// Only for TK_STRING
@@ -56,7 +56,7 @@ typedef struct s_node		t_node;
 typedef enum e_node_kind	t_node_kind;
 enum e_node_kind {
 	ND_WORD,
-	ND_REDIRECTION,
+	ND_REDIRECT_OUTPUT,
 	ND_CMD,
 };
 
@@ -68,7 +68,7 @@ struct s_node {
 	// Only for ND_CMD
 	t_node		*elements;
 
-	// Only for ND_WORD;
+	// Only for ND_WORD and ND_REDIRECT_*;
 	t_str		*str;
 };
 
@@ -76,6 +76,7 @@ typedef struct s_command	t_command;
 struct s_command {
 	char	*path;
 	char	**argv;
+	char	*redirect_out;
 };
 
 // tokenizer.c
