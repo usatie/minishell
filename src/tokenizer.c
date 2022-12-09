@@ -31,6 +31,115 @@ bool	startswith(char *p, char *q)
 	return (memcmp(p, q, strlen(q)) == 0);
 }
 
+bool	consume_space(char **rest, char *line)
+{
+	if (isspace(*line))
+	{
+		while (isspace(*line))
+			line++;
+		*rest = line;
+		return (true);
+	}
+	return (false);
+}
+
+t_str	*single_quotes(char **rest, char *line)
+{
+	t_str	*str;
+	char	*start;
+	
+	start = line;
+	line++; // skip the opening quote
+	while (*line != '\0' && *line != '\'')
+		line++;
+	if (*line != '\'')
+	{
+		printf("Unclosed single quote\n");
+		exit(1);
+	}
+	line++;
+	str = new_str(start, line - start, STR_SINGLE);
+	*rest = line;
+	return (str);
+}
+
+t_str	*double_quotes(char **rest, char *line)
+{
+	t_str	*str;
+	char	*start;
+	
+	start = line;
+	line++; // skip the opening quote
+	while (*line != '\0' && *line != '"')
+		line++;
+	if (*line != '"')
+	{
+		printf("Unclosed single quote\n");
+		exit(1);
+	}
+	line++;
+	str = new_str(start, line - start, STR_DOUBLE);
+	*rest = line;
+	return (str);
+}
+
+t_str	*plain_text(char **rest, char *line)
+{
+	t_str	*str;
+	char	*start;
+	
+	start = line;
+	while (*line != '\0' && !isspace(*line) && *line != '\'' && *line != '"')
+		line++;
+	if (line - start > 0)
+	{
+		str = new_str(start, line - start, STR_PLAIN);
+		*rest = line;
+		return (str);
+	}
+	printf("Unexpected character\n");
+	exit(1);
+}
+
+t_token	*string(char **rest, char *line)
+{
+	t_token	*tok;
+	t_str	head;
+	t_str	*cur;
+
+	tok = new_token(line, 0, TK_STRING);
+	cur = &head;
+	while (*line && !isspace(*line))
+	{
+		// Single Quotes
+		if (*line == '\'')
+		{
+			cur->next = single_quotes(&line, line);
+			cur = cur->next;
+			tok->len += cur->len;
+			continue ;
+		}
+		// Double Quotes
+		else if (*line == '"')
+		{
+			cur->next = double_quotes(&line, line);
+			cur = cur->next;
+			tok->len += cur->len;
+			continue ;
+		}
+		// Identifier
+		else
+		{
+			cur->next = plain_text(&line, line);
+			cur = cur->next;
+			tok->len += cur->len;
+			continue ;
+		}
+	}
+	tok->str = head.next;
+	*rest = line;
+	return (tok);
+}
 
 // "cat -e Makefile"
 //  ^   ^  ^
@@ -41,19 +150,13 @@ t_token	*tokenize(char *line)
 {
 	t_token	head = {};
 	t_token	*cur;
-	char	*start;
 
 	cur = &head;
 	while (*line)
 	{
 		// space
-		if (isspace(*line))
-		{
-			start = line;
-			while (isspace(*line))
-				line++;
+		if (consume_space(&line, line))
 			continue ;
-		}
 		// Multi character punctuator
 		if (startswith(line, "<<") || startswith(line, ">>"))
 		{
@@ -71,71 +174,11 @@ t_token	*tokenize(char *line)
 			continue ;
 		}
 		// String
-		t_str	sh;
-		t_str	*s = &sh;
-		cur->next = new_token(line, 0, TK_STRING);
-		cur = cur->next;
-		while (*line && !isspace(*line))
 		{
-			// Single Quotes
-			if (*line == '\'')
-			{
-				// echo 'hello'
-				// ^    ^
-				// tok->pos = "'hello'"
-				// tok->content = "hello"
-				start = line;
-				line++;
-				while (*line != '\0' && *line != '\'')
-					line++;
-				if (*line != '\'')
-				{
-					printf("Unclosed single quote\n");
-					exit(1);
-				}
-				line++;
-				s->next = new_str(start, line - start, STR_SINGLE);
-				s = s->next;
-				cur->len += s->len;
-				continue ;
-			}
-			// Double Quotes
-			if (*line == '"')
-			{
-				// echo "hello"
-				// ^    ^
-				// tok->pos = "\"hello""
-				// tok->content = "hello"
-				start = line;
-				line++;
-				while (*line != '\0' && *line != '"')
-					line++;
-				if (*line != '"')
-				{
-					printf("Unclosed double quote\n");
-					exit(1);
-				}
-				line++;
-				s->next = new_str(start, line - start, STR_DOUBLE);
-				s = s->next;
-				cur->len += s->len;
-				continue ;
-			}
-			// Identifier
-			start = line;
-			while (*line != '\0' && !isspace(*line) && *line != '\'' && *line != '"')
-				line++;
-			if (line - start > 0)
-			{
-				s->next = new_str(start, line - start, STR_PLAIN);
-				s = s->next;
-				cur->len += s->len;
-				continue ;
-			}
-			printf("Unexpected character\n");
-			exit(1);
+			cur->next = string(&line, line);
+			cur = cur->next;
+			continue ;
 		}
-		cur->str = sh.next;
 	}
 	cur->next = new_token(line, 0, TK_EOF);
 	return (head.next);

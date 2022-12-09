@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 15:34:36 by susami            #+#    #+#             */
-/*   Updated: 2022/12/08 23:48:48 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/09 08:53:15 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,17 @@
 #include "libft.h"
 #include "minishell.h"
 
+typedef struct s_node		t_node;
 typedef enum e_node_kind	t_node_kind;
 enum e_node_kind {
-	ND_STR,
-	ND_PLAIN_STR,
-	ND_EXPANDABLE,
+	ND_WORD,
+	ND_CMD_ELEM,
+	ND_CMD,
+};
+
+struct s_node {
+	t_node_kind	kind;
+	t_node		*next;
 };
 
 t_command	*new_command(char **argv)
@@ -34,41 +40,22 @@ t_command	*new_command(char **argv)
 	return (command);
 }
 
-char	*strjoin_all(t_str *str)
-{
-	size_t	len;
-	char	*s;
-	t_str	*cur;
+/*
+EBNF syntax
 
-	len = 0;
-	cur = str;
-	while (cur)
-	{
-		len += cur->len;
-		if (cur->kind != STR_PLAIN)
-			len -= 2;
-		cur = cur->next;
-	}
-	cur = str;
-	s = malloc(len + 1);
-	len = 0;
-	while (cur)
-	{
-		if (cur->kind == STR_PLAIN)
-		{
-			memcpy(s + len, cur->pos, cur->len);
-			len += cur->len;
-		}
-		else
-		{
-			memcpy(s + len, cur->pos + 1, cur->len - 2);
-			len += cur->len - 2;
-		}
-		cur = cur->next;
-	}
-	s[len] = '\0';
-	return (s);
-}
+redirection       = '>' word
+                  | '<' word
+			      | '>>' word
+			      | '<<' word
+
+command_element   = word
+                  | redirection
+
+command           = command_element*
+*/
+t_node	*redirection(t_token **rest, t_token *tok);
+t_node	*command_element(t_token **rest, t_token *tok);
+t_node	*command(t_token **rest, t_token *tok);
 
 t_command	*parse(t_token *tok)
 {
@@ -83,7 +70,7 @@ t_command	*parse(t_token *tok)
 	{
 		if (tok->type == TK_STRING)
 		{
-			argv[i] = strjoin_all(tok->str);
+			argv[i] = convert_to_word(tok->str);
 			tok = tok->next;
 			i++;
 		}
