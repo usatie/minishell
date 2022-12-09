@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 15:34:36 by susami            #+#    #+#             */
-/*   Updated: 2022/12/09 14:09:46 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/09 15:09:31 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,7 @@ bool	equal(t_token *tok, char *op)
 t_token	*skip_kind(t_token *tok, t_token_kind kind)
 {
 	if (tok->kind != kind)
-	{
-		printf("Expected %d kind, but got %d kind\n", kind, tok->kind);
-		exit(1);
-	}
+		err_exit("Invalid kind\n");
 	return (tok->next);
 }
 
@@ -64,11 +61,13 @@ command_element   = word
                   | redirection
 
 command           = command_element*
+
 */
-//static t_node	*redirection(t_token **rest, t_token *tok);
+static t_node	*redirection(t_token **rest, t_token *tok);
 static t_node	*command_element(t_token **rest, t_token *tok);
 static t_node	*command(t_token **rest, t_token *tok);
 
+// '<' '>' '<<' '>>' word
 t_node	*parse(t_token *tok)
 {
 	return (command(&tok, tok));
@@ -94,6 +93,7 @@ static t_node	*command_element(t_token **rest, t_token *tok)
 {
 	t_node	*node;
 
+	// word
 	if (tok->kind == TK_STRING)
 	{
 		node = new_node(ND_WORD, tok);
@@ -101,20 +101,32 @@ static t_node	*command_element(t_token **rest, t_token *tok)
 		*rest = tok->next;
 		return (node);
 	}
+	// redirection
+	// < > << >>
 	if (tok->kind == TK_PUNCT)
+		return (redirection(rest, tok));
+	err_exit("Invalid token");
+}
+
+static t_node	*redirection(t_token **rest, t_token *tok)
+{
+	t_node	*node;
+
+	// '>' word
+	if (equal(tok, ">"))
 	{
-		if (equal(tok, ">"))
+		node = new_node(ND_REDIRECT_OUTPUT, tok);
+		tok = tok->next;
+		if (tok->kind == TK_STRING)
 		{
-			node = new_node(ND_REDIRECT_OUTPUT, tok);
-			tok = tok->next;
-			if (tok->kind == TK_STRING)
-			{
-				node->str = tok->str;
-				*rest = tok->next;
-				return (node);
-			}
+			node->str = tok->str;
+			*rest = tok->next;
+			return (node);
 		}
+		err_exit("Invalid token, expected word");
 	}
-	printf("Error\n");
-	exit(1);
+	// '<' word
+	// '>>' word
+	// '<<' word
+	err_exit("Invalid token");
 }

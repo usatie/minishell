@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/09 13:58:43 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/09 15:03:11 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,9 @@ struct s_command {
 	char	**argv;
 	char	*redirect_out;
 };
+
+// error.c
+void	err_exit(char *s) __attribute__((noreturn));
 
 // tokenizer.c
 t_token	*tokenize(char *line);
