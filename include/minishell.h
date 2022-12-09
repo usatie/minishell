@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/09 16:51:58 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/09 18:20:07 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ typedef enum e_token_kind	t_token_kind;
 enum e_token_kind {
 	TK_PUNCT, // Punctuator
 	TK_STRING, // String (plain text, single quotes, double quotes)
+	TK_NUM, // Integer Literal
 	TK_EOF, // EOF
 };
 
@@ -50,6 +51,9 @@ struct s_token {
 
 	// Only for TK_STRING
 	t_str			*str;
+
+	// Only for TK_NUM
+	long			val;
 };
 
 typedef struct s_node		t_node;
@@ -70,13 +74,17 @@ struct s_node {
 
 	// Only for ND_WORD and ND_REDIRECT_*;
 	t_str		*str;
+
+	// Only for ND_REDIRECT_*
+	int			fd;
 };
 
 typedef struct s_command	t_command;
 struct s_command {
 	char	*path;
-	char	**argv;
-	char	*redirect_out;
+	char	*argv[100];
+	char	*out_path;
+	int		out_fd;
 };
 
 // error.c

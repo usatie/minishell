@@ -34,7 +34,7 @@ assert_output() {
 
 	diff "$2".out "$2".cmp && echo ", diff $2 OK" || terminate=1
 	if [ "$terminate" = "1" ]; then
-		echo "diff $2 NG"
+		echo ", diff $2 NG"
 		cleanup $2
 		exit
 	fi
@@ -86,6 +86,7 @@ assert "echo hello'world'\"42\""
 assert 'ec"ho" he"ll"o'
 assert_output 'echo hello >hello.txt' 'hello.txt'
 assert_output 'echo hello 1>hello.txt' 'hello.txt'
+assert_output 'invalid 2>hello.txt' 'hello.txt'
 # assert "ls -l"  # This test fails because out and cmp affects the output of `ls`
 
 echo "OK :D"

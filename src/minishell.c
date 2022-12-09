@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 14:21:05 by susami            #+#    #+#             */
-/*   Updated: 2022/12/09 16:59:50 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/09 18:27:44 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,8 @@ char	*find_path(char *cmd)
 	path = calloc(sizeof(char), PATH_MAX);
 	envpath = getenv("PATH");
 	paths = ft_split(envpath, ':');
-	for (int i = 0; paths[i]; i++) {
+	for (int i = 0; paths[i]; i++)
+	{
 		strcpy(path, paths[i]);
 		strcat(path, "/");
 		strcat(path, cmd);
@@ -47,40 +48,31 @@ char	*find_path(char *cmd)
 	return (NULL);
 }
 
-t_command	*new_command(char **argv, char *redirect_out)
-{
-	t_command	*command;
-
-	command = calloc(sizeof(t_command), 1);
-	command->argv = argv;
-	command->redirect_out = redirect_out;
-	return (command);
-}
-
 t_command	*gen_command(t_node *node)
 {
-	char	*argv[100] = {};
-	char	*redirect_out = NULL;
+	t_command	*command;
 	t_node	*elm;
 	size_t	i;
 
 	i = 0;
+	command = calloc(sizeof(t_command), 1);
 	elm = node->elements;
 	while (elm)
 	{
 		if (elm->kind == ND_WORD)
 		{
-			argv[i] = convert_to_word(elm->str);
+			command->argv[i] = convert_to_word(elm->str);
 			i++;
 		}
 		if (elm->kind == ND_REDIRECT_OUTPUT)
 		{
-			redirect_out = convert_to_word(elm->str);
+			command->out_path = convert_to_word(elm->str);
+			command->out_fd = elm->fd;
 		}
 		elm = elm->next;
 	}
-	argv[i+1] = NULL;
-	return (new_command(argv, redirect_out));
+	command->argv[i + 1] = NULL;
+	return (command);
 }
 
 // Return exit status
@@ -92,14 +84,26 @@ int	fork_and_exec(t_command *command)
 	extern char	**environ;
 	int			status;
 	pid_t		child_pid;
+	int			fdout;
 
+	// Redirect output before fork()
+	if (command->out_path)
+	{
+		fdout = open(command->out_path, O_CREAT | O_WRONLY, 0644);
+		if (fdout < 0)
+			err_exit("open()");
+		dup2(fdout, command->out_fd);
+	}
+	// Find path
+	command->path = find_path(command->argv[0]);
+	if (command->path == NULL)
+		err_exit("command not found.\n");
+	// Fork and Exec
 	child_pid = fork();
 	if (child_pid < 0)
 		fatal_exit("fork()");
 	else if (child_pid == 0)
 	{
-		int fd = open(command->redirect_out, O_CREAT | O_WRONLY, 0644);
-		dup2(fd, STDOUT_FILENO);
 		execve(command->path, command->argv, environ);
 		fatal_exit("execve()");
 	}
@@ -127,9 +131,6 @@ t_command	*parse_command(char *cmd)
 	// empty line
 	if (command->argv[0] == NULL)
 		exit(0);
-	command->path = find_path(command->argv[0]);
-	if (command->path == NULL)
-		err_exit("command not found.\n");
 	return (command);
 }
 
@@ -155,7 +156,6 @@ int	parse_and_exec(char *cmd)
 	else
 		return (status);
 }
-
 
 int	main(void)
 {

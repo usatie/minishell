@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 15:34:36 by susami            #+#    #+#             */
-/*   Updated: 2022/12/09 15:09:31 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/09 18:14:32 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,10 @@ t_token	*skip_kind(t_token *tok, t_token_kind kind)
 /*
 EBNF syntax
 
-redirection       = '>' word
-                  | '<' word
-			      | '>>' word
-			      | '<<' word
+redirection       = num? '>' word
+                  | num? '<' word
+			      | num? '>>' word
+			      | num? '<<' word
 
 command_element   = word
                   | redirection
@@ -102,20 +102,27 @@ static t_node	*command_element(t_token **rest, t_token *tok)
 		return (node);
 	}
 	// redirection
-	// < > << >>
-	if (tok->kind == TK_PUNCT)
-		return (redirection(rest, tok));
-	err_exit("Invalid token");
+	return (redirection(rest, tok));
 }
 
 static t_node	*redirection(t_token **rest, t_token *tok)
 {
 	t_node	*node;
+	int		fd;
 
+	fd = -1;
+	if (tok->kind == TK_NUM)
+	{
+		fd = tok->val;
+		tok = tok->next;
+	}
 	// '>' word
 	if (equal(tok, ">"))
 	{
 		node = new_node(ND_REDIRECT_OUTPUT, tok);
+		node->fd = fd;
+		if (node->fd < 0)
+			node->fd = STDOUT_FILENO;
 		tok = tok->next;
 		if (tok->kind == TK_STRING)
 		{

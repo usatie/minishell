@@ -166,6 +166,15 @@ t_token	*tokenize(char *line)
 			line++;
 			continue ;
 		}
+		// Number
+		if (isdigit(*line))
+		{
+			cur->next = new_token(line, 0, TK_NUM);
+			cur = cur->next;
+			cur->val = strtol(line, &line, 10);
+			cur->len = line - cur->pos;
+			continue ;
+		}
 		// String
 		{
 			cur->next = string(&line, line);
