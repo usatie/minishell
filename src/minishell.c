@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 14:21:05 by susami            #+#    #+#             */
-/*   Updated: 2022/12/09 15:06:46 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/09 15:33:42 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ int	ft_system(char *cmd)
 		return (-1);
 	else if (child_pid == 0)
 	{
-		int fd = open(command->redirect_out, O_WRONLY);
+		int fd = open(command->redirect_out, O_CREAT | O_WRONLY, 0644);
 		dup2(fd, STDOUT_FILENO);
 		execve(command->path, command->argv, environ);
 		exit(127);
