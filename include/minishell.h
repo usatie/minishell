@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/09 08:49:14 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/09 11:29:46 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,18 +52,37 @@ struct s_token {
 	t_str			*str;
 };
 
+typedef struct s_node		t_node;
+typedef enum e_node_kind	t_node_kind;
+enum e_node_kind {
+	ND_WORD,
+	ND_REDIRECTION,
+	ND_CMD,
+};
+
+struct s_node {
+	t_node_kind	kind;
+	t_node		*next;
+	t_token		*tok;
+
+	// Only for ND_CMD
+	t_node		*elements;
+
+	// Only for ND_WORD;
+	t_str		*str;
+};
+
 typedef struct s_command	t_command;
 struct s_command {
 	char	*path;
 	char	**argv;
 };
 
-
 // tokenizer.c
 t_token	*tokenize(char *line);
 
 // parser.c
-t_command	*parse(t_token *tok);
+t_node	*parse(t_token *tok);
 
 // quotes.c
 char	*convert_to_word(t_str *str);

@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 14:21:05 by susami            #+#    #+#             */
-/*   Updated: 2022/12/08 22:26:34 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/09 11:42:19 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,36 @@ char	*find_path(char *cmd)
 	return (NULL);
 }
 
+t_command	*new_command(char **argv)
+{
+	t_command	*command;
+
+	command = calloc(sizeof(t_command), 1);
+	command->argv = argv;
+	return (command);
+}
+
+t_command	*gen_command(t_node *node)
+{
+	char	*argv[100] = {};
+	t_node	*elm;
+	size_t	i;
+
+	i = 0;
+	elm = node->elements;
+	while (elm)
+	{
+		if (elm->kind == ND_WORD)
+		{
+			argv[i] = convert_to_word(elm->str);
+			i++;
+		}
+		elm = elm->next;
+	}
+	argv[i+1] = NULL;
+	return (new_command(argv));
+}
+
 // Return exit status
 // The system() function returns the exit status of the shell as returned by 
 // waitpid(2), or -1 if an error occurred when invoking fork(2) or waitpid(2). 
@@ -56,12 +86,14 @@ int	ft_system(char *cmd)
 	int			status;
 	pid_t		child_pid;
 	t_token		*tok;
+	t_node		*node;
 	t_command	*command;
 
 	tok = tokenize(cmd);
 	if (tok == NULL)
 		return (0);
-	command = parse(tok);
+	node = parse(tok);
+	command = gen_command(node);
 	if (command == NULL)
 		return (127 << 8);
 	if (command->argv[0] == NULL)

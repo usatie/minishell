@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 15:34:36 by susami            #+#    #+#             */
-/*   Updated: 2022/12/09 08:53:15 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/09 11:42:56 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,28 +17,6 @@
 
 #include "libft.h"
 #include "minishell.h"
-
-typedef struct s_node		t_node;
-typedef enum e_node_kind	t_node_kind;
-enum e_node_kind {
-	ND_WORD,
-	ND_CMD_ELEM,
-	ND_CMD,
-};
-
-struct s_node {
-	t_node_kind	kind;
-	t_node		*next;
-};
-
-t_command	*new_command(char **argv)
-{
-	t_command	*command;
-
-	command = calloc(sizeof(t_command), 1);
-	command->argv = argv;
-	return (command);
-}
 
 /*
 EBNF syntax
@@ -53,28 +31,60 @@ command_element   = word
 
 command           = command_element*
 */
-t_node	*redirection(t_token **rest, t_token *tok);
-t_node	*command_element(t_token **rest, t_token *tok);
-t_node	*command(t_token **rest, t_token *tok);
+//static t_node	*redirection(t_token **rest, t_token *tok);
+static t_node	*command_element(t_token **rest, t_token *tok);
+static t_node	*command(t_token **rest, t_token *tok);
 
-t_command	*parse(t_token *tok)
+t_node	*parse(t_token *tok)
 {
-	char		*argv[100] = {};
-	size_t		i;
+	return (command(&tok, tok));
+}
 
-	// line = " cat -e Makefile"
-	// tok->pos = "cat -e Makefile"
-	// tok->len = 3
-	i = 0;
+t_node	*new_node(t_node_kind kind, t_token *tok)
+{
+	t_node	*node;
+
+	node = calloc(sizeof(t_node), 1);
+	node->kind = kind;
+	node->tok = tok;
+	return (node);
+}
+
+t_node	*new_node_command(t_node *elements, t_token *tok)
+{
+	t_node	*node;
+
+	node = new_node(ND_CMD, tok);
+	node->elements = elements;
+	return (node);
+}
+
+static t_node	*command(t_token **rest, t_token *tok)
+{
+	t_node	head = {};
+	t_node	*elm;
+
+	elm = &head;
 	while (tok->type != TK_EOF)
 	{
-		if (tok->type == TK_STRING)
-		{
-			argv[i] = convert_to_word(tok->str);
-			tok = tok->next;
-			i++;
-		}
+		elm->next = command_element(&tok, tok);
+		elm = elm->next;
 	}
-	argv[i+1] = NULL;
-	return (new_command(argv));
+	*rest = tok;
+	return (new_node_command(head.next, tok));
+}
+
+static t_node	*command_element(t_token **rest, t_token *tok)
+{
+	t_node	*node;
+
+	if (tok->type == TK_STRING)
+	{
+		node = new_node(ND_WORD, tok);
+		node->str = tok->str;
+		*rest = tok->next;
+		return (node);
+	}
+	printf("Error\n");
+	exit(1);
 }
