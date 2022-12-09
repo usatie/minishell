@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/09 15:03:11 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/09 16:51:58 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ struct s_command {
 };
 
 // error.c
+void	fatal_exit(char *s) __attribute__((noreturn));
 void	err_exit(char *s) __attribute__((noreturn));
 
 // tokenizer.c

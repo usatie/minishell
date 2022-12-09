@@ -53,10 +53,7 @@ t_str	*single_quotes(char **rest, char *line)
 	while (*line != '\0' && *line != '\'')
 		line++;
 	if (*line != '\'')
-	{
-		printf("Unclosed single quote\n");
-		exit(1);
-	}
+		err_exit("Unclosed single quote\n");
 	line++;
 	str = new_str(start, line - start, STR_SINGLE);
 	*rest = line;
@@ -73,10 +70,7 @@ t_str	*double_quotes(char **rest, char *line)
 	while (*line != '\0' && *line != '"')
 		line++;
 	if (*line != '"')
-	{
-		printf("Unclosed single quote\n");
-		exit(1);
-	}
+		err_exit("Unclosed single quote\n");
 	line++;
 	str = new_str(start, line - start, STR_DOUBLE);
 	*rest = line;
@@ -97,8 +91,7 @@ t_str	*plain_text(char **rest, char *line)
 		*rest = line;
 		return (str);
 	}
-	printf("Unexpected character\n");
-	exit(1);
+	err_exit("Unexpected character\n");
 }
 
 t_token	*string(char **rest, char *line)

@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 14:21:05 by susami            #+#    #+#             */
-/*   Updated: 2022/12/09 15:33:42 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/09 16:59:50 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,40 +87,75 @@ t_command	*gen_command(t_node *node)
 // The system() function returns the exit status of the shell as returned by 
 // waitpid(2), or -1 if an error occurred when invoking fork(2) or waitpid(2). 
 // A return value of 127 means the execution of the shell failed.
-int	ft_system(char *cmd)
+int	fork_and_exec(t_command *command)
 {
 	extern char	**environ;
 	int			status;
 	pid_t		child_pid;
+
+	child_pid = fork();
+	if (child_pid < 0)
+		fatal_exit("fork()");
+	else if (child_pid == 0)
+	{
+		int fd = open(command->redirect_out, O_CREAT | O_WRONLY, 0644);
+		dup2(fd, STDOUT_FILENO);
+		execve(command->path, command->argv, environ);
+		fatal_exit("execve()");
+	}
+	if (waitpid(child_pid, &status, 0) < 0)
+		fatal_exit("waitpid()");
+	else
+		exit(status);
+}
+
+t_command	*parse_command(char *cmd)
+{
 	t_token		*tok;
 	t_node		*node;
 	t_command	*command;
 
 	tok = tokenize(cmd);
 	if (tok == NULL)
-		return (0);
+		fatal_exit("tokenize()");
 	node = parse(tok);
+	if (node == NULL)
+		fatal_exit("parse()");
 	command = gen_command(node);
 	if (command == NULL)
-		return (127 << 8);
+		fatal_exit("gen_command()");
+	// empty line
 	if (command->argv[0] == NULL)
-		return (0);
+		exit(0);
 	command->path = find_path(command->argv[0]);
+	if (command->path == NULL)
+		err_exit("command not found.\n");
+	return (command);
+}
+
+int	parse_and_exec(char *cmd)
+{
+	int			status;
+	pid_t		child_pid;
+	t_command	*command;
+
 	child_pid = fork();
 	if (child_pid < 0)
-		return (-1);
+		err_exit("fork()");
 	else if (child_pid == 0)
 	{
-		int fd = open(command->redirect_out, O_CREAT | O_WRONLY, 0644);
-		dup2(fd, STDOUT_FILENO);
-		execve(command->path, command->argv, environ);
+		// tokenize, parse, ...
+		command = parse_command(cmd);
+		fork_and_exec(command);
 		exit(127);
 	}
+	// parent
 	if (waitpid(child_pid, &status, 0) < 0)
 		return (-1);
 	else
 		return (status);
 }
+
 
 int	main(void)
 {
@@ -136,7 +171,7 @@ int	main(void)
 			add_history(line);
 		if (strcmp(line, "exit") == 0)
 			exit(0);
-		status = ft_system(line);
+		status = parse_and_exec(line);
 		free(line);
 	}
 	return (WEXITSTATUS(status));
