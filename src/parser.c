@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 15:34:36 by susami            #+#    #+#             */
-/*   Updated: 2022/12/09 11:42:56 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/09 13:04:41 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,9 +61,10 @@ t_node	*new_node_command(t_node *elements, t_token *tok)
 
 static t_node	*command(t_token **rest, t_token *tok)
 {
-	t_node	head = {};
+	t_node	head;
 	t_node	*elm;
 
+	head = (t_node){};
 	elm = &head;
 	while (tok->type != TK_EOF)
 	{
