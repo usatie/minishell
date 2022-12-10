@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/09 08:48:46 by susami            #+#    #+#             */
-/*   Updated: 2022/12/09 08:48:57 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/10 11:11:32 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ char	*convert_to_word(t_str *str)
 	}
 	cur = str;
 	s = malloc(len + 1);
+	if (s == NULL)
+		fatal_exit("malloc()");
 	len = 0;
 	while (cur)
 	{

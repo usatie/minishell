@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/09 18:20:07 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/10 15:30:15 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,10 @@ typedef struct s_node		t_node;
 typedef enum e_node_kind	t_node_kind;
 enum e_node_kind {
 	ND_WORD,
-	ND_REDIRECT_OUTPUT,
+	ND_NUM,
+	ND_REDIR_OUT,
 	ND_CMD,
+	ND_PIPE,
 };
 
 struct s_node {
@@ -69,22 +71,27 @@ struct s_node {
 	t_node		*next;
 	t_token		*tok;
 
+	pid_t		pid;
+	// ND_PIPE, ND_REDIRECT_*
+	t_node		*lhs;
+	t_node		*rhs;
+
 	// Only for ND_CMD
 	t_node		*elements;
 
-	// Only for ND_WORD and ND_REDIRECT_*;
+	// Only for ND_WORD;
 	t_str		*str;
 
-	// Only for ND_REDIRECT_*
-	int			fd;
+	// Only for ND_NUM
+	long		val;
 };
 
 typedef struct s_command	t_command;
 struct s_command {
-	char	*path;
-	char	*argv[100];
-	char	*out_path;
-	int		out_fd;
+	char		*path;
+	char		*argv[100];
+	char		*out_path;
+	int			out_fd;
 };
 
 // error.c
@@ -95,7 +102,7 @@ void	err_exit(char *s) __attribute__((noreturn));
 t_token	*tokenize(char *line);
 
 // parser.c
-t_node	*parse(t_token *tok);
+t_node	*parse(char *line);
 
 // quotes.c
 char	*convert_to_word(t_str *str);

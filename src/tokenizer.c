@@ -9,6 +9,8 @@ t_str	*new_str(char *pos, size_t len, t_str_kind kind)
 	t_str	*s;
 
 	s = calloc(sizeof(t_str), 1);
+	if (s == NULL)
+		fatal_exit("calloc()");
 	s->pos = pos;
 	s->len = len;
 	s->kind = kind;
@@ -20,6 +22,8 @@ t_token	*new_token(char *pos, size_t len, t_token_kind kind)
 	t_token	*tok;
 
 	tok = calloc(sizeof(t_token), 1);
+	if (tok == NULL)
+		fatal_exit("calloc()");
 	tok->pos = pos;
 	tok->len = len;
 	tok->kind = kind;
@@ -173,6 +177,7 @@ t_token	*tokenize(char *line)
 			cur = cur->next;
 			cur->val = strtol(line, &line, 10);
 			cur->len = line - cur->pos;
+			cur->str = new_str(cur->pos, cur->len, STR_PLAIN);
 			continue ;
 		}
 		// String

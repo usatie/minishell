@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 14:21:05 by susami            #+#    #+#             */
-/*   Updated: 2022/12/09 18:27:44 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/10 19:42:51 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 #include "libft.h"
 #include "minishell.h"
 
-#define PROMPT "minishell > "
+#define PROMPT "minishell $ "
 
 // find_path("cat") -> "/bin/cat"
 char	*find_path(char *cmd)
@@ -55,19 +55,21 @@ t_command	*gen_command(t_node *node)
 	size_t	i;
 
 	i = 0;
-	command = calloc(sizeof(t_command), 1);
+	command = calloc(1, sizeof(t_command));
+	if (command == NULL)
+		fatal_exit("calloc()");
 	elm = node->elements;
 	while (elm)
 	{
-		if (elm->kind == ND_WORD)
+		if (elm->kind == ND_WORD || elm->kind == ND_NUM)
 		{
 			command->argv[i] = convert_to_word(elm->str);
 			i++;
 		}
-		if (elm->kind == ND_REDIRECT_OUTPUT)
+		if (elm->kind == ND_REDIR_OUT)
 		{
-			command->out_path = convert_to_word(elm->str);
-			command->out_fd = elm->fd;
+			command->out_fd = elm->lhs->val;
+			command->out_path = convert_to_word(elm->rhs->str);
 		}
 		elm = elm->next;
 	}
@@ -79,66 +81,67 @@ t_command	*gen_command(t_node *node)
 // The system() function returns the exit status of the shell as returned by 
 // waitpid(2), or -1 if an error occurred when invoking fork(2) or waitpid(2). 
 // A return value of 127 means the execution of the shell failed.
-int	fork_and_exec(t_command *command)
+pid_t	fork_and_exec(t_command *command, int inpipe[2], int outpipe[2])
 {
 	extern char	**environ;
-	int			status;
+	//int			status;
 	pid_t		child_pid;
 	int			fdout;
 
-	// Redirect output before fork()
-	if (command->out_path)
-	{
-		fdout = open(command->out_path, O_CREAT | O_WRONLY, 0644);
-		if (fdout < 0)
-			err_exit("open()");
-		dup2(fdout, command->out_fd);
-	}
-	// Find path
-	command->path = find_path(command->argv[0]);
-	if (command->path == NULL)
-		err_exit("command not found.\n");
 	// Fork and Exec
 	child_pid = fork();
 	if (child_pid < 0)
 		fatal_exit("fork()");
 	else if (child_pid == 0)
 	{
+		// Redirect output
+		if (command->out_path)
+		{
+			fdout = open(command->out_path, O_CREAT | O_WRONLY, 0644);
+			if (fdout < 0)
+				fatal_exit("open()");
+			dup2(fdout, command->out_fd);
+		}
+		// Find path
+		if (command->argv[0] == NULL)
+			exit(0);
+		command->path = find_path(command->argv[0]);
+		if (command->path == NULL)
+			err_exit("command not found.\n");
+		// Exec
+		if (inpipe[1] >= 0 && close(inpipe[1]) < 0) // inpipe's write end won't be used.
+			fatal_exit("close()");
+		if (outpipe[0] >= 0 && close(outpipe[0]) < 0) // outpipe's read end won't be used.
+			fatal_exit("close()");
+		if (inpipe[0] != STDIN_FILENO) // dup inpipe's read end to stdin
+		{
+			if (dup2(inpipe[0], STDIN_FILENO) < 0)
+				fatal_exit("dup2()");
+			if (close(inpipe[0]) < 0)
+				fatal_exit("close()");
+		}
+		if (outpipe[1] != STDOUT_FILENO) // dup outpipe's write end to stdend
+		{
+			if (dup2(outpipe[1], STDOUT_FILENO) < 0)
+				fatal_exit("dup2()");
+			if (close(outpipe[1]) < 0)
+				fatal_exit("close()");
+		}
 		execve(command->path, command->argv, environ);
 		fatal_exit("execve()");
 	}
-	if (waitpid(child_pid, &status, 0) < 0)
-		fatal_exit("waitpid()");
-	else
-		exit(status);
-}
-
-t_command	*parse_command(char *cmd)
-{
-	t_token		*tok;
-	t_node		*node;
-	t_command	*command;
-
-	tok = tokenize(cmd);
-	if (tok == NULL)
-		fatal_exit("tokenize()");
-	node = parse(tok);
-	if (node == NULL)
-		fatal_exit("parse()");
-	command = gen_command(node);
-	if (command == NULL)
-		fatal_exit("gen_command()");
-	// empty line
-	if (command->argv[0] == NULL)
-		exit(0);
-	return (command);
+	return (child_pid);
 }
 
 int	parse_and_exec(char *cmd)
 {
 	int			status;
 	pid_t		child_pid;
+	t_node		*node;
+	t_node		*start;
 	t_command	*command;
+	int	inpipe[2] = {STDIN_FILENO, -1};
+	int outpipe[2] = {-1, STDOUT_FILENO};
 
 	child_pid = fork();
 	if (child_pid < 0)
@@ -146,9 +149,38 @@ int	parse_and_exec(char *cmd)
 	else if (child_pid == 0)
 	{
 		// tokenize, parse, ...
-		command = parse_command(cmd);
-		fork_and_exec(command);
-		exit(127);
+		node = parse(cmd);
+		start = node;
+		while (node->kind == ND_PIPE)
+		{
+			command = gen_command(node->lhs);
+			if (pipe(outpipe) < 0)
+				fatal_exit("pipe()");
+			node->lhs->pid = fork_and_exec(command, inpipe, outpipe);
+			if ((inpipe[0] >= 0 && close(inpipe[0]) < 0)
+					|| (inpipe[1] >= 0 && close(inpipe[1]) < 0))
+				fatal_exit("close()");
+			inpipe[0] = outpipe[0];
+			inpipe[1] = outpipe[1];
+			node = node->rhs;
+		}
+		outpipe[0] = -1;
+		outpipe[1] = STDOUT_FILENO;
+		command = gen_command(node);
+		node->pid = fork_and_exec(command, inpipe, outpipe);
+		node = start;
+		while (node->kind == ND_PIPE)
+		{
+			if (waitpid(node->lhs->pid, &status, 0) < 0)
+				fatal_exit("waitpid()");
+			else
+				exit(WEXITSTATUS(status));
+			node = node->rhs;
+		}
+		if (waitpid(node->pid, &status, 0) < 0)
+			fatal_exit("waitpid()");
+		else
+			exit(WEXITSTATUS(status));
 	}
 	// parent
 	if (waitpid(child_pid, &status, 0) < 0)
