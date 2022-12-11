@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 15:34:36 by susami            #+#    #+#             */
-/*   Updated: 2022/12/10 19:42:29 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/11 15:37:46 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,14 @@ t_node	*new_node_binary(t_node_kind kind, t_node *lhs, t_node *rhs, t_token *tok
 	return (node);
 }
 
-t_node	*new_node_command(t_node *elements, t_token *tok)
+t_node	*new_node_command(t_node *args, t_token *tok)
 {
 	t_node	*node;
 
 	node = new_node(ND_CMD, tok);
-	node->elements = elements;
+	node->args = args;
+	for (t_node *arg = args; arg; arg = arg->next)
+		node->nargs++;
 	return (node);
 }
 

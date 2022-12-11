@@ -9,7 +9,9 @@ SRCS      = src/minishell.c\
             src/tokenizer.c\
             src/parser.c\
             src/quotes.c\
-            src/error.c
+            src/error.c\
+			src/gen_command.c\
+			src/fork_exec.c
 OBJDIR    = obj
 OBJS      = $(SRCS:src/%.c=$(OBJDIR)/%.o)
 

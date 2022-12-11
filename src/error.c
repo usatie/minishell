@@ -6,24 +6,21 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/09 15:03:49 by susami            #+#    #+#             */
-/*   Updated: 2022/12/10 00:37:07 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/11 16:27:37 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
 #include <stdlib.h>
-#include <string.h>
+#include <stdio.h>
 
 void	fatal_exit(char *s)
 {
-	write(STDERR_FILENO, s, strlen(s));
-	write(STDERR_FILENO, "\n", 1);
+	perror(s);
 	exit(1);
 }
 
 void	err_exit(char *s)
 {
-	write(STDERR_FILENO, s, strlen(s));
-	write(STDERR_FILENO, "\n", 1);
+	perror(s);
 	exit(127);
 }

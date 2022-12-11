@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/10 15:30:15 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/11 15:36:33 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,9 @@ struct s_node {
 	t_node		*rhs;
 
 	// Only for ND_CMD
-	t_node		*elements;
+	int			nargs;
+	t_node		*args;
+	t_node		*redir_out;
 
 	// Only for ND_WORD;
 	t_str		*str;
@@ -89,9 +91,23 @@ struct s_node {
 typedef struct s_command	t_command;
 struct s_command {
 	char		*path;
-	char		*argv[100];
+	char		**argv;
+	int			inpipe[2];
+	int			outpipe[2];
 	char		*out_path;
 	int			out_fd;
+	t_command	*next;
+};
+
+typedef struct s_pipeline	t_pipeline;
+struct s_pipeline {
+	pid_t		pid;
+	char		**argv;
+	int			inpipe[2];
+	int			outpipe[2];
+	//char		*out_path;
+	//int			out_fd;
+	t_pipeline	*next;
 };
 
 // error.c
@@ -106,4 +122,16 @@ t_node	*parse(char *line);
 
 // quotes.c
 char	*convert_to_word(t_str *str);
+
+// gen_command.c
+t_pipeline	*gen_pipeline(t_node *node);
+
+// fork_exec.c
+void	ft_close(int fd);
+pid_t	ft_fork(void);
+void	ft_dup2(int oldfd, int newfd);
+void	forkexec(t_pipeline *command);
+
+// main.c
+char	*find_path(char *cmd);
 #endif
