@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/11 15:36:33 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/11 16:41:19 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,25 +88,14 @@ struct s_node {
 	long		val;
 };
 
-typedef struct s_command	t_command;
-struct s_command {
-	char		*path;
-	char		**argv;
-	int			inpipe[2];
-	int			outpipe[2];
-	char		*out_path;
-	int			out_fd;
-	t_command	*next;
-};
-
 typedef struct s_pipeline	t_pipeline;
 struct s_pipeline {
 	pid_t		pid;
 	char		**argv;
 	int			inpipe[2];
 	int			outpipe[2];
-	//char		*out_path;
-	//int			out_fd;
+	char		*out_path;
+	int			out_fd;
 	t_pipeline	*next;
 };
 

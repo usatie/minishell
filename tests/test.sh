@@ -67,13 +67,13 @@ assert "echo \"'hello'\""
 assert "     pwd   "
 assert "echo hello'world'\"42\""
 assert 'ec"ho" he"ll"o'
-#assert 'echo hello >hello.txt' 'hello.txt'
-#assert 'echo hello 1>hello.txt' 'hello.txt'
+assert 'echo hello >hello.txt' 'hello.txt'
+assert 'echo hello 1>hello.txt' 'hello.txt'
 # assert 'invalid 2>hello.txt' 'hello.txt'
 assert 'cat Makefile | grep minishell'
 assert 'cat Makefile | grep c | sort -r'
-#assert 'cat Makefile | grep c | sort -r > sort.txt' 'sort.txt'
-#assert 'ls -la | grep l > grep.txt | sort -r' 'grep.txt'
+assert 'cat Makefile | grep c | sort -r > sort.txt' 'sort.txt'
+assert 'cat Makefile | grep l > grep.txt | sort -r' 'grep.txt'
 # assert "ls -l"  # This test fails because out and cmp affects the output of `ls`
 
 echo "OK :D"

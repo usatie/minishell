@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 15:34:36 by susami            #+#    #+#             */
-/*   Updated: 2022/12/11 15:37:46 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/11 18:25:20 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,17 +41,6 @@ t_node	*new_node_binary(t_node_kind kind, t_node *lhs, t_node *rhs, t_token *tok
 	node->rhs = rhs;
 	node->kind = kind;
 	node->tok = tok;
-	return (node);
-}
-
-t_node	*new_node_command(t_node *args, t_token *tok)
-{
-	t_node	*node;
-
-	node = new_node(ND_CMD, tok);
-	node->args = args;
-	for (t_node *arg = args; arg; arg = arg->next)
-		node->nargs++;
 	return (node);
 }
 
@@ -93,17 +82,13 @@ redirection       = num? '>' word
 			      | num? '>>' word
 			      | num? '<<' word
 
-command_element   = word
-                  | redirection
-
-command           = command_element*
+command           = (redirection | word)*
 
 pipeline          = command ('|' pipeline)*
 */
 static t_node	*num(t_token **rest, t_token *tok);
 static t_node	*word(t_token **rest, t_token *tok);
 static t_node	*redirection(t_token **rest, t_token *tok);
-static t_node	*command_element(t_token **rest, t_token *tok);
 static t_node	*command(t_token **rest, t_token *tok);
 static t_node	*pipeline(t_token **rest, t_token *tok);
 
@@ -134,34 +119,41 @@ static t_node	*pipeline(t_token **rest, t_token *tok)
 // command = command_element*
 static t_node	*command(t_token **rest, t_token *tok)
 {
+	t_node	*cmd;
 	t_node	head;
-	t_node	*elm;
+	t_node	*arg;
 
+	cmd = new_node(ND_CMD, tok);
 	head = (t_node){};
-	elm = &head;
+	arg = &head;
 	while (!at_eof(tok) && !equal(tok, "|"))
 	{
-		elm->next = command_element(&tok, tok);
-		elm = elm->next;
+		// '>' word | num '>' word
+		if (equal(tok, ">") || (tok->kind == TK_NUM && equal(tok->next, ">")))
+		{
+			cmd->redir_out = redirection(&tok, tok);
+			continue ;
+		}
+		// word
+		else if (tok->kind == TK_STRING)
+		{
+			cmd->nargs++;
+			arg->next = word(&tok, tok);
+			arg = arg->next;
+			continue ;
+		}
+		// num
+		else if (tok->kind == TK_NUM)
+		{
+			arg->next = num(&tok, tok);
+			arg = arg->next;
+			continue ;
+		}
+		err_exit("Invalid token for <command_element>");
 	}
+	cmd->args = head.next;
 	*rest = tok;
-	return (new_node_command(head.next, tok));
-}
-
-static t_node	*command_element(t_token **rest, t_token *tok)
-{
-	t_node	*node;
-
-	// word
-	if (tok->kind == TK_STRING)
-	{
-		node = new_node(ND_WORD, tok);
-		node->str = tok->str;
-		*rest = tok->next;
-		return (node);
-	}
-	// redirection
-	return (redirection(rest, tok));
+	return (cmd);
 }
 
 // redirection = num? '>' word

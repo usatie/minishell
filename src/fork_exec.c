@@ -1,7 +1,17 @@
 #include <stdlib.h>
 #include <unistd.h>
+#include <fcntl.h>
 #include "minishell.h"
 
+int	ft_open(char *path)
+{
+	int	fd;
+
+	fd = open(path, O_CREAT | O_WRONLY, 0644);
+	if (fd < 0)
+		err_exit("open()");
+	return (fd);
+}
 void	ft_close(int fd)
 {
 	if (fd < 0)
@@ -42,13 +52,23 @@ void	forkexec(t_pipeline *command)
 	command->pid = ft_fork();
 	if (command->pid == 0)
 	{
-		// exec
+		// child
+		// pipe
 		ft_close(command->inpipe[1]); // write end is not necessary
 		ft_close(command->outpipe[0]); // read end is not necessary
 		ft_dup2(command->inpipe[0], STDIN_FILENO);
 		ft_dup2(command->outpipe[1], STDOUT_FILENO);
+		// redirect
+		if (command->out_path)
+		{
+			int	fd;
+			fd = ft_open(command->out_path);
+			ft_dup2(fd, command->out_fd);
+		}
+		// path
 		if (command->argv[0] == NULL)
 			exit(0);
+		// exec
 		execve(find_path(command->argv[0]), command->argv, NULL);
 		err_exit("execve");
 	}
