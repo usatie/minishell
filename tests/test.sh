@@ -74,6 +74,7 @@ assert 'cat Makefile | grep minishell'
 assert 'cat Makefile | grep c | sort -r'
 assert 'cat Makefile | grep c | sort -r > sort.txt' 'sort.txt'
 assert 'cat Makefile | grep l > grep.txt | sort -r' 'grep.txt'
+assert 'echo 111111111111111111111111111111'
 # assert "ls -l"  # This test fails because out and cmp affects the output of `ls`
 
 echo "OK :D"

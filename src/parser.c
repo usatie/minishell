@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 15:34:36 by susami            #+#    #+#             */
-/*   Updated: 2022/12/11 18:25:20 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/11 18:48:51 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,6 +145,7 @@ static t_node	*command(t_token **rest, t_token *tok)
 		// num
 		else if (tok->kind == TK_NUM)
 		{
+			cmd->nargs++;
 			arg->next = num(&tok, tok);
 			arg = arg->next;
 			continue ;
