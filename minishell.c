@@ -1,5 +1,8 @@
 #include <stdio.h>
 #include <readline/readline.h>
+#include <string.h>
+#include <stdlib.h>
+
 
 int main()
 {
@@ -8,6 +11,8 @@ int main()
     while (1)
     {
         line = readline("minishell $ ");
+        if (line && *line && strcmp(line, "exit") == 0)
+            exit(0);
         printf("%s\n", line);
     }
     return 0;
