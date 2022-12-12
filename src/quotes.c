@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/09 08:48:46 by susami            #+#    #+#             */
-/*   Updated: 2022/12/12 23:16:44 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/13 07:10:34 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,7 @@ size_t	get_len(t_str *str)
 		if (cur->kind == STR_VAR)
 		{
 			len -= cur->len;
-			char	*name = strndup(cur->pos + 1, cur->len - 1);
-			len += get_envlen(name);
+			len += cur->value_len;
 		}
 		else if (cur->kind == STR_PLAIN)
 			;
@@ -63,8 +62,7 @@ size_t	get_len(t_str *str)
 			for (t_str *var = cur->variables; var; var = var->next)
 			{
 				len -= var->len;
-				char	*name = strndup(var->pos + 1, var->len - 1);
-				len += get_envlen(name);
+				len += var->value_len;
 			}
 		}
 		else if (cur->kind == STR_SINGLE)
@@ -97,19 +95,15 @@ char	*convert_to_word(t_str *str)
 		}
 		else if (cur->kind == STR_VAR)
 		{
-			// cur->pos + 1, cur->len - 1
-			// $USER
-			// shunusami
-			char	*name = strndup(cur->pos + 1, cur->len - 1);
-			char	*value = getenv(name);
-			if (value)
+			if (cur->value)
 			{
-				memcpy(s + len, value, strlen(value));
-				len += strlen(value);
+				memcpy(s + len, cur->value, cur->value_len);
+				len += cur->value_len;
 			}
 		}
 		else if (cur->kind == STR_DOUBLE)
 		{
+			// "hello $USER world"
 			char *p;
 			p = cur->pos + 1;
 			for (t_str *var = cur->variables; var; var = var->next)
@@ -118,34 +112,15 @@ char	*convert_to_word(t_str *str)
 				memcpy(s + len, p, var->pos - p);
 				len += var->pos - p;
 				// varible expansion
-				char	*name = strndup(var->pos + 1, var->len - 1);
-				char	*value = getenv(name);
-				if (value)
+				if (var->value)
 				{
-					memcpy(s + len, value, strlen(value));
-					len += strlen(value);
+					memcpy(s + len, var->value, var->value_len);
+					len += var->value_len;
 				}
 				p = var->pos + var->len;
 			}
 			memcpy(s + len, p, (cur->pos + cur->len - 1) - p);
 			len += (cur->pos + cur->len - 1) - p;
-			/*
-			// "hello $USER world"
-			//  ^
-			//        ^
-			t_str	*var = cur->variables;
-			// "hello "
-			memcpy(s + len, cur->pos + 1, var->pos - (cur->pos + 1));
-			len += var->pos - (cur->pos + 1);
-			// "$USER"
-			char	*name = strndup(var->pos + 1, var->len - 1);
-			char	*value = getenv(name);
-			memcpy(s + len, value, strlen(value));
-			len += strlen(value);
-			// " world"
-			memcpy(s + len, var->pos + var->len, (cur->pos + cur->len - 1) - (var->pos + var->len));
-			len += (cur->pos + cur->len - 1) - (var->pos + var->len);
-			*/
 		}
 		else
 		{

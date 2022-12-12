@@ -6,13 +6,12 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 15:34:36 by susami            #+#    #+#             */
-/*   Updated: 2022/12/11 18:48:51 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/13 07:11:30 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <string.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <limits.h>
 
 #include "libft.h"

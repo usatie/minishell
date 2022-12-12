@@ -259,6 +259,7 @@ t_token	*tokenize(char *line)
 		}
 	}
 	cur->next = new_token(line, 0, TK_EOF);
+	expand_parameter(head.next);
 	return (head.next);
 }
 

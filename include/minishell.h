@@ -6,13 +6,14 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/12 15:48:14 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/13 06:59:34 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# include <unistd.h>
 # include <stdio.h>
 # include <stddef.h>
 # include <stdbool.h>
@@ -52,6 +53,10 @@ struct s_str {
 	
 	// Only for STR_DOUBLE
 	t_str		*variables;
+
+	// Only for STR_VAR
+	char		*value;
+	size_t		value_len;
 };
 
 struct s_token {
@@ -116,6 +121,9 @@ void	err_exit(char *s) __attribute__((noreturn));
 
 // tokenizer.c
 t_token	*tokenize(char *line);
+
+// expansion.c
+void	expand_parameter(t_token *tok);
 
 // parser.c
 t_node	*parse(char *line);

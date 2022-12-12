@@ -6,12 +6,11 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/11 14:32:27 by susami            #+#    #+#             */
-/*   Updated: 2022/12/11 18:26:49 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/13 07:11:14 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include <unistd.h>
 #include "minishell.h"
 
 void	cpy_pipe(int dst[2], int src[2])
