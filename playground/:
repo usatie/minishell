@@ -1,0 +1,9 @@
+int main(void)
+{
+    char *hoge;
+
+    hoge = "minishell $ ";
+    line = readline(hoge);
+    printf(line);
+}
+
