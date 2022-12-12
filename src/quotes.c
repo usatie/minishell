@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/09 08:48:46 by susami            #+#    #+#             */
-/*   Updated: 2022/12/10 11:11:32 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/12 14:55:02 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,16 @@
 #include <string.h>
 #include "minishell.h"
 
+// echo "hello"word
+// t_str *s1 = "\"hello\""
+// t_str *s2 = "world"
+// t_str *s3 = "$USER"
+// s1->next = s2;
+//
+// "\"hello\"" -> "hello"
+// "world" -> "world"
+//
+// char *s = "hello world"
 char	*convert_to_word(t_str *str)
 {
 	size_t	len;
@@ -24,9 +34,16 @@ char	*convert_to_word(t_str *str)
 	cur = str;
 	while (cur)
 	{
-		len += cur->len;
-		if (cur->kind != STR_PLAIN)
-			len -= 2;
+		if (cur->kind == STR_VAR)
+		{
+			char	*name = strndup(cur->pos + 1, cur->len - 1);
+			char	*value = getenv(name);
+			len += strlen(value);
+		}
+		else if (cur->kind == STR_PLAIN)
+			len += cur->len;
+		else
+			len += cur->len - 2;
 		cur = cur->next;
 	}
 	cur = str;
@@ -40,6 +57,16 @@ char	*convert_to_word(t_str *str)
 		{
 			memcpy(s + len, cur->pos, cur->len);
 			len += cur->len;
+		}
+		else if (cur->kind == STR_VAR)
+		{
+			// cur->pos + 1, cur->len - 1
+			// $USER
+			// shunusami
+			char	*name = strndup(cur->pos + 1, cur->len - 1);
+			char	*value = getenv(name);
+			memcpy(s + len, value, strlen(value));
+			len += strlen(value);
 		}
 		else
 		{

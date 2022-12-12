@@ -47,6 +47,7 @@ bool	consume_space(char **rest, char *line)
 	return (false);
 }
 
+// Read until next single quote
 t_str	*single_quotes(char **rest, char *line)
 {
 	t_str	*str;
@@ -54,7 +55,7 @@ t_str	*single_quotes(char **rest, char *line)
 	
 	start = line;
 	line++; // skip the opening quote
-	while (*line != '\0' && *line != '\'')
+	while (*line && *line != '\'')
 		line++;
 	if (*line != '\'')
 		err_exit("Unclosed single quote\n");
@@ -64,6 +65,8 @@ t_str	*single_quotes(char **rest, char *line)
 	return (str);
 }
 
+// Read until next double quote
+// $variable may be contained
 t_str	*double_quotes(char **rest, char *line)
 {
 	t_str	*str;
@@ -71,7 +74,7 @@ t_str	*double_quotes(char **rest, char *line)
 	
 	start = line;
 	line++; // skip the opening quote
-	while (*line != '\0' && *line != '"')
+	while (*line && *line != '"')
 		line++;
 	if (*line != '"')
 		err_exit("Unclosed single quote\n");
@@ -81,13 +84,19 @@ t_str	*double_quotes(char **rest, char *line)
 	return (str);
 }
 
+bool	isplain(char c)
+{
+	return ((strchr("<>|\'\"$", c) == NULL) && (!isspace(c)));
+}
+
+// Read until next punctuator or space
 t_str	*plain_text(char **rest, char *line)
 {
 	t_str	*str;
 	char	*start;
 	
 	start = line;
-	while (*line != '\0' && !isspace(*line) && *line != '\'' && *line != '"')
+	while (*line != '\0' && isplain(*line))
 		line++;
 	if (line - start > 0)
 	{
@@ -96,6 +105,33 @@ t_str	*plain_text(char **rest, char *line)
 		return (str);
 	}
 	err_exit("Unexpected character\n");
+}
+
+// echo $USER 
+//      ^    ^
+// (t_token *) or (t_str *)
+//
+// echo "hello"$USER"world"
+// echo $foo"hello"
+// echo "a" "b" "chello"
+//
+t_str	*variable(char **rest, char *line)
+{
+	t_str	*str;
+	char	*start;
+	
+	start = line;
+	if (*line != '$')
+		err_exit("Expected $\n");
+	line++;
+	if (!isalpha(*line) && *line != '_')
+		err_exit("Expected alphabetic character or underscore.");
+	line++;
+	while (isalpha(*line) || isdigit(*line) || *line == '_')
+		line++;
+	str = new_str(start, line - start, STR_VAR);
+	*rest = line;
+	return (str);
 }
 
 t_token	*string(char **rest, char *line)
@@ -124,7 +160,14 @@ t_token	*string(char **rest, char *line)
 			tok->len += cur->len;
 			continue ;
 		}
-		// Identifier
+		else if (*line == '$')
+		{
+			cur->next = variable(&line, line);
+			cur = cur->next;
+			tok->len += cur->len;
+			continue ;
+		}
+		// Plain text
 		else
 		{
 			cur->next = plain_text(&line, line);

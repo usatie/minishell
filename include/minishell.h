@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/11 16:41:19 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/12 14:43:00 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ enum e_str_kind {
 	STR_PLAIN, // str
 	STR_SINGLE, // 'str'
 	STR_DOUBLE, // "str"
+	STR_VAR, // $variable
 };
 
 struct s_str {
