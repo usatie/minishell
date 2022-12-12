@@ -85,6 +85,11 @@ assert 'echo "hello $USER"'
 assert 'echo "hello $USER world"'
 assert 'echo "hello $USER world. Shell = $SHELL."'
 
+# Word splitting
+export foo="a     b"
+assert 'echo "$foo"'
+assert 'echo $foo'
+
 # assert "ls -l"  # This test fails because out and cmp affects the output of `ls`
 
 echo "OK :D"
