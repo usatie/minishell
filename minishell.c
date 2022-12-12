@@ -5,7 +5,10 @@ int main()
 {
     char *line;
     
-    line = readline("minishell $ ");
-    printf("%s\n", line);
+    while (1)
+    {
+        line = readline("minishell $ ");
+        printf("%s\n", line);
+    }
     return 0;
 }
