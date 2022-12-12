@@ -1,6 +1,5 @@
 #!/bin/bash
 
-./minishell <<EOF
-exit
-EOF
+echo "exit" | ./minishell
+echo "hello" | ./minishell
 echo "exit success"
