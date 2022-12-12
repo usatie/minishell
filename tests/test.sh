@@ -81,6 +81,10 @@ assert 'echo hello "Mr. "$USER'
 
 # Variable in quotes
 assert 'echo "$USER"'
+assert 'echo "hello $USER"'
+assert 'echo "hello $USER world"'
+assert 'echo "hello $USER world. Shell = $SHELL."'
+
 # assert "ls -l"  # This test fails because out and cmp affects the output of `ls`
 
 echo "OK :D"
