@@ -1,6 +1,7 @@
 #!/bin/bash
 
-./minishell <<EOF
-exit
-EOF
-echo "exit success"
+echo "exit" | ./minishell > out
+echo "exit" | bash > cmp
+diff out cmp
+
+echo "OK :D"
