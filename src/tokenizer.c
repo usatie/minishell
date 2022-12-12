@@ -46,6 +46,26 @@ bool	consume_space(char **rest, char *line)
 	}
 	return (false);
 }
+
+bool	isplain(char c)
+{
+	return ((strchr("<>|\'\"$", c) == NULL) && (!isspace(c)));
+}
+
+// name
+// A word consisting only of alphanumeric characters and underscores, 
+// and beginning with an alphabetic character or an underscore.  
+// Also referred to as an identifier.
+bool	is_alpha_num_under(char c)
+{
+	return (isalpha(c) || isdigit(c) || c == '_');
+}
+
+bool	is_alpha_under(char c)
+{
+	return (isalpha(c) || c == '_');
+}
+
 // echo $USER 
 //      ^    ^
 // (t_token *) or (t_str *)
@@ -63,10 +83,10 @@ t_str	*variable(char **rest, char *line)
 	if (*line != '$')
 		err_exit("Expected $\n");
 	line++;
-	if (!isalpha(*line) && *line != '_')
+	if (!is_alpha_under(*line))
 		err_exit("Expected alphabetic character or underscore.");
 	line++;
-	while (isalpha(*line) || isdigit(*line) || *line == '_')
+	while (is_alpha_num_under(*line))
 		line++;
 	str = new_str(start, line - start, STR_VAR);
 	*rest = line;
@@ -106,7 +126,7 @@ t_str	*double_quotes(char **rest, char *line)
 	line++; // skip the opening quote
 	while (*line && *line != '"')
 	{
-		if (*line == '$')
+		if (*line == '$' && is_alpha_under(line[1]))
 		{
 			var->next = variable(&line, line);
 			var = var->next;
@@ -121,11 +141,6 @@ t_str	*double_quotes(char **rest, char *line)
 	str->variables = varhead.next;
 	*rest = line;
 	return (str);
-}
-
-bool	isplain(char c)
-{
-	return ((strchr("<>|\'\"$", c) == NULL) && (!isspace(c)));
 }
 
 // Read until next punctuator or space
@@ -172,7 +187,8 @@ t_token	*string(char **rest, char *line)
 			tok->len += cur->len;
 			continue ;
 		}
-		else if (*line == '$')
+		// Parameter
+		else if (*line == '$' && is_alpha_under(line[1]))
 		{
 			cur->next = variable(&line, line);
 			cur = cur->next;

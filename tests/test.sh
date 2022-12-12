@@ -81,14 +81,18 @@ assert 'echo hello "Mr. "$USER'
 
 # Variable in quotes
 assert 'echo "$USER"'
-assert 'echo "hello $USER"'
-assert 'echo "hello $USER world"'
-assert 'echo "hello $USER world. Shell = $SHELL."'
+assert 'echo "Variable with text $USER"'
+assert 'echo "Variable $USER between text"'
+assert 'echo "Multiple $USER variables $SHELL"'
+assert 'echo "Variables non-space $USER.$SHELL+$HOME"'
+assert 'echo "Undefined variable $undefined_variable"'
+assert 'echo "These are not variable : $. $+ "'
+assert 'echo "These are variable     : $_foo $foo"'
 
 # Word splitting
-export foo="a     b"
-assert 'echo "$foo"'
-assert 'echo $foo'
+# export foo="a     b"
+# assert 'echo "$foo"'
+# assert 'echo $foo'
 
 # assert "ls -l"  # This test fails because out and cmp affects the output of `ls`
 

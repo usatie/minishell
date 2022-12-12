@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/09 08:48:46 by susami            #+#    #+#             */
-/*   Updated: 2022/12/12 17:14:55 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/12 23:16:44 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,9 @@ size_t	get_envlen(char *name)
 {
 	char	*value;
 	value = getenv(name);
-	return (strlen(value));
+	if (value)
+		return (strlen(value));
+	return (0);
 }
 
 size_t	get_len(t_str *str)
@@ -100,8 +102,11 @@ char	*convert_to_word(t_str *str)
 			// shunusami
 			char	*name = strndup(cur->pos + 1, cur->len - 1);
 			char	*value = getenv(name);
-			memcpy(s + len, value, strlen(value));
-			len += strlen(value);
+			if (value)
+			{
+				memcpy(s + len, value, strlen(value));
+				len += strlen(value);
+			}
 		}
 		else if (cur->kind == STR_DOUBLE)
 		{
@@ -115,9 +120,12 @@ char	*convert_to_word(t_str *str)
 				// varible expansion
 				char	*name = strndup(var->pos + 1, var->len - 1);
 				char	*value = getenv(name);
-				memcpy(s + len, value, strlen(value));
+				if (value)
+				{
+					memcpy(s + len, value, strlen(value));
+					len += strlen(value);
+				}
 				p = var->pos + var->len;
-				len += strlen(value);
 			}
 			memcpy(s + len, p, (cur->pos + cur->len - 1) - p);
 			len += (cur->pos + cur->len - 1) - p;
