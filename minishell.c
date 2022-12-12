@@ -10,7 +10,6 @@ int main()
     while (1)
     {
         line = readline("minishell $ ");
-        if (line && *line) // why
         if (line == NULL) 
             break;
         if (*line)
