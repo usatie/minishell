@@ -3,6 +3,14 @@
 #include <string.h>
 #include <stdlib.h>
 
+
+extern char     *envp[];
+
+void    exec_cmd(const char *line)
+{
+    system(line);
+}
+
 int main()
 {
     char *line;
@@ -16,8 +24,9 @@ int main()
         {
             if (strcmp(line, "exit") == 0)
                 exit(0);
-            printf("%s\n", line);
-        }
+//           printf("%s\n", line);
+            exec_cmd(line);
+       }
     }
     return 0;
 }
