@@ -46,67 +46,6 @@ bool	consume_space(char **rest, char *line)
 	}
 	return (false);
 }
-
-// Read until next single quote
-t_str	*single_quotes(char **rest, char *line)
-{
-	t_str	*str;
-	char	*start;
-	
-	start = line;
-	line++; // skip the opening quote
-	while (*line && *line != '\'')
-		line++;
-	if (*line != '\'')
-		err_exit("Unclosed single quote\n");
-	line++;
-	str = new_str(start, line - start, STR_SINGLE);
-	*rest = line;
-	return (str);
-}
-
-// Read until next double quote
-// $variable may be contained
-t_str	*double_quotes(char **rest, char *line)
-{
-	t_str	*str;
-	char	*start;
-	
-	start = line;
-	line++; // skip the opening quote
-	while (*line && *line != '"')
-		line++;
-	if (*line != '"')
-		err_exit("Unclosed single quote\n");
-	line++;
-	str = new_str(start, line - start, STR_DOUBLE);
-	*rest = line;
-	return (str);
-}
-
-bool	isplain(char c)
-{
-	return ((strchr("<>|\'\"$", c) == NULL) && (!isspace(c)));
-}
-
-// Read until next punctuator or space
-t_str	*plain_text(char **rest, char *line)
-{
-	t_str	*str;
-	char	*start;
-	
-	start = line;
-	while (*line != '\0' && isplain(*line))
-		line++;
-	if (line - start > 0)
-	{
-		str = new_str(start, line - start, STR_PLAIN);
-		*rest = line;
-		return (str);
-	}
-	err_exit("Unexpected character\n");
-}
-
 // echo $USER 
 //      ^    ^
 // (t_token *) or (t_str *)
@@ -132,6 +71,79 @@ t_str	*variable(char **rest, char *line)
 	str = new_str(start, line - start, STR_VAR);
 	*rest = line;
 	return (str);
+}
+
+
+// Read until next single quote
+t_str	*single_quotes(char **rest, char *line)
+{
+	t_str	*str;
+	char	*start;
+	
+	start = line;
+	line++; // skip the opening quote
+	while (*line && *line != '\'')
+		line++;
+	if (*line != '\'')
+		err_exit("Unclosed single quote\n");
+	line++;
+	str = new_str(start, line - start, STR_SINGLE);
+	*rest = line;
+	return (str);
+}
+
+// Read until next double quote
+// $variable may be contained
+t_str	*double_quotes(char **rest, char *line)
+{
+	t_str	*str;
+	char	*start;
+	t_str	varhead = {0};
+	t_str	*var;
+	
+	var = &varhead;
+	start = line;
+	line++; // skip the opening quote
+	while (*line && *line != '"')
+	{
+		if (*line == '$')
+		{
+			var->next = variable(&line, line);
+			var = var->next;
+		}
+		else
+			line++;
+	}
+	if (*line != '"')
+		err_exit("Unclosed single quote\n");
+	line++;
+	str = new_str(start, line - start, STR_DOUBLE);
+	str->variables = varhead.next;
+	*rest = line;
+	return (str);
+}
+
+bool	isplain(char c)
+{
+	return ((strchr("<>|\'\"$", c) == NULL) && (!isspace(c)));
+}
+
+// Read until next punctuator or space
+t_str	*plain_text(char **rest, char *line)
+{
+	t_str	*str;
+	char	*start;
+	
+	start = line;
+	while (*line != '\0' && isplain(*line))
+		line++;
+	if (line - start > 0)
+	{
+		str = new_str(start, line - start, STR_PLAIN);
+		*rest = line;
+		return (str);
+	}
+	err_exit("Unexpected character\n");
 }
 
 t_token	*string(char **rest, char *line)

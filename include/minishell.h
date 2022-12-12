@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/12 14:43:00 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/12 15:48:14 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,21 @@ enum e_str_kind {
 	STR_VAR, // $variable
 };
 
+// echo "hello $USER $USER world" "world!"
+// pos: ^
+// len: 7
+//        pos: ^
+//        len: 5
+//              pos: ^
+//              len: 5
 struct s_str {
 	t_str_kind	kind;
 	char		*pos;
 	size_t		len;
 	t_str		*next;
+	
+	// Only for STR_DOUBLE
+	t_str		*variables;
 };
 
 struct s_token {

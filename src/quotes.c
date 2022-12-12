@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/09 08:48:46 by susami            #+#    #+#             */
-/*   Updated: 2022/12/12 14:55:02 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/12 16:03:30 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,18 @@ char	*convert_to_word(t_str *str)
 		}
 		else if (cur->kind == STR_PLAIN)
 			len += cur->len;
+		else if (cur->kind == STR_DOUBLE && cur->variables)
+		{
+			//  + len("hello $USER") - len("")
+			len += cur->len - 2;
+
+			// + len(getenv("USER")) - len($USER)
+			t_str	*var = cur->variables;
+			char	*name = strndup(var->pos + 1, var->len - 1);
+			char	*value = getenv(name);
+			len += strlen(value);
+			len -= var->len;
+		}
 		else
 			len += cur->len - 2;
 		cur = cur->next;
@@ -67,6 +79,22 @@ char	*convert_to_word(t_str *str)
 			char	*value = getenv(name);
 			memcpy(s + len, value, strlen(value));
 			len += strlen(value);
+		}
+		else if (cur->kind == STR_DOUBLE && cur->variables)
+		{
+			// "hello $USER world"
+			t_str	*var = cur->variables;
+			// "hello "
+			memcpy(s + len, cur->pos + 1, var->pos - (cur->pos + 1));
+			len += var->pos - (cur->pos + 1);
+			// "$USER"
+			char	*name = strndup(var->pos + 1, var->len - 1);
+			char	*value = getenv(name);
+			memcpy(s + len, value, strlen(value));
+			len += strlen(value);
+			// " world"
+			memcpy(s + len, var->pos + var->len, (cur->pos + cur->len - 1) - (var->pos + var->len));
+			len += (cur->pos + cur->len - 1) - (var->pos + var->len);
 		}
 		else
 		{
