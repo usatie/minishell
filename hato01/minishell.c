@@ -6,11 +6,6 @@
 
 extern char     *envp[];
 
-void    exec_cmd(const char *line)
-{
-    system(line);
-}
-
 #define NUM_BUILTIN 7
 
 bool is_builtin(const char *cmd)
@@ -27,6 +22,7 @@ bool is_builtin(const char *cmd)
     return (false);
 }
 
+int status;
 void    exec_builtin(const char *line)
 {
     if (strcmp(line, "exit") == 0)
@@ -37,12 +33,12 @@ void    exec_builtin(const char *line)
     // TODO: export
     // TODO: unset
     // TODO: env
-    system(line);
+    status = system(line);
 }
 
 void exec_non_builtin(const char *line)
 {
-    system(line);
+    status = system(line);
 }
 
 void    exec(const char *line)
@@ -63,11 +59,7 @@ int main(void)
         if (line == NULL)
             break;
         if (*line)
-        {
-            if (strcmp(line, "exit") == 0)
-                exit(0);
-            exec_cmd(line);
-        }
+            exec(line);
     }
-    return 0;
+    return (status >> 8);
 }
