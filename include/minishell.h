@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/13 06:59:34 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/13 10:42:33 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,11 @@
 # define MINISHELL_H
 
 # include <unistd.h>
-# include <stdio.h>
 # include <stddef.h>
 # include <stdbool.h>
+
+// for printf debug
+# include <stdio.h>
 
 typedef struct s_token		t_token;
 typedef enum e_token_kind	t_token_kind;

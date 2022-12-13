@@ -6,8 +6,8 @@ LIBFTDIR  = libft
 LIBFT     = libft/libft.a
 LIBS      = -lreadline -lft -L libft          # linker flags
 SRCS      = src/minishell.c\
-            src/tokenizer.c\
-            src/parser.c\
+            src/tokenize.c\
+            src/parse.c\
             src/quotes.c\
             src/error.c\
 			src/gen_pipeline.c\

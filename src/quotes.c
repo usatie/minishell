@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/09 08:48:46 by susami            #+#    #+#             */
-/*   Updated: 2022/12/13 07:10:34 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/13 10:39:48 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,15 +25,6 @@
 //
 // char *s = "hello world"
 
-size_t	get_envlen(char *name)
-{
-	char	*value;
-	value = getenv(name);
-	if (value)
-		return (strlen(value));
-	return (0);
-}
-
 size_t	get_len(t_str *str)
 {
 	size_t	len;
@@ -43,22 +34,13 @@ size_t	get_len(t_str *str)
 	cur = str;
 	while (cur)
 	{
-		// "hello"
-		// 'hello'
-		// hello
-		// $USER
-		len += cur->len;
 		if (cur->kind == STR_VAR)
-		{
-			len -= cur->len;
 			len += cur->value_len;
-		}
 		else if (cur->kind == STR_PLAIN)
-			;
+			len += cur->len;
 		else if (cur->kind == STR_DOUBLE)
 		{
-			len -= 2;
-			// "hello $USER"
+			len += cur->len - 2;
 			for (t_str *var = cur->variables; var; var = var->next)
 			{
 				len -= var->len;
@@ -66,7 +48,7 @@ size_t	get_len(t_str *str)
 			}
 		}
 		else if (cur->kind == STR_SINGLE)
-			len -= 2;
+			len += cur->len - 2;
 		else
 			err_exit("Unexpected STR type");
 		cur = cur->next;
@@ -76,30 +58,21 @@ size_t	get_len(t_str *str)
 
 char	*convert_to_word(t_str *str)
 {
-	size_t	len;
 	char	*s;
 	t_str	*cur;
 
-	len = get_len(str);
 	cur = str;
-	s = malloc(len + 1);
+	s = calloc(get_len(str) + 1, sizeof(char));
 	if (s == NULL)
 		fatal_exit("malloc()");
-	len = 0;
 	while (cur)
 	{
 		if (cur->kind == STR_PLAIN)
-		{
-			memcpy(s + len, cur->pos, cur->len);
-			len += cur->len;
-		}
+			strncat(s, cur->pos, cur->len);
 		else if (cur->kind == STR_VAR)
 		{
 			if (cur->value)
-			{
-				memcpy(s + len, cur->value, cur->value_len);
-				len += cur->value_len;
-			}
+				strncat(s, cur->value, cur->value_len);
 		}
 		else if (cur->kind == STR_DOUBLE)
 		{
@@ -109,26 +82,17 @@ char	*convert_to_word(t_str *str)
 			for (t_str *var = cur->variables; var; var = var->next)
 			{
 				// plain text
-				memcpy(s + len, p, var->pos - p);
-				len += var->pos - p;
+				strncat(s, p, var->pos - p);
 				// varible expansion
 				if (var->value)
-				{
-					memcpy(s + len, var->value, var->value_len);
-					len += var->value_len;
-				}
+					strncat(s, var->value, var->value_len);
 				p = var->pos + var->len;
 			}
-			memcpy(s + len, p, (cur->pos + cur->len - 1) - p);
-			len += (cur->pos + cur->len - 1) - p;
+			strncat(s, p, (cur->len - 1) - (p - cur->pos));
 		}
 		else
-		{
-			memcpy(s + len, cur->pos + 1, cur->len - 2);
-			len += cur->len - 2;
-		}
+			strncat(s, cur->pos + 1, cur->len - 2);
 		cur = cur->next;
 	}
-	s[len] = '\0';
 	return (s);
 }
