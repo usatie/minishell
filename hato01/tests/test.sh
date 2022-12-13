@@ -1,5 +1,10 @@
 #!/bin/bash
 
+cleanup(){
+    rm -f cmp out
+    exit
+}
+
 assert() {
     printf "%-30s:" "\"$1\""
     echo -e "$1" | ./minishell >out 2>/dev/null
@@ -9,7 +14,7 @@ assert() {
     diff out cmp >/dev/null && echo -n "diff OK" || terminate=1
     if [ "$terminate" = "1" ]; then
         echo "diff NG"
-        exit
+        cleanup
     fi
 
     if [ "$actual" = "$expected" ]; then
@@ -20,7 +25,7 @@ assert() {
     fi
 
     if [ "$terminate" = "1" ]; then
-        exit
+        cleanup
     fi
 }
 
@@ -29,6 +34,7 @@ assert "exit"
 assert "pwd"
 assert "ls | grep .c"
 assert "invalid command"
-assert 'exit \n pwd'
+assert 'exit\npwd'
 
 echo "OK :D"
+cleanup
