@@ -1,12 +1,29 @@
 NAME	= minishell
+CC      = cc
 CFLAGS	= -Wall -Werror -Wextra
+LIBS    = -lreadline
 SRCS    = src/minishell.c
-OBJS    = $(SRCS:%.c=%.o)
+OBJDIR  = obj
+OBJS    = $(SRCS:src/%.c=$(OBJDIR)/%.o)
+
+all: $(NAME)
 
 $(NAME): $(OBJS)
-	gcc $(OBJS) -o $(NAME) -lreadline $(CFLAGS)
+	$(CC) $(OBJS) -o $(NAME) $(LIBS)
+
+$(OBJDIR)/%.o: src/%.c
+	mkdir -p $(OBJDIR)
+	$(CC) $^ -o $@ -c $(CFLAGS)
 
 test: $(NAME)
 	./tests/test.sh
 
-.PHONY: test
+clean:
+	$(RM) -r $(OBJDIR)
+
+fclean: clean
+	$(RM) $(NAME)
+
+re: fclean all
+
+.PHONY: test all clean fclean re
