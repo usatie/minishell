@@ -89,6 +89,10 @@ assert 'echo "Undefined variable $undefined_variable"'
 assert 'echo "These are not variable : $. $+ "'
 assert 'echo "These are variable     : $_foo $foo"'
 
+# Special Parameter
+assert 'echo $?'
+assert 'echo "$?"'
+
 # Word splitting
 # export foo="a     b"
 # assert 'echo "$foo"'

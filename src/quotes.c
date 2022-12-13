@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/09 08:48:46 by susami            #+#    #+#             */
-/*   Updated: 2022/12/13 13:25:18 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/13 14:19:36 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ size_t	get_len(t_str *str)
 	cur = str;
 	while (cur)
 	{
-		if (cur->kind == STR_VAR)
+		if (cur->kind == STR_VAR || cur->kind == STR_SPECIAL_PARAM)
 			len += cur->value_len;
 		else if (cur->kind == STR_PLAIN)
 			len += cur->len;
@@ -69,7 +69,7 @@ char	*convert_to_word(t_str *str)
 	{
 		if (cur->kind == STR_PLAIN)
 			strncat(s, cur->pos, cur->len);
-		else if (cur->kind == STR_VAR)
+		else if (cur->kind == STR_VAR || cur->kind == STR_SPECIAL_PARAM)
 		{
 			if (cur->value)
 				strncat(s, cur->value, cur->value_len);

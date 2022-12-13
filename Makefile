@@ -24,9 +24,7 @@ $(NAME): $(OBJS) $(LIBFT)
 	$(CC) $(OBJS) -o $(NAME) $(LIBS)
 
 $(OBJDIR)/%.o: src/%.c
-	mkdir -p $(OBJDIR)
-	# $< The name of the first prerequisite.
-	# $^ The names of all the prerequisites.
+	@mkdir -p $(OBJDIR)
 	$(CC) -MMD -MP -c $< -o $@ $(CFLAGS) $(INCLUDES)
 
 $(LIBFT):

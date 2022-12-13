@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 06:45:04 by susami            #+#    #+#             */
-/*   Updated: 2022/12/13 13:25:01 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/13 14:29:36 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,17 @@ static void	expand_parameter_str(t_str *s)
 		if (s->value)
 			s->value_len = strlen(s->value);
 		free(name);
+	}
+	if (s->kind == STR_SPECIAL_PARAM)
+	{
+		if (startswith(s->pos, "$?"))
+		{
+			s->value = calloc(12, sizeof(char));
+			sprintf(s->value, "%d", WEXITSTATUS(status));
+			s->value_len = strlen(s->value);
+		}
+		else
+			err_exit("Unexpected special param");
 	}
 	else if (s->kind == STR_DOUBLE)
 	{

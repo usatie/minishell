@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 14:21:05 by susami            #+#    #+#             */
-/*   Updated: 2022/12/13 10:40:38 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/13 14:17:49 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,10 +83,11 @@ int	parse_and_exec(char *cmd)
 		return (status);
 }
 
+int	status = 0;
+
 int	main(void)
 {
 	char	*line;
-	int		status;
 
 	while (1)
 	{

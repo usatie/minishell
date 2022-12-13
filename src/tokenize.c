@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 10:25:51 by susami            #+#    #+#             */
-/*   Updated: 2022/12/13 13:28:17 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/13 14:29:23 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,47 @@ static bool	is_variable(char *s)
 	return (*s == '$' && is_alpha_under(s[1]));
 }
 
+/*
+Special Parameters
+       The shell treats several parameters specially.  These parameters may only be referenced; assignment to them is not
+       allowed.
+       *      Expands to the positional parameters, starting from one.  When the expansion occurs within double quotes, it
+              expands to a single word with the value of each parameter separated by the first character of the IFS special
+              variable.  That is, "$*" is equivalent to "$1c$2c...", where c is the first character of the value of the IFS
+              variable.  If IFS is unset, the parameters are separated by spaces.  If IFS is null, the parameters are joined
+              without intervening separators.
+       @      Expands to the positional parameters, starting from one.  When the expansion occurs within double quotes, each
+              parameter expands to a separate word.  That is, "$@" is equivalent to "$1" "$2" ...  If the double-quoted
+              expansion occurs within a word, the expansion of the first parameter is joined with the beginning part of the
+              original word, and the expansion of the last parameter is joined with the last part of the original word.
+              When there are no positional parameters, "$@" and $@ expand to nothing (i.e., they are removed).
+       #      Expands to the number of positional parameters in decimal.
+       ?      Expands to the status of the most recently executed foreground pipeline.
+       -      Expands to the current option flags as specified upon invocation, by the set builtin command, or those set by
+              the shell itself (such as the -i option).
+       $      Expands to the process ID of the shell.  In a () subshell, it expands to the process ID of the current shell,
+              not the subshell.
+       !      Expands to the process ID of the most recently executed background (asynchronous) command.
+       0      Expands to the name of the shell or shell script.  This is set at shell initialization.  If bash is invoked
+              with a file of commands, $0 is set to the name of that file.  If bash is started with the -c option, then $0
+              is set to the first argument after the string to be executed, if one is present.  Otherwise, it is set to the
+              file name used to invoke bash, as given by argument zero.
+       _      At shell startup, set to the absolute pathname used to invoke the shell or shell script being executed as
+              passed in the environment or argument list.  Subsequently, expands to the last argument to the previous
+              command, after expansion.  Also set to the full pathname used to invoke each command executed and placed in
+              the environment exported to that command.  When checking mail, this parameter holds the name of the mail file
+			  mail, this parameter holds the name of the mail file currently being checked.
+*/
+static bool	is_specialchr(char c)
+{
+	return (strchr("?", c));
+	//return (strchr("*@#?-$!0_", s[1]));
+}
+static bool	is_special_param(char *s)
+{
+	return (*s == '$' && is_specialchr(s[1]));
+}
+
 static bool	is_unquoted(char *s)
 {
 	return (*s != '\"'
@@ -167,6 +208,22 @@ t_str	*variable(char **rest, char *line)
 	return (str);
 }
 
+t_str	*special_parameter(char **rest, char *line)
+{
+	t_str	*str;
+	char	*start;
+	
+	start = line;
+	if (*line != '$')
+		err_exit("Expected $\n");
+	line++;
+	if (!is_specialchr(*line))
+		err_exit("Expected special character.");
+	line++;
+	str = new_str(start, line - start, STR_SPECIAL_PARAM);
+	*rest = line;
+	return (str);
+}
 
 // Read until next single quote
 t_str	*single_quotes(char **rest, char *line)
@@ -203,6 +260,11 @@ t_str	*double_quotes(char **rest, char *line)
 		if (is_variable(line))
 		{
 			param->next = variable(&line, line);
+			param = param->next;
+		}
+		else if (is_special_param(line))
+		{
+			param->next = special_parameter(&line, line);
 			param = param->next;
 		}
 		else
@@ -257,6 +319,14 @@ t_token	*string(char **rest, char *line)
 		else if (*line == '"')
 		{
 			cur->next = double_quotes(&line, line);
+			cur = cur->next;
+			tok->len += cur->len;
+			continue ;
+		}
+		// Special Parameter
+		else if (is_special_param(line))
+		{
+			cur->next = special_parameter(&line, line);
 			cur = cur->next;
 			tok->len += cur->len;
 			continue ;

@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/13 13:06:45 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/13 14:24:49 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 
 // for printf debug
 # include <stdio.h>
+
+extern int	status;
 
 typedef struct s_token		t_token;
 typedef enum e_token_kind	t_token_kind;
@@ -38,6 +40,7 @@ enum e_str_kind {
 	STR_SINGLE, // 'str'
 	STR_DOUBLE, // "str"
 	STR_VAR, // $variable
+	STR_SPECIAL_PARAM, // $?
 };
 
 // echo "hello $USER $USER world" "world!"
@@ -122,6 +125,7 @@ void	fatal_exit(char *s) __attribute__((noreturn));
 void	err_exit(char *s) __attribute__((noreturn));
 
 // tokenizer.c
+bool	startswith(char *p, char *q);
 t_token	*tokenize(char *line);
 
 // expansion.c
