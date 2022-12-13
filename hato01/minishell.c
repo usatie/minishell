@@ -3,8 +3,11 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <unistd.h>
+#include <errno.h>
 
-extern char     *envp[];
+extern char     **environ;
+int             status;
 
 #define NUM_BUILTIN 7
 
@@ -22,7 +25,25 @@ bool is_builtin(const char *cmd)
     return (false);
 }
 
-int status;
+int mysystem(const char *cmd)
+{
+    int     st;
+    char *argv[4] = {"/bin/sh", "-c", (char *)cmd, NULL};
+
+    switch (fork()) {
+        case -1:
+            exit(1);
+        case 0:
+            execve("/bin/sh", argv, environ);
+            exit(1);
+        default:
+            break;
+    }
+    wait(&st);
+    status = st;
+    return (st);
+}
+
 void    exec_builtin(const char *line)
 {
     if (strcmp(line, "exit") == 0)
@@ -33,7 +54,7 @@ void    exec_builtin(const char *line)
     // TODO: export
     // TODO: unset
     // TODO: env
-    status = system(line);
+    status = mysystem(line);
 }
 
 void exec_non_builtin(const char *line)
