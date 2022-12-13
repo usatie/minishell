@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 10:25:51 by susami            #+#    #+#             */
-/*   Updated: 2022/12/13 13:06:59 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/13 13:28:17 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ static bool	is_control_operator(char *s)
 	//		|| startswith(s, "\n"));
 }
 
-static bool	is_parameter(char *s)
+static bool	is_variable(char *s)
 {
 	return (*s == '$' && is_alpha_under(s[1]));
 }
@@ -123,7 +123,7 @@ static bool	is_unquoted(char *s)
 	return (*s != '\"'
 			&& *s != '\''
 			&& !is_metachr(*s)
-			&& !is_parameter(s)
+			&& !is_variable(s)
 			&& !is_control_operator(s));
 }
 
@@ -148,7 +148,7 @@ static bool	consume_blank(char **rest, char *line)
 // echo $foo"hello"
 // echo "a" "b" "chello"
 //
-t_str	*parameter(char **rest, char *line)
+t_str	*variable(char **rest, char *line)
 {
 	t_str	*str;
 	char	*start;
@@ -200,9 +200,9 @@ t_str	*double_quotes(char **rest, char *line)
 	line++; // skip the opening quote
 	while (*line && *line != '"')
 	{
-		if (is_parameter(line))
+		if (is_variable(line))
 		{
-			param->next = parameter(&line, line);
+			param->next = variable(&line, line);
 			param = param->next;
 		}
 		else
@@ -262,9 +262,9 @@ t_token	*string(char **rest, char *line)
 			continue ;
 		}
 		// Parameter
-		else if (*line == '$' && is_alpha_under(line[1]))
+		else if (is_variable(line))
 		{
-			cur->next = parameter(&line, line);
+			cur->next = variable(&line, line);
 			cur = cur->next;
 			tok->len += cur->len;
 			continue ;
