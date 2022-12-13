@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 06:45:04 by susami            #+#    #+#             */
-/*   Updated: 2022/12/13 07:05:30 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/13 13:25:01 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static void	expand_parameter_str(t_str *s)
 	}
 	else if (s->kind == STR_DOUBLE)
 	{
-		for (t_str *var = s->variables; var; var = var->next)
-			expand_parameter_str(var);
+		for (t_str *param = s->parameters; param; param = param->next)
+			expand_parameter_str(param);
 	}
 }

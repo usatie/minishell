@@ -15,6 +15,8 @@ SRCS      = src/minishell.c\
 			src/expand.c
 OBJDIR    = obj
 OBJS      = $(SRCS:src/%.c=$(OBJDIR)/%.o)
+DEPS      = $(SRCS:src/%.c=$(OBJDIR)/%.d)
+.PHONY: $(DEPS)
 
 all: $(NAME)
 
@@ -23,7 +25,9 @@ $(NAME): $(OBJS) $(LIBFT)
 
 $(OBJDIR)/%.o: src/%.c
 	mkdir -p $(OBJDIR)
-	$(CC) $^ -o $@ -c $(CFLAGS) $(INCLUDES)
+	# $< The name of the first prerequisite.
+	# $^ The names of all the prerequisites.
+	$(CC) -MMD -MP -c $< -o $@ $(CFLAGS) $(INCLUDES)
 
 $(LIBFT):
 	make -C $(LIBFTDIR)
@@ -40,3 +44,4 @@ fclean: clean
 re: fclean all
 
 .PHONY: test all clean fclean re
+-include $(DEPS)

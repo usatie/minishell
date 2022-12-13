@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/13 10:42:33 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/13 13:06:45 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ struct s_str {
 	t_str		*next;
 	
 	// Only for STR_DOUBLE
-	t_str		*variables;
+	t_str		*parameters;
 
 	// Only for STR_VAR
 	char		*value;

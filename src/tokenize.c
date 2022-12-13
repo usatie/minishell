@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 10:25:51 by susami            #+#    #+#             */
-/*   Updated: 2022/12/13 12:16:11 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/13 13:06:59 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,16 @@ DEFINITIONS
 			A token that performs a control function. It is one of the
 			following symbols:
 			|| & && ; ;; ( ) | <newline>
+
+PARAMETERS
+	A parameter is an entity that stores values.  It can be a name, a number,
+	or one of the special characters listed below under Special Parameters.
+	A variable is a parameter denoted by a name.  A variable has a value and
+	zero or more attributes.  Attributes are assigned using the declare builtin
+	command (see declare below in SHELL BUILTIN COMMANDS).
+
+	variable
+			A parameter denoted by a name.
 */
 static bool	is_blank(char c)
 {
@@ -202,7 +212,7 @@ t_str	*double_quotes(char **rest, char *line)
 		err_exit("Unclosed single quote\n");
 	line++;
 	str = new_str(start, line - start, STR_DOUBLE);
-	str->variables = paramhead.next;
+	str->parameters = paramhead.next;
 	*rest = line;
 	return (str);
 }

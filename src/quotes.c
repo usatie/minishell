@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/09 08:48:46 by susami            #+#    #+#             */
-/*   Updated: 2022/12/13 10:39:48 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/13 13:25:18 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,10 @@ size_t	get_len(t_str *str)
 		else if (cur->kind == STR_DOUBLE)
 		{
 			len += cur->len - 2;
-			for (t_str *var = cur->variables; var; var = var->next)
+			for (t_str *param = cur->parameters; param; param = param->next)
 			{
-				len -= var->len;
-				len += var->value_len;
+				len -= param->len;
+				len += param->value_len;
 			}
 		}
 		else if (cur->kind == STR_SINGLE)
@@ -79,14 +79,14 @@ char	*convert_to_word(t_str *str)
 			// "hello $USER world"
 			char *p;
 			p = cur->pos + 1;
-			for (t_str *var = cur->variables; var; var = var->next)
+			for (t_str *param = cur->parameters; param; param = param->next)
 			{
 				// plain text
-				strncat(s, p, var->pos - p);
-				// varible expansion
-				if (var->value)
-					strncat(s, var->value, var->value_len);
-				p = var->pos + var->len;
+				strncat(s, p, param->pos - p);
+				// paramible expansion
+				if (param->value)
+					strncat(s, param->value, param->value_len);
+				p = param->pos + param->len;
 			}
 			strncat(s, p, (cur->len - 1) - (p - cur->pos));
 		}
