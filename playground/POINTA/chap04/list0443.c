@@ -15,7 +15,7 @@ size_t strspn(const char *s1, const char *s2)
     return s1 - p;
 }
 
-
+/*
 int main(void)
 {
     const char *s1 = "HELLOAhOOOOOhelloWORLDDDDDDDD";
@@ -24,3 +24,4 @@ int main(void)
     printf("%lu\n", strspn(s1, s2));
     return 0;
 }
+*/
