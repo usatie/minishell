@@ -2,11 +2,9 @@
 
 char *weekstr(int wd)
 {
-    char wstr[][10] = {"Sundat","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"};
+    char *wstr[] = {"Sundat","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"};
     return (wd >= 0 && wd < 7) ? wstr[wd] : NULL;
 }
-
-
 
 int main(void)
 {
