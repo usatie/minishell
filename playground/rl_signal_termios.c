@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <signal.h>
 #include <stdio.h>
+#include <string.h>
 #include <readline/readline.h>
 
 #include <unistd.h>
@@ -36,9 +37,8 @@ void	sigint_handler(int signum)
 	setup_term();
 }
 
-void	setup_signal(void)
+void	setup_sigint(void)
 {
-	//signal(SIGINT, handler);
 	struct sigaction	sa;
 	sigemptyset(&sa.sa_mask);
 	sa.sa_flags = 0;
@@ -47,22 +47,31 @@ void	setup_signal(void)
 		exit(1);
 }
 
+void	setup_sigquit(void)
+{
+	struct sigaction	sa_ignore;
+	sa_ignore.sa_handler = SIG_IGN;
+	sa_ignore.sa_flags = 0;
+	sigemptyset(&sa_ignore.sa_mask);
+	if (sigaction(SIGQUIT, &sa_ignore, NULL) < 0)
+		exit(1);
+}
+
 int	main(void)
 {
 	char	*line;
 
 	setup_rl();
-	setup_signal();
+	setup_sigint();
+	setup_sigquit();
 	setup_term();
 	while (1)
 	{
 		line = readline("nanoshell$ ");
-		if (!line)
-		{
-			write(STDERR_FILENO, "exit", 4);
-			exit(0);
-		}
+		if (!line || strcmp("exit", line) == 0)
+			break ;
 		system(line);
 	}
+	write(STDERR_FILENO, "exit\n", 5);
 	return (0);
 }
