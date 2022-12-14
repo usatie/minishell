@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 15:34:36 by susami            #+#    #+#             */
-/*   Updated: 2022/12/13 07:11:30 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/14 16:12:58 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,13 +64,6 @@ bool	equal(t_token *tok, char *op)
 bool	at_eof(t_token *tok)
 {
 	return (tok->kind == TK_EOF);
-}
-
-t_token	*skip_kind(t_token *tok, t_token_kind kind)
-{
-	if (tok->kind != kind)
-		err_exit("Invalid kind\n");
-	return (tok->next);
 }
 
 /*
