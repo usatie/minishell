@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/13 14:24:49 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/14 16:16:08 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,7 @@ t_token	*tokenize(char *line);
 void	expand_parameter(t_token *tok);
 
 // parser.c
-t_node	*parse(char *line);
+t_node	*parse(t_token *tok);
 
 // quotes.c
 char	*convert_to_word(t_str *str);

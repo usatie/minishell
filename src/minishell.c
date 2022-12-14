@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 14:21:05 by susami            #+#    #+#             */
-/*   Updated: 2022/12/14 15:17:20 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/14 16:16:47 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,12 @@ char	*find_path(char *cmd)
 int	parse_and_exec(char *cmd)
 {
 	int			status;
+	t_token		*tok;
 	t_node		*node;
 
 	// tokenize, parse, ...
-	node = parse(cmd);
+	tok = tokenize(cmd);
+	node = parse(tok);
 	t_pipeline	*head;
 	t_pipeline	*pipeline;
 
@@ -70,6 +72,9 @@ int	parse_and_exec(char *cmd)
 			fatal_exit("waitpid()");
 		pipeline = pipeline->next;
 	}
+	//free_all_tok(tok);
+	//free_all_node(node);
+	//free_all_pipeline(head);
 	return (status);
 }
 

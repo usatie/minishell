@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 15:34:36 by susami            #+#    #+#             */
-/*   Updated: 2022/12/14 16:12:58 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/14 16:15:48 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,11 +84,8 @@ static t_node	*redirection(t_token **rest, t_token *tok);
 static t_node	*command(t_token **rest, t_token *tok);
 static t_node	*pipeline(t_token **rest, t_token *tok);
 
-t_node	*parse(char *line)
+t_node	*parse(t_token *tok)
 {
-	t_token		*tok;
-
-	tok = tokenize(line);
 	return (pipeline(&tok, tok));
 }
 
