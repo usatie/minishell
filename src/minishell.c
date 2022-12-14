@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 14:21:05 by susami            #+#    #+#             */
-/*   Updated: 2022/12/13 14:17:49 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/14 15:17:20 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,38 +49,28 @@ char	*find_path(char *cmd)
 int	parse_and_exec(char *cmd)
 {
 	int			status;
-	pid_t		child_pid;
 	t_node		*node;
 
-	child_pid = ft_fork();
-	if (child_pid == 0)
-	{
-		// tokenize, parse, ...
-		node = parse(cmd);
-		t_pipeline	*head;
-		t_pipeline	*pipeline;
+	// tokenize, parse, ...
+	node = parse(cmd);
+	t_pipeline	*head;
+	t_pipeline	*pipeline;
 
-		head = pipeline = gen_pipeline(node);
-		while (pipeline)
-		{
-			forkexec(pipeline);
-			pipeline = pipeline->next;
-		}
-		// wait all pipeline processes to exit
-		pipeline = head;
-		while (pipeline)
-		{
-			if (waitpid(pipeline->pid, &status, 0) < 0 && errno != ECHILD)
-				fatal_exit("waitpid()");
-			pipeline = pipeline->next;
-		}
-		exit(WEXITSTATUS(status));
+	head = pipeline = gen_pipeline(node);
+	while (pipeline)
+	{
+		forkexec(pipeline);
+		pipeline = pipeline->next;
 	}
-	// wait parse and all pipeline processes to exit
-	if (waitpid(child_pid, &status, 0) < 0)
-		return (-1);
-	else
-		return (status);
+	// wait all pipeline processes to exit
+	pipeline = head;
+	while (pipeline)
+	{
+		if (waitpid(pipeline->pid, &status, 0) < 0 && errno != ECHILD)
+			fatal_exit("waitpid()");
+		pipeline = pipeline->next;
+	}
+	return (status);
 }
 
 int	status = 0;

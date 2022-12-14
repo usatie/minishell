@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 10:26:01 by susami            #+#    #+#             */
-/*   Updated: 2022/12/13 10:26:03 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/14 15:25:43 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,8 @@ void	forkexec(t_pipeline *command)
 	else
 	{
 		// parent
-		ft_close(command->inpipe[0]); // inpipe is not necessary anymore
+		if (command->inpipe[0] != STDIN_FILENO)
+			ft_close(command->inpipe[0]); // inpipe is not necessary anymore
 		ft_close(command->inpipe[1]); // inpipe is not necessary anymore
 	}
 }
