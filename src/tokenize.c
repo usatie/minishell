@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 10:25:51 by susami            #+#    #+#             */
-/*   Updated: 2022/12/13 14:29:23 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/14 15:21:52 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -236,7 +236,11 @@ t_str	*single_quotes(char **rest, char *line)
 	while (*line && *line != '\'')
 		line++;
 	if (*line != '\'')
-		err_exit("Unclosed single quote\n");
+	{
+		str = new_str(start, line - start, STR_PLAIN);
+		*rest = line;
+		return (str);
+	}
 	line++;
 	str = new_str(start, line - start, STR_SINGLE);
 	*rest = line;
@@ -271,7 +275,11 @@ t_str	*double_quotes(char **rest, char *line)
 			line++;
 	}
 	if (*line != '"')
-		err_exit("Unclosed single quote\n");
+	{
+		str = new_str(start, line - start, STR_PLAIN);
+		*rest = line;
+		return (str);
+	}
 	line++;
 	str = new_str(start, line - start, STR_DOUBLE);
 	str->parameters = paramhead.next;
