@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 10:25:51 by susami            #+#    #+#             */
-/*   Updated: 2022/12/16 07:11:09 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/16 07:17:19 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,78 @@
 #include <string.h>
 #include <ctype.h>
 #include "minishell.h"
+
+static bool		is_blank(char c);
+static bool		is_alpha_under(char c);
+static bool		is_alpha_num_under(char c);
+static bool		is_metachr(char c);
+static bool		is_control_operator(char *s);
+static bool		is_variable(char *s);
+static bool		is_specialchr(char c);
+static bool		is_special_param(char *s);
+static bool		is_unquoted(char *s);
+static bool		consume_blank(char **rest, char *line);
+static t_str	*variable(char **rest, char *line);
+static t_str	*special_parameter(char **rest, char *line);
+static t_str	*single_quotes(char **rest, char *line);
+static t_str	*double_quotes(char **rest, char *line);
+static t_str	*plain_text(char **rest, char *line);
+static t_token	*string(char **rest, char *line);
+
+
+// "cat -e Makefile"
+//  ^   ^  ^
+
+// 'echo "hello"'
+//  ^    ^ 
+t_token	*tokenize(char *line)
+{
+	t_token	head = {};
+	t_token	*cur;
+
+	cur = &head;
+	while (*line)
+	{
+		// blank
+		if (consume_blank(&line, line))
+			continue ;
+		// Multi character punctuator
+		if (startswith(line, "<<") || startswith(line, ">>"))
+		{
+			cur->next = new_token(line, 2, TK_PUNCT);
+			cur = cur->next;
+			line += 2;
+			continue ;
+		}
+		// Single character punctuator
+		if (strchr("|<>", *line) != NULL)
+		{
+			cur->next = new_token(line, 1, TK_PUNCT);
+			cur = cur->next;
+			line++;
+			continue ;
+		}
+		// Number
+		if (isdigit(*line))
+		{
+			cur->next = new_token(line, 0, TK_NUM);
+			cur = cur->next;
+			cur->val = strtol(line, &line, 10);
+			cur->len = line - cur->pos;
+			cur->str = new_str(cur->pos, cur->len, STR_PLAIN);
+			continue ;
+		}
+		// String
+		{
+			cur->next = string(&line, line);
+			cur = cur->next;
+			continue ;
+		}
+	}
+	cur->next = new_token(line, 0, TK_EOF);
+	expand_parameter(head.next);
+	return (head.next);
+}
 
 /*
 `man bash`
@@ -329,58 +401,3 @@ t_token	*string(char **rest, char *line)
 	*rest = line;
 	return (tok);
 }
-
-// "cat -e Makefile"
-//  ^   ^  ^
-
-// 'echo "hello"'
-//  ^    ^ 
-t_token	*tokenize(char *line)
-{
-	t_token	head = {};
-	t_token	*cur;
-
-	cur = &head;
-	while (*line)
-	{
-		// blank
-		if (consume_blank(&line, line))
-			continue ;
-		// Multi character punctuator
-		if (startswith(line, "<<") || startswith(line, ">>"))
-		{
-			cur->next = new_token(line, 2, TK_PUNCT);
-			cur = cur->next;
-			line += 2;
-			continue ;
-		}
-		// Single character punctuator
-		if (strchr("|<>", *line) != NULL)
-		{
-			cur->next = new_token(line, 1, TK_PUNCT);
-			cur = cur->next;
-			line++;
-			continue ;
-		}
-		// Number
-		if (isdigit(*line))
-		{
-			cur->next = new_token(line, 0, TK_NUM);
-			cur = cur->next;
-			cur->val = strtol(line, &line, 10);
-			cur->len = line - cur->pos;
-			cur->str = new_str(cur->pos, cur->len, STR_PLAIN);
-			continue ;
-		}
-		// String
-		{
-			cur->next = string(&line, line);
-			cur = cur->next;
-			continue ;
-		}
-	}
-	cur->next = new_token(line, 0, TK_EOF);
-	expand_parameter(head.next);
-	return (head.next);
-}
-
