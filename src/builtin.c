@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 13:09:50 by susami            #+#    #+#             */
-/*   Updated: 2022/12/15 23:18:13 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/15 23:30:15 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ bool	isbuiltin(char *command)
 {
 	unsigned long		i;
 	static const char	*builtins[] = {
-//		"echo",
+		"echo",
 		"cd",
 		"pwd",
 		"export",
@@ -124,6 +124,29 @@ int	ft_unset(char **argv)
 	return (0);
 }
 
+int	ft_echo(char **argv)
+{
+	bool	printnl;
+	int		start;
+
+	printnl = true;
+	start = 1;
+	if (argv[1] && strcmp(argv[1], "-n") == 0)
+	{
+		printnl = false;
+		start = 2;
+	}
+	for (int i = start; argv[i]; i++)
+	{
+		if (i > start)
+			printf(" ");
+		printf("%s", argv[i]);
+	}
+	if (printnl)
+		printf("\n");
+	return (0);
+}
+
 int	exec_builtin(t_pipeline *pipeline)
 {
 	char	*command;
@@ -141,6 +164,8 @@ int	exec_builtin(t_pipeline *pipeline)
 		return (ft_env(pipeline->argv));
 	else if (strcmp(command, "unset") == 0)
 		return (ft_unset(pipeline->argv));
+	else if (strcmp(command, "echo") == 0)
+		return (ft_echo(pipeline->argv));
 	else
 	{
 		// TODO

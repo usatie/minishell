@@ -67,8 +67,8 @@ assert "echo \"'hello'\""
 assert "     pwd   "
 assert "echo hello'world'\"42\""
 assert 'ec"ho" he"ll"o'
-assert 'echo hello >hello.txt' 'hello.txt'
-assert 'echo hello 1>hello.txt' 'hello.txt'
+# assert 'echo hello >hello.txt' 'hello.txt'
+# assert 'echo hello 1>hello.txt' 'hello.txt'
 # assert 'invalid 2>hello.txt' 'hello.txt'
 assert 'cat Makefile | grep minishell'
 assert 'cat Makefile | grep c | sort -r'
@@ -109,5 +109,12 @@ assert 'cd /etc\npwd' # bash doesn't follow symlink? or cd/pwd implementation is
 assert 'env | grep "USER"'
 assert 'export foo=bar\nenv | grep "foo=bar"'
 assert 'export foo=bar\nunset foo\necho $foo'
+assert 'echo'
+assert 'echo hello'
+assert 'echo hello "    " world'
+assert 'echo -n'
+assert 'echo -n hello'
+assert 'echo -n hello world'
+assert 'echo hello -n'
 
 echo "OK :D"
