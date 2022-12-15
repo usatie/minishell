@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 10:26:01 by susami            #+#    #+#             */
-/*   Updated: 2022/12/15 13:17:51 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/15 13:36:18 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,5 +148,5 @@ int	forkexec_pipeline(t_pipeline *head)
 			fatal_exit("waitpid()");
 		pipeline = pipeline->next;
 	}
-	return (status);
+	return (WEXITSTATUS(status));
 }

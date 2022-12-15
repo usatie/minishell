@@ -6,18 +6,42 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 14:21:05 by susami            #+#    #+#             */
-/*   Updated: 2022/12/15 13:19:05 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/15 13:35:34 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <readline/readline.h>
 #include <stdlib.h>
+#include <errno.h>
 
 #include "minishell.h"
 
 #define PROMPT "minishell $ "
 
 int	status = 0;
+
+bool	is_syntax_ok(char *cmd)
+{
+	t_token		*tok;
+	t_node		*node;
+	pid_t		pid;
+	int			status;
+
+	pid = fork();
+	if (pid < 0)
+		fatal_exit("fork()");
+	else if (pid == 0)
+	{
+		tok = tokenize(cmd);
+		node = parse(tok);
+		gen_pipeline(node);
+		exit(0);
+	}
+	// parent
+	if (waitpid(pid, &status, 0) < 0 && errno != ECHILD)
+		fatal_exit("waitpid()");
+	return (status == 0);
+}
 
 int	exec(char *cmd)
 {
@@ -26,6 +50,8 @@ int	exec(char *cmd)
 	t_node		*node;
 	t_pipeline	*pipeline;
 
+	if (!is_syntax_ok(cmd))
+		return (258);
 	// tokenize, parse, ...
 	tok = tokenize(cmd);
 	node = parse(tok);
@@ -59,5 +85,5 @@ int	main(void)
 		status = exec(line);
 		free(line);
 	}
-	return (WEXITSTATUS(status));
+	return (status);
 }

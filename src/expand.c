@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 06:45:04 by susami            #+#    #+#             */
-/*   Updated: 2022/12/13 14:29:36 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/15 13:35:05 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static void	expand_parameter_str(t_str *s)
 		if (startswith(s->pos, "$?"))
 		{
 			s->value = calloc(12, sizeof(char));
-			sprintf(s->value, "%d", WEXITSTATUS(status));
+			sprintf(s->value, "%d", status);
 			s->value_len = strlen(s->value);
 		}
 		else
