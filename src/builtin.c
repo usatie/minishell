@@ -6,12 +6,13 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 13:09:50 by susami            #+#    #+#             */
-/*   Updated: 2022/12/15 13:10:38 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/15 14:11:44 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include <string.h>
+#include <limits.h>
 
 #include "minishell.h"
 
@@ -21,7 +22,7 @@ bool	isbuiltin(char *command)
 	static const char	*builtins[] = {
 //		"echo",
 //		"cd",
-//		"pwd",
+		"pwd",
 //		"export",
 //		"unset",
 //		"env",
@@ -37,6 +38,22 @@ bool	isbuiltin(char *command)
 	return (false);
 }
 
+int	ft_pwd(void)
+{
+	char	cwd[PATH_MAX];
+
+	if (getcwd(cwd, PATH_MAX))
+	{
+		printf("%s\n", cwd);
+		return (0);
+	}
+	else
+	{
+		perror("pwd");
+		return (1);
+	}
+}
+
 int	exec_builtin(t_pipeline *pipeline)
 {
 	char	*command;
@@ -44,6 +61,8 @@ int	exec_builtin(t_pipeline *pipeline)
 	command = pipeline->argv[0];
 	if (strcmp(command, "exit") == 0)
 		exit(status);
+	else if (strcmp(command, "pwd") == 0)
+		return (ft_pwd());
 	else
 	{
 		// TODO
