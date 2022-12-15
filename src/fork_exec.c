@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 10:26:01 by susami            #+#    #+#             */
-/*   Updated: 2022/12/14 15:25:43 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/15 10:08:31 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,8 +80,17 @@ void	forkexec(t_pipeline *command)
 		if (command->argv[0] == NULL)
 			exit(0);
 		// exec
-		execve(find_path(command->argv[0]), command->argv, NULL);
-		err_exit("execve");
+		if (isbuiltin(command->argv[0]))
+		{
+			exec_builtin(command);
+			exit(0);
+		}
+		else
+		{
+			char	*path = find_path(command->argv[0]);
+			execve(path, command->argv, NULL);
+			err_exit("execve");
+		}
 	}
 	else
 	{

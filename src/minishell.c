@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 14:21:05 by susami            #+#    #+#             */
-/*   Updated: 2022/12/14 16:16:47 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/15 13:06:44 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,19 +46,45 @@ char	*find_path(char *cmd)
 	return (NULL);
 }
 
-int	parse_and_exec(char *cmd)
+bool	isbuiltin(char *command)
 {
-	int			status;
-	t_token		*tok;
-	t_node		*node;
+	unsigned long		i;
+	static const char	*builtins[] = {
+//		"echo",
+//		"cd",
+//		"pwd",
+//		"export",
+//		"unset",
+//		"env",
+		"exit"};
 
-	// tokenize, parse, ...
-	tok = tokenize(cmd);
-	node = parse(tok);
-	t_pipeline	*head;
+	i = 0;
+	while (i < sizeof(builtins) / sizeof(*builtins))
+	{
+		if (strcmp(command, builtins[i]) == 0)
+			return (true);
+		i++;
+	}
+	return (false);
+}
+
+int	exec_builtin(t_pipeline *pipeline)
+{
+	if (strcmp(pipeline->argv[0], "exit") == 0)
+		exit(status);
+	else
+	{
+		// TODO
+		write(STDERR_FILENO, "Unknown Builtin\n", strlen("Unknown Builtin\n"));
+		return (1);
+	}
+}
+
+int	forkexec_pipeline(t_pipeline *head)
+{
 	t_pipeline	*pipeline;
 
-	head = pipeline = gen_pipeline(node);
+	pipeline = head;
 	while (pipeline)
 	{
 		forkexec(pipeline);
@@ -72,6 +98,27 @@ int	parse_and_exec(char *cmd)
 			fatal_exit("waitpid()");
 		pipeline = pipeline->next;
 	}
+	return (status);
+}
+
+int	parse_and_exec(char *cmd)
+{
+	int			status;
+	t_token		*tok;
+	t_node		*node;
+	t_pipeline	*pipeline;
+
+	// tokenize, parse, ...
+	tok = tokenize(cmd);
+	node = parse(tok);
+
+	pipeline = gen_pipeline(node);
+	if (pipeline->argv[0] == NULL)
+		return (0);
+	if (!pipeline->next && isbuiltin(pipeline->argv[0]))
+		status = exec_builtin(pipeline);
+	else
+		status = forkexec_pipeline(pipeline);
 	//free_all_tok(tok);
 	//free_all_node(node);
 	//free_all_pipeline(head);
@@ -91,8 +138,6 @@ int	main(void)
 			break ;
 		if (*line)
 			add_history(line);
-		if (strcmp(line, "exit") == 0)
-			exit(0);
 		status = parse_and_exec(line);
 		free(line);
 	}

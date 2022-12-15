@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/14 16:16:08 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/15 09:57:51 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,6 +139,10 @@ char	*convert_to_word(t_str *str);
 
 // gen_command.c
 t_pipeline	*gen_pipeline(t_node *node);
+
+// builtin.c
+bool	isbuiltin(char *command);
+int		exec_builtin(t_pipeline *pipeline);
 
 // fork_exec.c
 void	ft_close(int fd);
