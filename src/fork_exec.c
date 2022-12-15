@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 10:26:01 by susami            #+#    #+#             */
-/*   Updated: 2022/12/15 18:37:55 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/16 06:36:51 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ int	ft_open(char *path)
 		err_exit("open()");
 	return (fd);
 }
+
 void	ft_close(int fd)
 {
 	if (fd < 0)

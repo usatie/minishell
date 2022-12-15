@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 10:25:51 by susami            #+#    #+#             */
-/*   Updated: 2022/12/14 15:21:52 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/16 07:11:09 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,37 +14,6 @@
 #include <string.h>
 #include <ctype.h>
 #include "minishell.h"
-
-t_str	*new_str(char *pos, size_t len, t_str_kind kind)
-{
-	t_str	*s;
-
-	s = calloc(sizeof(t_str), 1);
-	if (s == NULL)
-		fatal_exit("calloc()");
-	s->pos = pos;
-	s->len = len;
-	s->kind = kind;
-	return (s);
-}
-
-t_token	*new_token(char *pos, size_t len, t_token_kind kind)
-{
-	t_token	*tok;
-
-	tok = calloc(sizeof(t_token), 1);
-	if (tok == NULL)
-		fatal_exit("calloc()");
-	tok->pos = pos;
-	tok->len = len;
-	tok->kind = kind;
-	return (tok);
-}
-
-bool	startswith(char *p, char *q)
-{
-	return (memcmp(p, q, strlen(q)) == 0);
-}
 
 /*
 `man bash`
@@ -81,12 +50,12 @@ static bool	is_blank(char c)
 	return (c == ' ' || c == '\t');
 }
 
-bool	is_alpha_under(char c)
+static bool	is_alpha_under(char c)
 {
 	return (isalpha(c) || c == '_');
 }
 
-bool	is_alpha_num_under(char c)
+static bool	is_alpha_num_under(char c)
 {
 	return (is_alpha_under(c) || isdigit(c));
 }

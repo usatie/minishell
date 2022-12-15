@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 06:45:04 by susami            #+#    #+#             */
-/*   Updated: 2022/12/15 13:35:05 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/16 06:36:35 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,21 @@
 
 static void	expand_parameter_str(t_str *s);
 
+static void	foreach_str(t_str *s, void f(t_str *))
+{
+	while (s)
+	{
+		f(s);
+		s = s->next;
+	}
+}
+
 void	expand_parameter(t_token *tok)
 {
 	while (tok->kind != TK_EOF)
 	{
 		if (tok->kind == TK_STRING)
-		{
-			for (t_str *s = tok->str; s; s = s->next)
-				expand_parameter_str(s);
-		}
+			foreach_str(tok->str, expand_parameter_str);
 		tok = tok->next;
 	}
 }
@@ -55,8 +61,5 @@ static void	expand_parameter_str(t_str *s)
 			err_exit("Unexpected special param");
 	}
 	else if (s->kind == STR_DOUBLE)
-	{
-		for (t_str *param = s->parameters; param; param = param->next)
-			expand_parameter_str(param);
-	}
+		foreach_str(s->parameters, expand_parameter_str);
 }

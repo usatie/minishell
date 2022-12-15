@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 13:09:50 by susami            #+#    #+#             */
-/*   Updated: 2022/12/15 23:30:15 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/16 06:33:20 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	ft_pwd(char *argv[])
 {
 	char		cwd[PATH_MAX];
 	struct stat	st1;
-	struct stat st2;
+	struct stat	st2;
 	char		*pwd;
 
 	(void)argv;
@@ -168,7 +168,6 @@ int	exec_builtin(t_pipeline *pipeline)
 		return (ft_echo(pipeline->argv));
 	else
 	{
-		// TODO
 		write(STDERR_FILENO, "Unknown Builtin\n", strlen("Unknown Builtin\n"));
 		return (1);
 	}

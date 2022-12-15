@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/15 18:37:24 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/16 07:10:53 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,6 +134,20 @@ void	expand_parameter(t_token *tok);
 
 // parser.c
 t_node	*parse(t_token *tok);
+
+// str.c
+t_str	*new_str(char *pos, size_t len, t_str_kind kind);
+
+// token.c
+t_token	*new_token(char *pos, size_t len, t_token_kind kind);
+bool	startswith(char *p, char *q);
+
+// node.c
+t_node	*new_node(t_node_kind kind, t_token *tok);
+t_node	*new_node_binary(t_node_kind kind, t_node *lhs, t_node *rhs, t_token *tok);
+t_node	*new_node_num(long val, t_token *tok);
+bool	equal(t_token *tok, char *op);
+bool	at_eof(t_token *tok);
 
 // quotes.c
 char	*convert_to_word(t_str *str);

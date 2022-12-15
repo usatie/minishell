@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   quotes.c                                           :+:      :+:    :+:   */
+/*   str.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/09 08:48:46 by susami            #+#    #+#             */
-/*   Updated: 2022/12/13 14:19:36 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/16 07:09:16 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,19 @@
 // "world" -> "world"
 //
 // char *s = "hello world"
+
+t_str	*new_str(char *pos, size_t len, t_str_kind kind)
+{
+	t_str	*s;
+
+	s = calloc(sizeof(t_str), 1);
+	if (s == NULL)
+		fatal_exit("calloc()");
+	s->pos = pos;
+	s->len = len;
+	s->kind = kind;
+	return (s);
+}
 
 size_t	get_len(t_str *str)
 {

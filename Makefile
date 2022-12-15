@@ -8,12 +8,14 @@ LIBS      = -lreadline -lft -L libft          # linker flags
 SRCS      = src/minishell.c\
             src/tokenize.c\
             src/parse.c\
-            src/quotes.c\
             src/error.c\
 			src/gen_pipeline.c\
 			src/fork_exec.c\
 			src/expand.c\
-			src/builtin.c
+			src/builtin.c\
+			src/node.c\
+			src/str.c\
+			src/token.c
 OBJDIR    = obj
 OBJS      = $(SRCS:src/%.c=$(OBJDIR)/%.o)
 DEPS      = $(SRCS:src/%.c=$(OBJDIR)/%.d)
