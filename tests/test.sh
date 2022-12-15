@@ -100,4 +100,10 @@ assert 'echo "$?"'
 
 # assert "ls -l"  # This test fails because out and cmp affects the output of `ls`
 
+# Builtin
+assert 'pwd'
+assert 'cd\npwd'
+assert 'cd src\npwd'
+# assert 'cd /etc\npwd' # bash doesn't follow symlink
+
 echo "OK :D"
