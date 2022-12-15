@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 13:09:50 by susami            #+#    #+#             */
-/*   Updated: 2022/12/15 22:58:48 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/15 23:08:23 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ bool	isbuiltin(char *command)
 		"pwd",
 		"export",
 //		"unset",
-//		"env",
+		"env",
 		"exit"};
 
 	i = 0;
@@ -76,7 +76,9 @@ int	ft_pwd(char *argv[])
 // cd /etc
 int	ft_cd(char *argv[])
 {
+	char	cwd[PATH_MAX];
 	char	*path;
+	char	*pwd;
 
 	path = argv[1];
 	if (!path)
@@ -91,6 +93,11 @@ int	ft_cd(char *argv[])
 		perror("cd");
 		return (1);
 	}
+	pwd = getenv("PWD");
+	if (pwd)
+		setenv("OLDPWD", pwd, 1);
+	else if (getcwd(cwd, PATH_MAX))
+		setenv("OLDPWD", cwd, 1);
 	setenv("PWD", path, 1);
 	return (0);
 }
@@ -99,6 +106,14 @@ int	ft_export(char **argv)
 {
 	if (putenv(argv[1]) < 0)
 		return (1);
+	return (0);
+}
+
+int	ft_env(char **argv)
+{
+	(void)argv;
+	for (int i = 0; environ[i]; i++)
+		printf("%s\n", environ[i]);
 	return (0);
 }
 
@@ -115,6 +130,8 @@ int	exec_builtin(t_pipeline *pipeline)
 		return (ft_cd(pipeline->argv));
 	else if (strcmp(command, "export") == 0)
 		return (ft_export(pipeline->argv));
+	else if (strcmp(command, "env") == 0)
+		return (ft_env(pipeline->argv));
 	else
 	{
 		// TODO

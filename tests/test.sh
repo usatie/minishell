@@ -105,5 +105,6 @@ assert 'pwd'
 assert 'cd\npwd'
 assert 'cd src\npwd'
 assert 'cd /etc\npwd' # bash doesn't follow symlink? or cd/pwd implementation is strange?
+# assert 'env' # output doesn't match bash's
 
 echo "OK :D"
