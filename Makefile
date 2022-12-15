@@ -12,7 +12,8 @@ SRCS      = src/minishell.c\
             src/error.c\
 			src/gen_pipeline.c\
 			src/fork_exec.c\
-			src/expand.c
+			src/expand.c\
+			src/builtin.c
 OBJDIR    = obj
 OBJS      = $(SRCS:src/%.c=$(OBJDIR)/%.o)
 DEPS      = $(SRCS:src/%.c=$(OBJDIR)/%.d)

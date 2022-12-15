@@ -6,12 +6,17 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 10:26:01 by susami            #+#    #+#             */
-/*   Updated: 2022/12/15 10:08:31 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/15 13:17:51 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include <fcntl.h>
+#include <errno.h>
+#include <limits.h>
+#include <string.h>
+
+#include "libft.h"
 #include "minishell.h"
 
 int	ft_open(char *path)
@@ -101,3 +106,47 @@ void	forkexec(t_pipeline *command)
 	}
 }
 
+// find_path("cat") -> "/bin/cat"
+char	*find_path(char *cmd)
+{
+	char	*path;
+	char	*envpath;
+	char	**paths;
+
+	if (access(cmd, X_OK) == 0)
+		return (cmd);
+	path = calloc(sizeof(char), PATH_MAX);
+	envpath = getenv("PATH");
+	paths = ft_split(envpath, ':');
+	for (int i = 0; paths[i]; i++)
+	{
+		strcpy(path, paths[i]);
+		strcat(path, "/");
+		strcat(path, cmd);
+		if (access(path, X_OK) == 0)
+			return (path);
+	}
+	free(path);
+	return (NULL);
+}
+
+int	forkexec_pipeline(t_pipeline *head)
+{
+	t_pipeline	*pipeline;
+
+	pipeline = head;
+	while (pipeline)
+	{
+		forkexec(pipeline);
+		pipeline = pipeline->next;
+	}
+	// wait all pipeline processes to exit
+	pipeline = head;
+	while (pipeline)
+	{
+		if (waitpid(pipeline->pid, &status, 0) < 0 && errno != ECHILD)
+			fatal_exit("waitpid()");
+		pipeline = pipeline->next;
+	}
+	return (status);
+}

@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/15 09:57:51 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/15 13:17:10 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,7 +149,7 @@ void	ft_close(int fd);
 pid_t	ft_fork(void);
 void	ft_dup2(int oldfd, int newfd);
 void	forkexec(t_pipeline *command);
-
-// main.c
+int		forkexec_pipeline(t_pipeline *head);
 char	*find_path(char *cmd);
+
 #endif
