@@ -106,5 +106,8 @@ assert 'cd\npwd'
 assert 'cd src\npwd'
 assert 'cd /etc\npwd' # bash doesn't follow symlink? or cd/pwd implementation is strange?
 # assert 'env' # output doesn't match bash's
+assert 'env | grep "USER"'
+assert 'export foo=bar\nenv | grep "foo=bar"'
+assert 'export foo=bar\nunset foo\necho $foo'
 
 echo "OK :D"

@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 13:09:50 by susami            #+#    #+#             */
-/*   Updated: 2022/12/15 23:08:23 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/15 23:18:13 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ bool	isbuiltin(char *command)
 		"cd",
 		"pwd",
 		"export",
-//		"unset",
+		"unset",
 		"env",
 		"exit"};
 
@@ -117,6 +117,13 @@ int	ft_env(char **argv)
 	return (0);
 }
 
+int	ft_unset(char **argv)
+{
+	if (unsetenv(argv[1]) < 0)
+		return (1);
+	return (0);
+}
+
 int	exec_builtin(t_pipeline *pipeline)
 {
 	char	*command;
@@ -132,6 +139,8 @@ int	exec_builtin(t_pipeline *pipeline)
 		return (ft_export(pipeline->argv));
 	else if (strcmp(command, "env") == 0)
 		return (ft_env(pipeline->argv));
+	else if (strcmp(command, "unset") == 0)
+		return (ft_unset(pipeline->argv));
 	else
 	{
 		// TODO
