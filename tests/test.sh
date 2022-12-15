@@ -104,6 +104,6 @@ assert 'echo "$?"'
 assert 'pwd'
 assert 'cd\npwd'
 assert 'cd src\npwd'
-# assert 'cd /etc\npwd' # bash doesn't follow symlink
+assert 'cd /etc\npwd' # bash doesn't follow symlink? or cd/pwd implementation is strange?
 
 echo "OK :D"

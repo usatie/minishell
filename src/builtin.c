@@ -6,15 +6,19 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 13:09:50 by susami            #+#    #+#             */
-/*   Updated: 2022/12/15 14:30:49 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/15 22:58:48 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include <string.h>
 #include <limits.h>
+#include <sys/stat.h>
 
 #include "minishell.h"
+
+int	ft_pwd(char *argv[]);
+int	ft_export(char **argv);
 
 bool	isbuiltin(char *command)
 {
@@ -23,7 +27,7 @@ bool	isbuiltin(char *command)
 //		"echo",
 		"cd",
 		"pwd",
-//		"export",
+		"export",
 //		"unset",
 //		"env",
 		"exit"};
@@ -40,19 +44,32 @@ bool	isbuiltin(char *command)
 
 int	ft_pwd(char *argv[])
 {
-	char	cwd[PATH_MAX];
+	char		cwd[PATH_MAX];
+	struct stat	st1;
+	struct stat st2;
+	char		*pwd;
 
 	(void)argv;
+	pwd = getenv("PWD");
+	if (pwd)
+	{
+		bzero(&st1, sizeof(struct stat));
+		bzero(&st2, sizeof(struct stat));
+		stat(".", &st1);
+		stat(pwd, &st2);
+		if (st1.st_ino == st2.st_ino)
+		{
+			printf("%s\n", pwd);
+			return (0);
+		}
+	}
 	if (getcwd(cwd, PATH_MAX))
 	{
 		printf("%s\n", cwd);
 		return (0);
 	}
-	else
-	{
-		perror("pwd");
-		return (1);
-	}
+	perror("pwd");
+	return (1);
 }
 
 // TODO: bash doesn't follow symlink
@@ -74,6 +91,14 @@ int	ft_cd(char *argv[])
 		perror("cd");
 		return (1);
 	}
+	setenv("PWD", path, 1);
+	return (0);
+}
+
+int	ft_export(char **argv)
+{
+	if (putenv(argv[1]) < 0)
+		return (1);
 	return (0);
 }
 
@@ -88,6 +113,8 @@ int	exec_builtin(t_pipeline *pipeline)
 		return (ft_pwd(pipeline->argv));
 	else if (strcmp(command, "cd") == 0)
 		return (ft_cd(pipeline->argv));
+	else if (strcmp(command, "export") == 0)
+		return (ft_export(pipeline->argv));
 	else
 	{
 		// TODO
