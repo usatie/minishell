@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/16 15:23:26 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/16 16:29:10 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,7 @@ void	fatal_exit(char *s) __attribute__((noreturn));
 void	err_exit(char *s) __attribute__((noreturn));
 
 // tokenizer.c
-bool	startswith(char *p, char *q);
+bool	startswith(const char *p, const char *q);
 t_token	*tokenize(char *line);
 
 // expansion.c
@@ -147,7 +147,7 @@ t_str	*new_str(char *pos, size_t len, t_str_kind kind);
 
 // token.c
 t_token	*new_token(char *pos, size_t len, t_token_kind kind);
-bool	startswith(char *p, char *q);
+bool	startswith(const char *p, const char *q);
 
 // node.c
 t_node	*new_node(t_node_kind kind, t_token *tok);

@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 10:25:51 by susami            #+#    #+#             */
-/*   Updated: 2022/12/16 07:17:19 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/16 16:27:56 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,12 @@ static bool		is_blank(char c);
 static bool		is_alpha_under(char c);
 static bool		is_alpha_num_under(char c);
 static bool		is_metachr(char c);
-static bool		is_control_operator(char *s);
-static bool		is_variable(char *s);
+static bool		is_control_operator(const char *s);
+static bool		is_variable(const char *s);
 static bool		is_specialchr(char c);
-static bool		is_special_param(char *s);
-static bool		is_unquoted(char *s);
+static bool		is_special_param(const char *s);
+static bool		is_unquoted(const char *s);
+static bool		is_number(const char *s);
 static bool		consume_blank(char **rest, char *line);
 static t_str	*variable(char **rest, char *line);
 static t_str	*special_parameter(char **rest, char *line);
@@ -66,7 +67,7 @@ t_token	*tokenize(char *line)
 			continue ;
 		}
 		// Number
-		if (isdigit(*line))
+		if (is_number(line))
 		{
 			cur->next = new_token(line, 0, TK_NUM);
 			cur = cur->next;
@@ -138,7 +139,7 @@ static bool	is_metachr(char c)
 	return (strchr("<>", c) || is_blank(c));
 }
 
-static bool	is_control_operator(char *s)
+static bool	is_control_operator(const char *s)
 {
 	return (startswith(s, "&&")
 			|| startswith(s, "|")
@@ -154,7 +155,7 @@ static bool	is_control_operator(char *s)
 	//		|| startswith(s, "\n"));
 }
 
-static bool	is_variable(char *s)
+static bool	is_variable(const char *s)
 {
 	return (*s == '$' && is_alpha_under(s[1]));
 }
@@ -195,18 +196,27 @@ static bool	is_specialchr(char c)
 	return (strchr("?", c));
 	//return (strchr("*@#?-$!0_", s[1]));
 }
-static bool	is_special_param(char *s)
+static bool	is_special_param(const char *s)
 {
 	return (*s == '$' && is_specialchr(s[1]));
 }
 
-static bool	is_unquoted(char *s)
+static bool	is_unquoted(const char *s)
 {
 	return (*s != '\"'
 			&& *s != '\''
 			&& !is_metachr(*s)
 			&& !is_variable(s)
 			&& !is_control_operator(s));
+}
+
+static bool	is_number(const char *s)
+{
+	if (!isdigit(*s))
+		return (false);
+	while (isdigit(*s))
+		s++;
+	return (is_blank(*s) || is_metachr(*s) || is_control_operator(s));
 }
 
 static bool	consume_blank(char **rest, char *line)

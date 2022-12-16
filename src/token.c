@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 07:10:22 by susami            #+#    #+#             */
-/*   Updated: 2022/12/16 07:10:26 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/16 16:28:50 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ t_token	*new_token(char *pos, size_t len, t_token_kind kind)
 	return (tok);
 }
 
-bool	startswith(char *p, char *q)
+bool	startswith(const char *p, const char *q)
 {
 	return (memcmp(p, q, strlen(q)) == 0);
 }

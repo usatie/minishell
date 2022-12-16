@@ -83,9 +83,15 @@ assert "echo \"'hello'\""
 assert "     pwd   "
 assert "echo hello'world'\"42\""
 assert 'ec"ho" he"ll"o'
+assert 'echo 1.txt'
+
+# Redirection
 assert 'echo hello >hello.txt' 'hello.txt'
 assert 'echo hello 1>hello.txt' 'hello.txt'
 # assert 'invalid 2>hello.txt' 'hello.txt'
+# assert 'echo 1>one.txt 2>two.txt 3>three.txt' 'one.txt' 'two.txt' 'three.txt'
+
+# Pipe
 assert 'cat Makefile | grep minishell'
 assert 'cat Makefile | grep c | sort -r'
 assert 'cat Makefile | grep c | sort -r > sort.txt' 'sort.txt'
@@ -134,6 +140,7 @@ assert 'echo -n hello world'
 assert 'echo hello -n'
 assert 'exit 42'
 assert '>>>\nexit'
+
 test_sigint
 
 echo "OK :D"
