@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 10:26:01 by susami            #+#    #+#             */
-/*   Updated: 2022/12/16 14:01:47 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/16 16:49:42 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,11 +73,11 @@ static void	forkexec(t_pipeline *command)
 		ft_dup2(command->inpipe[0], STDIN_FILENO);
 		ft_dup2(command->outpipe[1], STDOUT_FILENO);
 		// redirect
-		if (command->out_path)
+		if (command->redir_out)
 		{
 			int	fd;
-			fd = ft_open(command->out_path);
-			ft_dup2(fd, command->out_fd);
+			fd = ft_open(command->redir_out->path);
+			ft_dup2(fd, command->redir_out->fd);
 		}
 		// path
 		if (command->argv[0] == NULL)

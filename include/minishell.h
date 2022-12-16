@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/16 16:41:05 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/16 16:46:59 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,14 +117,20 @@ struct s_node {
 	long		val;
 };
 
+typedef struct s_redirect	t_redirect;
+struct s_redirect {
+	char		*path;
+	int			fd;
+	int			dupfd;
+	t_redirect	*next;
+};
+
 struct s_pipeline {
 	pid_t		pid;
 	char		**argv;
 	int			inpipe[2];
 	int			outpipe[2];
-	char		*out_path;
-	int			out_fd;
-	int			out_dupfd;
+	t_redirect	*redir_out;
 	t_pipeline	*next;
 };
 

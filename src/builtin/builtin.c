@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 13:09:50 by susami            #+#    #+#             */
-/*   Updated: 2022/12/16 10:59:13 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/16 16:54:38 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,18 +48,17 @@ int	exec_builtin(t_pipeline *command)
 	int		status;
 	int		fd;
 
-	command->out_dupfd = -1;
 	status = 0;
 	command_name = command->argv[0];
 	// redirect
-	if (command->out_path)
+	if (command->redir_out)
 	{
 		// stash original out_fd
-		if (is_valid_fd(command->out_fd))
-			command->out_dupfd = ft_dup(command->out_fd);
+		if (is_valid_fd(command->redir_out->fd))
+			command->redir_out->dupfd = ft_dup(command->redir_out->fd);
 		// open redirout path and map to out_fd
-		fd = ft_open(command->out_path);
-		ft_dup2(fd, command->out_fd);
+		fd = ft_open(command->redir_out->path);
+		ft_dup2(fd, command->redir_out->fd);
 	}
 	if (strcmp(command_name, "exit") == 0)
 		ft_exit(command->argv);
@@ -80,8 +79,8 @@ int	exec_builtin(t_pipeline *command)
 		write(STDERR_FILENO, "Unknown Builtin\n", strlen("Unknown Builtin\n"));
 		status = 1;
 	}
-	if (is_valid_fd(command->out_dupfd))
-		ft_dup2(command->out_dupfd, command->out_fd);
+	if (command->redir_out && is_valid_fd(command->redir_out->dupfd))
+		ft_dup2(command->redir_out->dupfd, command->redir_out->fd);
 	return (status);
 }
 
