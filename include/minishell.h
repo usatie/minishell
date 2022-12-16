@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/16 09:18:26 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/16 09:28:09 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 
 // for printf debug
 # include <stdio.h>
+# include <string.h>
 
 extern int	g_status;
 extern char **environ;
@@ -158,6 +159,15 @@ t_pipeline	*gen_pipeline(t_node *node);
 // builtin.c
 bool	isbuiltin(char *command);
 int		exec_builtin(t_pipeline *pipeline);
+
+// builtin/ft_*.c
+int	ft_echo(char *argv[]);
+int	ft_cd(char **argv);
+int	ft_pwd(char *argv[]);
+int	ft_export(char **argv);
+int	ft_unset(char *argv[]);
+int	ft_env(char **argv);
+int	ft_exit(char **argv);
 
 // fork_exec.c
 int		forkexec_pipeline(t_pipeline *head);

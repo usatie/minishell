@@ -116,5 +116,7 @@ assert 'echo -n'
 assert 'echo -n hello'
 assert 'echo -n hello world'
 assert 'echo hello -n'
+assert 'exit 42'
+assert '>>>\nexit'
 
 echo "OK :D"

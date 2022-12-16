@@ -12,11 +12,19 @@ SRCS      = src/minishell.c\
 			src/gen_pipeline.c\
 			src/fork_exec.c\
 			src/expand.c\
-			src/builtin.c\
 			src/node.c\
 			src/str.c\
 			src/token.c\
-			src/ft_syscall.c
+			src/ft_syscall.c\
+			src/builtin/builtin.c\
+			src/builtin/ft_echo.c\
+			src/builtin/ft_cd.c\
+			src/builtin/ft_pwd.c\
+			src/builtin/ft_export.c\
+			src/builtin/ft_unset.c\
+			src/builtin/ft_env.c\
+			src/builtin/ft_exit.c\
+
 OBJDIR    = obj
 OBJS      = $(SRCS:src/%.c=$(OBJDIR)/%.o)
 DEPS      = $(SRCS:src/%.c=$(OBJDIR)/%.d)
@@ -28,7 +36,7 @@ $(NAME): $(OBJS) $(LIBFT)
 	$(CC) $(OBJS) -o $(NAME) $(LIBS)
 
 $(OBJDIR)/%.o: src/%.c
-	@mkdir -p $(OBJDIR)
+	@mkdir -p $(@D)
 	$(CC) -MMD -MP -c $< -o $@ $(CFLAGS) $(INCLUDES)
 
 $(LIBFT):
