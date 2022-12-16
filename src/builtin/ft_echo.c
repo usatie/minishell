@@ -6,11 +6,12 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 09:32:31 by susami            #+#    #+#             */
-/*   Updated: 2022/12/16 09:33:53 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/16 11:03:44 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "libft.h"
 
 int	ft_echo(char **argv)
 {
@@ -27,10 +28,10 @@ int	ft_echo(char **argv)
 	for (int i = start; argv[i]; i++)
 	{
 		if (i > start)
-			printf(" ");
-		printf("%s", argv[i]);
+			ft_putstr_fd(" ", STDOUT_FILENO);
+		ft_putstr_fd(argv[i], STDOUT_FILENO);
 	}
 	if (printnl)
-		printf("\n");
+		ft_putstr_fd("\n", STDOUT_FILENO);
 	return (0);
 }

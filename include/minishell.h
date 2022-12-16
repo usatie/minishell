@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/16 09:28:09 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/16 10:35:46 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,7 @@ struct s_pipeline {
 	int			outpipe[2];
 	char		*out_path;
 	int			out_fd;
+	int			out_dupfd;
 	t_pipeline	*next;
 };
 
@@ -176,6 +177,7 @@ int		forkexec_pipeline(t_pipeline *head);
 int		ft_open(char *path);
 void	ft_close(int fd);
 pid_t	ft_fork(void);
+int		ft_dup(int oldfd);
 void	ft_dup2(int oldfd, int newfd);
 
 #endif

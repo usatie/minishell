@@ -67,8 +67,8 @@ assert "echo \"'hello'\""
 assert "     pwd   "
 assert "echo hello'world'\"42\""
 assert 'ec"ho" he"ll"o'
-# assert 'echo hello >hello.txt' 'hello.txt'
-# assert 'echo hello 1>hello.txt' 'hello.txt'
+assert 'echo hello >hello.txt' 'hello.txt'
+assert 'echo hello 1>hello.txt' 'hello.txt'
 # assert 'invalid 2>hello.txt' 'hello.txt'
 assert 'cat Makefile | grep minishell'
 assert 'cat Makefile | grep c | sort -r'

@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 09:26:48 by susami            #+#    #+#             */
-/*   Updated: 2022/12/16 09:27:16 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/16 11:05:25 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <limits.h>
 #include <stdlib.h>
 #include "minishell.h"
+#include "libft.h"
 
 int	ft_pwd(char *argv[])
 {
@@ -32,13 +33,13 @@ int	ft_pwd(char *argv[])
 		stat(pwd, &st2);
 		if (st1.st_ino == st2.st_ino)
 		{
-			printf("%s\n", pwd);
+			ft_putendl_fd(pwd, STDOUT_FILENO);
 			return (0);
 		}
 	}
 	if (getcwd(cwd, PATH_MAX))
 	{
-		printf("%s\n", cwd);
+		ft_putendl_fd(cwd, STDOUT_FILENO);
 		return (0);
 	}
 	perror("pwd");

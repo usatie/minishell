@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 07:28:02 by susami            #+#    #+#             */
-/*   Updated: 2022/12/16 07:28:27 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/16 10:52:42 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,16 @@ pid_t	ft_fork(void)
 	if (pid < 0)
 		err_exit("fork()");
 	return (pid);
+}
+
+int	ft_dup(int oldfd)
+{
+	int	newfd;
+
+	newfd = dup(oldfd);
+	if (newfd < 0)
+		err_exit("dup()");
+	return (newfd);
 }
 
 void	ft_dup2(int oldfd, int newfd)
