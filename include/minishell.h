@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/16 13:39:38 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/16 15:23:26 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,15 +22,21 @@
 # include <string.h>
 
 typedef struct s_env		t_env;
+typedef struct s_token		t_token;
+typedef enum e_token_kind	t_token_kind;
+typedef struct s_str		t_str;
+typedef enum e_str_kind		t_str_kind;
+typedef struct s_node		t_node;
+typedef enum e_node_kind	t_node_kind;
+typedef struct s_pipeline	t_pipeline;
+
 extern char					**environ;
 extern t_env				g_env;
 
 struct s_env {
-	int	status;
+	int			status;
+	t_pipeline	*pipeline;
 };
-
-typedef struct s_token		t_token;
-typedef enum e_token_kind	t_token_kind;
 
 enum e_token_kind {
 	TK_PUNCT, // Punctuator
@@ -38,9 +44,6 @@ enum e_token_kind {
 	TK_NUM, // Integer Literal
 	TK_EOF, // EOF
 };
-
-typedef struct s_str		t_str;
-typedef enum e_str_kind		t_str_kind;
 
 enum e_str_kind {
 	STR_PLAIN, // str
@@ -84,8 +87,6 @@ struct s_token {
 	long			val;
 };
 
-typedef struct s_node		t_node;
-typedef enum e_node_kind	t_node_kind;
 enum e_node_kind {
 	ND_WORD,
 	ND_NUM,
@@ -116,7 +117,6 @@ struct s_node {
 	long		val;
 };
 
-typedef struct s_pipeline	t_pipeline;
 struct s_pipeline {
 	pid_t		pid;
 	char		**argv;

@@ -3,6 +3,22 @@
 cleanup() {
 	rm -f cmp out
 	rm -f "$1".cmp "$1".out
+	rm -f test_sigint
+}
+
+
+test_sigint() {
+	printf "%-50s:" "[test_sigint] Please press Ctrl-C 2 times"
+
+	echo "int main() { while (1) ; }" | gcc -xc -o test_sigint -
+	echo "./test_sigint" | ./minishell 2>&- || actual=$?
+	echo "./test_sigint" | bash 2>&- || expected=$?
+	if [ "$actual" = "$expected" ]; then
+		echo "status OK"
+	else
+		echo "status NG. Expected $expected, actual is $actual"
+	fi
+	cleanup
 }
 
 assert() {
@@ -118,5 +134,6 @@ assert 'echo -n hello world'
 assert 'echo hello -n'
 assert 'exit 42'
 assert '>>>\nexit'
+test_sigint
 
 echo "OK :D"

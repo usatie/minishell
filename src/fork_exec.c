@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 10:26:01 by susami            #+#    #+#             */
-/*   Updated: 2022/12/16 09:19:28 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/16 14:01:47 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,17 @@ int	forkexec_pipeline(t_pipeline *head)
 	pipeline = head;
 	while (pipeline)
 	{
-		if (waitpid(pipeline->pid, &status, 0) < 0 && errno != ECHILD)
-			fatal_exit("waitpid()");
+		errno = 0;
+		if (waitpid(pipeline->pid, &status, 0) < 0)
+		{
+			if (errno == EINTR)
+				return (128 + SIGINT);
+				//status = 1;
+			else if (errno == ECHILD)
+				status = 0; // ?
+			else
+				fatal_exit("waitpid()");
+		}
 		pipeline = pipeline->next;
 	}
 	return (WEXITSTATUS(status));

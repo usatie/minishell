@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 14:21:05 by susami            #+#    #+#             */
-/*   Updated: 2022/12/16 13:41:06 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/16 15:24:48 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,17 @@ bool	is_syntax_ok(char *cmd)
 		exit(0);
 	}
 	// parent
-	if (waitpid(pid, &status, 0) < 0 && errno != ECHILD)
-		fatal_exit("waitpid()");
+	errno = 0;
+	if (waitpid(pid, &status, 0) < 0)
+	{
+		if (errno == EINTR)
+			return (128 + SIGINT);
+			//status = 1;
+		else if (errno == ECHILD)
+			status = 0; // ?
+		else
+			fatal_exit("waitpid()");
+	}
 	return (status == 0);
 }
 
@@ -57,6 +66,7 @@ int	exec(char *cmd)
 	tok = tokenize(cmd);
 	node = parse(tok);
 	pipeline = gen_pipeline(node);
+	g_env.pipeline = pipeline;
 	// empty command
 	if (pipeline->argv[0] == NULL)
 		status = 0;
@@ -69,6 +79,7 @@ int	exec(char *cmd)
 	//free_all_tok(tok);
 	//free_all_node(node);
 	//free_all_pipeline(head);
+	g_env.pipeline = NULL;
 	return (status);
 }
 
@@ -76,7 +87,6 @@ int	main(void)
 {
 	char	*line;
 
-	g_env.status = 0;
 	setup_rl();
 	setup_signal();
 	setup_term();

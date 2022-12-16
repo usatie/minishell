@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 13:10:41 by susami            #+#    #+#             */
-/*   Updated: 2022/12/16 13:22:02 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/16 13:55:27 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,26 @@ void	setup_signal(void)
 
 static void	sigint_handler(int signum)
 {
+	t_pipeline	*pipeline;
+
 	(void)signum;
-	write(STDERR_FILENO, "\n", 1); // Move to a new line
-	rl_on_new_line(); // Regenerate the prompt on a newline
-	rl_replace_line("", 0); // Clear the previous text
-	rl_redisplay(); // Refresh the prompt
 	setup_term();
+	pipeline = g_env.pipeline;
+	if (pipeline)
+	{
+		while (pipeline)
+		{
+			kill(pipeline->pid, SIGINT);
+			pipeline = pipeline->next;
+		}
+	}
+	else
+	{
+		write(STDERR_FILENO, "\n", 1); // Move to a new line
+		rl_on_new_line(); // Regenerate the prompt on a newline
+		rl_replace_line("", 0); // Clear the previous text
+		rl_redisplay(); // Refresh the prompt
+	}
 }
 
 static void	setup_sigint(void)
