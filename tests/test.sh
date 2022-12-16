@@ -3,6 +3,7 @@
 cleanup() {
 	rm -f cmp out
 	rm -f "$1".cmp "$1".out
+	rm -f test_*.txt
 	rm -f test_sigint
 }
 
@@ -89,7 +90,7 @@ assert 'echo 1.txt'
 assert 'echo hello >hello.txt' 'hello.txt'
 assert 'echo hello 1>hello.txt' 'hello.txt'
 # assert 'invalid 2>hello.txt' 'hello.txt'
-# assert 'echo 1>one.txt 2>two.txt 3>three.txt' 'one.txt' 'two.txt' 'three.txt'
+assert 'echo 1>test_one.txt 2>test_two.txt 3>test_three.txt'
 
 # Pipe
 assert 'cat Makefile | grep minishell'

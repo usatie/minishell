@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 06:49:21 by susami            #+#    #+#             */
-/*   Updated: 2022/12/16 06:49:32 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/16 16:40:11 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,19 @@ t_node	*new_node_num(long val, t_token *tok)
 	node->val = val;
 	node->tok = tok;
 	return (node);
+}
+
+t_node	*add_node_back(t_node *head, t_node *new_node)
+{
+	t_node	*cur;
+
+	if (!head)
+		return (new_node);
+	cur = head;
+	while (cur->next)
+		cur = cur->next;
+	cur->next = new_node;
+	return (head);
 }
 
 bool	equal(t_token *tok, char *op)

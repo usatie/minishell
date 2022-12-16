@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/16 16:29:10 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/16 16:41:05 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,6 +153,7 @@ bool	startswith(const char *p, const char *q);
 t_node	*new_node(t_node_kind kind, t_token *tok);
 t_node	*new_node_binary(t_node_kind kind, t_node *lhs, t_node *rhs, t_token *tok);
 t_node	*new_node_num(long val, t_token *tok);
+t_node	*add_node_back(t_node *head, t_node *new_node);
 bool	equal(t_token *tok, char *op);
 bool	at_eof(t_token *tok);
 

@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 15:34:36 by susami            #+#    #+#             */
-/*   Updated: 2022/12/16 07:08:09 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/16 16:42:29 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,39 +60,32 @@ static t_node	*pipeline(t_token **rest, t_token *tok)
 static t_node	*command(t_token **rest, t_token *tok)
 {
 	t_node	*cmd;
-	t_node	head;
-	t_node	*arg;
 
 	cmd = new_node(ND_CMD, tok);
-	head = (t_node){};
-	arg = &head;
 	while (!at_eof(tok) && !equal(tok, "|"))
 	{
 		// '>' word | num '>' word
 		if (equal(tok, ">") || (tok->kind == TK_NUM && equal(tok->next, ">")))
 		{
-			cmd->redir_out = redirection(&tok, tok);
+			cmd->redir_out = add_node_back(cmd->redir_out, redirection(&tok, tok));
 			continue ;
 		}
 		// word
 		else if (tok->kind == TK_STRING)
 		{
 			cmd->nargs++;
-			arg->next = word(&tok, tok);
-			arg = arg->next;
+			cmd->args = add_node_back(cmd->args, word(&tok, tok));
 			continue ;
 		}
 		// num
 		else if (tok->kind == TK_NUM)
 		{
 			cmd->nargs++;
-			arg->next = num(&tok, tok);
-			arg = arg->next;
+			cmd->args = add_node_back(cmd->args, num(&tok, tok));
 			continue ;
 		}
 		err_exit("Invalid token for <command_element>");
 	}
-	cmd->args = head.next;
 	*rest = tok;
 	return (cmd);
 }
