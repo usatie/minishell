@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/11 14:32:27 by susami            #+#    #+#             */
-/*   Updated: 2022/12/16 16:54:22 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/16 17:03:41 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,17 +71,38 @@ t_redirect	*new_redirect(char *path, int fd)
 	return (redirect);
 }
 
+t_redirect	*gen_redirect(t_node *redir_node)
+{
+	char	*path;
+	int		fd;
+
+	path = convert_to_word(redir_node->rhs->str);
+	fd = redir_node->lhs->val;
+	return (new_redirect(path, fd));
+}
+
+t_redirect	*add_redir_back(t_redirect *head, t_redirect *new_redir)
+{
+	t_redirect	*cur;
+	
+	if (!head)
+		return (new_redir);
+	cur = head;
+	while (cur->next)
+		cur = cur->next;
+	cur->next = new_redir;
+	return (head);
+}
+
 t_pipeline	*gen_command(t_node *node)
 {
 	t_pipeline	*command;
 
 	command = new_pipeline();
 	command->argv = gen_argv(node);
-	if (node->redir_out)
+	for (t_node	*redir_node = node->redir_out; redir_node; redir_node = redir_node->next)
 	{
-		command->redir_out = new_redirect(convert_to_word(node->redir_out->rhs->str), node->redir_out->lhs->val);
-		//command->out_fd = node->redir_out->lhs->val;
-		//command->out_path = convert_to_word(node->redir_out->rhs->str);
+		command->redir_out = add_redir_back(command->redir_out, gen_redirect(redir_node));
 	}
 	return (command);
 }
