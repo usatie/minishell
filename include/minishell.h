@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/16 09:02:45 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/16 09:18:26 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 // for printf debug
 # include <stdio.h>
 
-extern int	status;
+extern int	g_status;
 extern char **environ;
 
 typedef struct s_token		t_token;

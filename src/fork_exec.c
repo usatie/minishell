@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 10:26:01 by susami            #+#    #+#             */
-/*   Updated: 2022/12/16 07:30:07 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/16 09:19:28 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,10 @@ static char	*find_path(char *cmd);
 
 int	forkexec_pipeline(t_pipeline *head)
 {
+	int			status;
 	t_pipeline	*pipeline;
 
+	status = 0;
 	pipeline = head;
 	while (pipeline)
 	{

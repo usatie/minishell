@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 13:09:50 by susami            #+#    #+#             */
-/*   Updated: 2022/12/16 06:33:20 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/16 09:18:55 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,7 +153,7 @@ int	exec_builtin(t_pipeline *pipeline)
 
 	command = pipeline->argv[0];
 	if (strcmp(command, "exit") == 0)
-		exit(status);
+		exit(g_status);
 	else if (strcmp(command, "pwd") == 0)
 		return (ft_pwd(pipeline->argv));
 	else if (strcmp(command, "cd") == 0)

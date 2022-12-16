@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 14:21:05 by susami            #+#    #+#             */
-/*   Updated: 2022/12/15 13:35:34 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/16 09:18:40 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 #define PROMPT "minishell $ "
 
-int	status = 0;
+int	g_status = 0;
 
 bool	is_syntax_ok(char *cmd)
 {
@@ -82,8 +82,8 @@ int	main(void)
 			break ;
 		if (*line)
 			add_history(line);
-		status = exec(line);
+		g_status = exec(line);
 		free(line);
 	}
-	return (status);
+	return (g_status);
 }
