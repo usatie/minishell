@@ -15,7 +15,8 @@ SRCS      = src/minishell.c\
 			src/builtin.c\
 			src/node.c\
 			src/str.c\
-			src/token.c
+			src/token.c\
+			src/ft_syscall.c
 OBJDIR    = obj
 OBJS      = $(SRCS:src/%.c=$(OBJDIR)/%.o)
 DEPS      = $(SRCS:src/%.c=$(OBJDIR)/%.d)

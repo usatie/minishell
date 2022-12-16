@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 10:26:01 by susami            #+#    #+#             */
-/*   Updated: 2022/12/16 06:36:51 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/16 07:30:07 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,42 +19,28 @@
 #include "libft.h"
 #include "minishell.h"
 
-int	ft_open(char *path)
+static void	forkexec(t_pipeline *command);
+static char	*find_path(char *cmd);
+
+int	forkexec_pipeline(t_pipeline *head)
 {
-	int	fd;
+	t_pipeline	*pipeline;
 
-	fd = open(path, O_CREAT | O_WRONLY, 0644);
-	if (fd < 0)
-		err_exit("open()");
-	return (fd);
-}
-
-void	ft_close(int fd)
-{
-	if (fd < 0)
-		return ;
-	if (close(fd) < 0)
-		err_exit("close()");
-}
-
-pid_t	ft_fork(void)
-{
-	pid_t	pid;
-
-	pid = fork();
-	if (pid < 0)
-		err_exit("fork()");
-	return (pid);
-}
-
-void	ft_dup2(int oldfd, int newfd)
-{
-	if (oldfd != newfd)
+	pipeline = head;
+	while (pipeline)
 	{
-		if (dup2(oldfd, newfd) < 0)
-			err_exit("dup2()");
-		ft_close(oldfd);
+		forkexec(pipeline);
+		pipeline = pipeline->next;
 	}
+	// wait all pipeline processes to exit
+	pipeline = head;
+	while (pipeline)
+	{
+		if (waitpid(pipeline->pid, &status, 0) < 0 && errno != ECHILD)
+			fatal_exit("waitpid()");
+		pipeline = pipeline->next;
+	}
+	return (WEXITSTATUS(status));
 }
 
 //               pipe_from_terminal_stdin
@@ -64,7 +50,7 @@ void	ft_dup2(int oldfd, int newfd)
 //     |    ||   pipe2
 //     |_ child3
 //               pipe_to_terminal_stdout
-void	forkexec(t_pipeline *command)
+static void	forkexec(t_pipeline *command)
 {
 	command->pid = ft_fork();
 	if (command->pid == 0)
@@ -108,7 +94,7 @@ void	forkexec(t_pipeline *command)
 }
 
 // find_path("cat") -> "/bin/cat"
-char	*find_path(char *cmd)
+static char	*find_path(char *cmd)
 {
 	char	*path;
 	char	*envpath;
@@ -129,25 +115,4 @@ char	*find_path(char *cmd)
 	}
 	free(path);
 	return (NULL);
-}
-
-int	forkexec_pipeline(t_pipeline *head)
-{
-	t_pipeline	*pipeline;
-
-	pipeline = head;
-	while (pipeline)
-	{
-		forkexec(pipeline);
-		pipeline = pipeline->next;
-	}
-	// wait all pipeline processes to exit
-	pipeline = head;
-	while (pipeline)
-	{
-		if (waitpid(pipeline->pid, &status, 0) < 0 && errno != ECHILD)
-			fatal_exit("waitpid()");
-		pipeline = pipeline->next;
-	}
-	return (WEXITSTATUS(status));
 }

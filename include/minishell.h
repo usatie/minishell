@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/16 07:10:53 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/16 09:02:45 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,11 +160,12 @@ bool	isbuiltin(char *command);
 int		exec_builtin(t_pipeline *pipeline);
 
 // fork_exec.c
+int		forkexec_pipeline(t_pipeline *head);
+
+// ft_syscall.c
+int		ft_open(char *path);
 void	ft_close(int fd);
 pid_t	ft_fork(void);
 void	ft_dup2(int oldfd, int newfd);
-void	forkexec(t_pipeline *command);
-int		forkexec_pipeline(t_pipeline *head);
-char	*find_path(char *cmd);
 
 #endif
