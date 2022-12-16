@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/17 07:32:53 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/17 08:38:56 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,5 +200,9 @@ void	setup_signal(void);
 
 // readline.c
 void	setup_rl(void);
+
+// redirect.c
+void	redirect(t_pipeline *command);
+void	restore_redirect(t_pipeline *command);
 
 #endif

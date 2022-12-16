@@ -28,6 +28,7 @@ SRCS      = src/minishell.c\
 			src/signal.c\
 			src/termios.c\
 			src/readline.c\
+			src/redirect.c\
 
 OBJDIR    = obj
 OBJS      = $(SRCS:src/%.c=$(OBJDIR)/%.o)

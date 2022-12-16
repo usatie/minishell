@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 14:21:05 by susami            #+#    #+#             */
-/*   Updated: 2022/12/16 15:24:48 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/17 08:47:23 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,11 @@ int	exec(char *cmd)
 		status = 0;
 	// builtin && single command
 	else if (isbuiltin(pipeline->argv[0]) && pipeline->next == NULL)
+	{
+		redirect(pipeline);
 		status = exec_builtin(pipeline);
+		restore_redirect(pipeline);
+	}
 	// multiple command or non-builtin
 	else
 		status = forkexec_pipeline(pipeline);
