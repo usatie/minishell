@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/16 16:46:59 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/17 07:32:53 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,7 @@ typedef struct s_redirect	t_redirect;
 struct s_redirect {
 	char		*path;
 	int			fd;
-	int			dupfd;
+	int			tmpfd;
 	t_redirect	*next;
 };
 

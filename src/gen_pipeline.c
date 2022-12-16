@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/11 14:32:27 by susami            #+#    #+#             */
-/*   Updated: 2022/12/16 17:03:41 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/17 07:33:07 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ t_redirect	*new_redirect(char *path, int fd)
 		fatal_exit("calloc()");
 	redirect->path = path;
 	redirect->fd = fd;
-	redirect->dupfd = -1;
+	redirect->tmpfd = -1;
 	return (redirect);
 }
 

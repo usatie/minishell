@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 13:09:50 by susami            #+#    #+#             */
-/*   Updated: 2022/12/16 17:07:53 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/17 07:43:48 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,24 +42,45 @@ bool	isbuiltin(char *command)
 	return (false);
 }
 
+void	redirect(t_pipeline *command)
+{
+	int	newfd;
+
+	for (t_redirect *redir = command->redir_out; redir; redir = redir->next)
+	{
+		// If fd is valid, duplicate it as tmpfd
+		if (is_valid_fd(redir->fd))
+		{
+			redir->tmpfd = redir->fd + 10;
+			while (is_valid_fd(redir->tmpfd))
+				redir->tmpfd++;
+			ft_dup2(redir->fd, redir->tmpfd);
+		}
+		// open redirirout path and map to out_fd
+		newfd = ft_open(redir->path);
+		ft_dup2(newfd, redir->fd);
+	}
+}
+
+void	restore_redirect(t_pipeline *command)
+{
+	for (t_redirect *redir = command->redir_out; redir; redir = redir->next)
+	{
+		if (is_valid_fd(redir->tmpfd))
+			ft_dup2(redir->tmpfd, redir->fd);
+		else if (redir->tmpfd != redir->fd)
+			ft_close(redir->fd);
+	}
+}
+
 int	exec_builtin(t_pipeline *command)
 {
 	char	*command_name;
 	int		status;
-	int		fd;
 
 	status = 0;
 	command_name = command->argv[0];
-	// redirect
-	for (t_redirect *red = command->redir_out; red; red = red->next)
-	{
-		// stash original out_fd
-		if (is_valid_fd(red->fd))
-			red->dupfd = ft_dup(red->fd);
-		// open redirout path and map to out_fd
-		fd = ft_open(red->path);
-		ft_dup2(fd, red->fd);
-	}
+	redirect(command);
 	if (strcmp(command_name, "exit") == 0)
 		ft_exit(command->argv);
 	else if (strcmp(command_name, "pwd") == 0)
@@ -79,12 +100,7 @@ int	exec_builtin(t_pipeline *command)
 		write(STDERR_FILENO, "Unknown Builtin\n", strlen("Unknown Builtin\n"));
 		status = 1;
 	}
-	
-	for (t_redirect *red = command->redir_out; red; red = red->next)
-	{
-		if (is_valid_fd(red->dupfd))
-			ft_dup2(red->dupfd, red->fd);
-	}
+	restore_redirect(command);
 	return (status);
 }
 
