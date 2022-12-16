@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 09:34:06 by susami            #+#    #+#             */
-/*   Updated: 2022/12/16 09:37:59 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/16 13:41:58 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,5 +21,5 @@ int	ft_exit(char **argv)
 	if (arg)
 		exit(atoi(arg));
 	else
-		exit(g_status);
+		exit(g_env.status);
 }

@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/16 13:21:55 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/16 13:39:38 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,13 @@
 # include <stdio.h>
 # include <string.h>
 
-extern int					g_status;
+typedef struct s_env		t_env;
 extern char					**environ;
+extern t_env				g_env;
+
+struct s_env {
+	int	status;
+};
 
 typedef struct s_token		t_token;
 typedef enum e_token_kind	t_token_kind;
