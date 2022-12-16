@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/16 10:35:46 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/16 13:21:55 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@
 # include <stdio.h>
 # include <string.h>
 
-extern int	g_status;
-extern char **environ;
+extern int					g_status;
+extern char					**environ;
 
 typedef struct s_token		t_token;
 typedef enum e_token_kind	t_token_kind;
@@ -57,7 +57,7 @@ struct s_str {
 	char		*pos;
 	size_t		len;
 	t_str		*next;
-	
+
 	// Only for STR_DOUBLE
 	t_str		*parameters;
 
@@ -179,5 +179,14 @@ void	ft_close(int fd);
 pid_t	ft_fork(void);
 int		ft_dup(int oldfd);
 void	ft_dup2(int oldfd, int newfd);
+
+// termios.c
+void	setup_term(void);
+
+// signal.c
+void	setup_signal(void);
+
+// readline.c
+void	setup_rl(void);
 
 #endif

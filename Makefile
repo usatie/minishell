@@ -1,10 +1,11 @@
 NAME	  = minishell
 CC        = cc
 CFLAGS	  = -Wall -Werror -Wextra # compiler flags
-INCLUDES  = -I include
+RLDIR     = $(shell brew --prefix readline)
+INCLUDES  = -I include -I $(RLDIR)/include
 LIBFTDIR  = libft
 LIBFT     = libft/libft.a
-LIBS      = -lreadline -lft -L libft          # linker flags
+LIBS      = -lreadline -L$(RLDIR)/lib -lft -L libft          # linker flags
 SRCS      = src/minishell.c\
             src/tokenize.c\
             src/parse.c\
@@ -24,6 +25,9 @@ SRCS      = src/minishell.c\
 			src/builtin/ft_unset.c\
 			src/builtin/ft_env.c\
 			src/builtin/ft_exit.c\
+			src/signal.c\
+			src/termios.c\
+			src/readline.c\
 
 OBJDIR    = obj
 OBJS      = $(SRCS:src/%.c=$(OBJDIR)/%.o)

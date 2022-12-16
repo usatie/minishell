@@ -6,15 +6,16 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 14:21:05 by susami            #+#    #+#             */
-/*   Updated: 2022/12/16 09:18:40 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/16 13:30:17 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "minishell.h"
+
 #include <readline/readline.h>
+#include <readline/history.h>
 #include <stdlib.h>
 #include <errno.h>
-
-#include "minishell.h"
 
 #define PROMPT "minishell $ "
 
@@ -75,6 +76,10 @@ int	main(void)
 {
 	char	*line;
 
+	g_status = 0;
+	setup_rl();
+	setup_signal();
+	setup_term();
 	while (1)
 	{
 		line = readline(PROMPT);
