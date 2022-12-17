@@ -7,28 +7,28 @@ LIBFTDIR  = libft
 LIBFT     = libft/libft.a
 LIBS      = -lreadline -L$(RLDIR)/lib -lft -L libft          # linker flags
 SRCS      = src/minishell.c\
-            src/tokenize.c\
-            src/parse.c\
             src/error.c\
-			src/gen_pipeline.c\
-			src/fork_exec.c\
-			src/expand.c\
-			src/node.c\
-			src/str.c\
-			src/token.c\
 			src/ft_syscall.c\
-			src/builtin/builtin.c\
-			src/builtin/ft_echo.c\
-			src/builtin/ft_cd.c\
-			src/builtin/ft_pwd.c\
-			src/builtin/ft_export.c\
-			src/builtin/ft_unset.c\
-			src/builtin/ft_env.c\
-			src/builtin/ft_exit.c\
-			src/signal.c\
-			src/termios.c\
-			src/readline.c\
-			src/redirect.c\
+			src/setup/signal.c\
+			src/setup/termios.c\
+			src/setup/readline.c\
+            src/tokenize/tokenize.c\
+			src/tokenize/str.c\
+			src/tokenize/token.c\
+			src/tokenize/expand.c\
+            src/parse/parse.c\
+			src/parse/node.c\
+			src/exec/gen_pipeline.c\
+			src/exec/fork_exec.c\
+			src/exec/redirect.c\
+			src/exec/builtin/builtin.c\
+			src/exec/builtin/ft_echo.c\
+			src/exec/builtin/ft_cd.c\
+			src/exec/builtin/ft_pwd.c\
+			src/exec/builtin/ft_export.c\
+			src/exec/builtin/ft_unset.c\
+			src/exec/builtin/ft_env.c\
+			src/exec/builtin/ft_exit.c\
 
 OBJDIR    = obj
 OBJS      = $(SRCS:src/%.c=$(OBJDIR)/%.o)
