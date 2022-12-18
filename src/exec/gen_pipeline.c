@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/11 14:32:27 by susami            #+#    #+#             */
-/*   Updated: 2022/12/17 07:33:07 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/18 13:32:59 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,27 +58,21 @@ char	**gen_argv(t_node *node)
 	return (argv);
 }
 
-t_redirect	*new_redirect(char *path, int fd)
-{
-	t_redirect	*redirect;
-
-	redirect = calloc(1, sizeof(t_redirect));
-	if (!redirect)
-		fatal_exit("calloc()");
-	redirect->path = path;
-	redirect->fd = fd;
-	redirect->tmpfd = -1;
-	return (redirect);
-}
-
-t_redirect	*gen_redirect(t_node *redir_node)
+t_redirect	*gen_redirect(t_node *node)
 {
 	char	*path;
 	int		fd;
 
-	path = convert_to_word(redir_node->rhs->str);
-	fd = redir_node->lhs->val;
-	return (new_redirect(path, fd));
+	// [num] > path
+	// [num] < path
+	path = convert_to_word(node->rhs->str);
+	fd = node->lhs->val;
+	if (node->kind == ND_REDIR_OUT)
+		return (new_redirect(REDIR_OUTPUT, path, fd));
+	else if (node->kind == ND_REDIR_IN)
+		return (new_redirect(REDIR_INPUT, path, fd));
+	else
+		err_exit("Unexpected Node Kind");
 }
 
 t_redirect	*add_redir_back(t_redirect *head, t_redirect *new_redir)
@@ -97,12 +91,15 @@ t_redirect	*add_redir_back(t_redirect *head, t_redirect *new_redir)
 t_pipeline	*gen_command(t_node *node)
 {
 	t_pipeline	*command;
+	t_node		*redir;
 
 	command = new_pipeline();
 	command->argv = gen_argv(node);
-	for (t_node	*redir_node = node->redir_out; redir_node; redir_node = redir_node->next)
+	redir = node->redirects;
+	while (redir)
 	{
-		command->redir_out = add_redir_back(command->redir_out, gen_redirect(redir_node));
+		command->redirects = add_redir_back(command->redirects, gen_redirect(redir));
+		redir = redir->next;
 	}
 	return (command);
 }

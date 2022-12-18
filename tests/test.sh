@@ -87,10 +87,19 @@ assert 'ec"ho" he"ll"o'
 assert 'echo 1.txt'
 
 # Redirection
+## Redirect Output
 assert 'echo hello >hello.txt' 'hello.txt'
 assert 'echo hello 1>hello.txt' 'hello.txt'
 # assert 'invalid 2>hello.txt' 'hello.txt'
 assert 'echo 1>test_one.txt 2>test_two.txt 3>test_three.txt'
+
+## Redirect Input
+echo hello > test_hello.txt
+assert 'cat <test_hello.txt'
+# echo 0 >test_zero.txt && echo 1 >test_one.txt && echo 2 >test_two.txt && echo 3 >test_three.txt
+# assert 'cat 0<test_zero.txt 1<test_one.txt 2<test_two.txt 3<test_three.txt'
+# echo 0 >test_zero.txt && echo 1 >test_one.txt && echo 2 >test_two.txt && echo 3 >test_three.txt
+# assert 'echo 1<test_one.txt 2<test_two.txt 3<test_three.txt'
 
 # Pipe
 assert 'cat Makefile | grep minishell'

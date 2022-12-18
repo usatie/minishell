@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 15:34:36 by susami            #+#    #+#             */
-/*   Updated: 2022/12/16 16:42:29 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/18 13:30:13 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,23 @@ static t_node	*pipeline(t_token **rest, t_token *tok)
 	return (node);
 }
 
+static bool	is_redirection(const t_token *tok)
+{
+	// '>' word
+	if (equal(tok, ">"))
+		return (true);
+	// num '>' word
+	else if (tok->kind == TK_NUM && equal(tok->next, ">"))
+		return (true);
+	// '<' word
+	else if (equal(tok, "<"))
+		return (true);
+	// num '<' word
+	else if (tok->kind == TK_NUM && equal(tok->next, "<"))
+		return (true);
+	return (false);
+}
+
 // command = (redirection | word)*
 static t_node	*command(t_token **rest, t_token *tok)
 {
@@ -65,9 +82,9 @@ static t_node	*command(t_token **rest, t_token *tok)
 	while (!at_eof(tok) && !equal(tok, "|"))
 	{
 		// '>' word | num '>' word
-		if (equal(tok, ">") || (tok->kind == TK_NUM && equal(tok->next, ">")))
+		if (is_redirection(tok))
 		{
-			cmd->redir_out = add_node_back(cmd->redir_out, redirection(&tok, tok));
+			cmd->redirects = add_node_back(cmd->redirects, redirection(&tok, tok));
 			continue ;
 		}
 		// word
@@ -111,6 +128,13 @@ static t_node	*redirection(t_token **rest, t_token *tok)
 		return (node);
 	}
 	// '<' word
+	if (equal(tok, "<"))
+	{
+		if (node == NULL)
+			node = new_node_num(STDIN_FILENO, tok);
+		node = new_node_binary(ND_REDIR_IN, node, word(rest, tok->next), tok);
+		return (node);
+	}
 	// '>>' word
 	// '<<' word
 	err_exit("Invalid token for <redirection>");

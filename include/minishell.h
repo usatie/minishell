@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/17 08:38:56 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/18 13:28:23 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ enum e_node_kind {
 	ND_WORD,
 	ND_NUM,
 	ND_REDIR_OUT,
+	ND_REDIR_IN,
 	ND_CMD,
 	ND_PIPE,
 };
@@ -108,7 +109,7 @@ struct s_node {
 	// Only for ND_CMD
 	int			nargs;
 	t_node		*args;
-	t_node		*redir_out;
+	t_node		*redirects;
 
 	// Only for ND_WORD;
 	t_str		*str;
@@ -117,12 +118,19 @@ struct s_node {
 	long		val;
 };
 
-typedef struct s_redirect	t_redirect;
+typedef struct s_redirect		t_redirect;
+typedef enum e_redirect_kind	t_redirect_kind;
+
+enum e_redirect_kind {
+	REDIR_OUTPUT,
+	REDIR_INPUT,
+};
 struct s_redirect {
-	char		*path;
-	int			fd;
-	int			tmpfd;
-	t_redirect	*next;
+	t_redirect_kind	kind;
+	char			*path;
+	int				fd;
+	int				tmpfd;
+	t_redirect		*next;
 };
 
 struct s_pipeline {
@@ -130,7 +138,7 @@ struct s_pipeline {
 	char		**argv;
 	int			inpipe[2];
 	int			outpipe[2];
-	t_redirect	*redir_out;
+	t_redirect	*redirects;
 	t_pipeline	*next;
 };
 
@@ -160,8 +168,8 @@ t_node	*new_node(t_node_kind kind, t_token *tok);
 t_node	*new_node_binary(t_node_kind kind, t_node *lhs, t_node *rhs, t_token *tok);
 t_node	*new_node_num(long val, t_token *tok);
 t_node	*add_node_back(t_node *head, t_node *new_node);
-bool	equal(t_token *tok, char *op);
-bool	at_eof(t_token *tok);
+bool	equal(const t_token *tok, const char *op);
+bool	at_eof(const t_token *tok);
 
 // quotes.c
 char	*convert_to_word(t_str *str);
@@ -186,10 +194,9 @@ int	ft_exit(char **argv);
 int		forkexec_pipeline(t_pipeline *head);
 
 // ft_syscall.c
-int		ft_open(char *path);
+int		ft_open(char *path, int oflag, mode_t mode);
 void	ft_close(int fd);
 pid_t	ft_fork(void);
-int		ft_dup(int oldfd);
 void	ft_dup2(int oldfd, int newfd);
 
 // termios.c
@@ -202,7 +209,8 @@ void	setup_signal(void);
 void	setup_rl(void);
 
 // redirect.c
-void	redirect(t_pipeline *command);
-void	restore_redirect(t_pipeline *command);
+t_redirect	*new_redirect(t_redirect_kind kind, char *path, int fd);
+void		redirect(t_pipeline *command);
+void		restore_redirect(t_pipeline *command);
 
 #endif
