@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 15:34:36 by susami            #+#    #+#             */
-/*   Updated: 2022/12/18 13:30:13 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/19 11:13:25 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,17 @@ static bool	is_redirection(const t_token *tok)
 	// num '<' word
 	else if (tok->kind == TK_NUM && equal(tok->next, "<"))
 		return (true);
+	// '>>' word
+	else if (equal(tok, ">>"))
+		return (true);
+	// num '>>' word
+	else if (tok->kind == TK_NUM && equal(tok->next, ">>"))
+		return (true);
+	// '<<' word
+	else if (equal(tok, "<<"))
+		return (true);
+	// num '<<' word
+	// ^ This is invalid
 	return (false);
 }
 
@@ -81,7 +92,12 @@ static t_node	*command(t_token **rest, t_token *tok)
 	cmd = new_node(ND_CMD, tok);
 	while (!at_eof(tok) && !equal(tok, "|"))
 	{
-		// '>' word | num '>' word
+		// '>' word
+		// num '>' word
+		// '<' word
+		// num '<' word
+		// '>>' word
+		// num '>>' word
 		if (is_redirection(tok))
 		{
 			cmd->redirects = add_node_back(cmd->redirects, redirection(&tok, tok));
@@ -115,6 +131,13 @@ static t_node	*redirection(t_token **rest, t_token *tok)
 {
 	t_node	*node;
 
+	// '<<' word
+	if (equal(tok, "<<"))
+	{
+		node = new_node_num(STDIN_FILENO, tok);
+		node = new_node_binary(ND_REDIR_HEREDOC, node, word(rest, tok->next), tok);
+		return (node);
+	}
 	// num?
 	node = NULL;
 	if (tok->kind == TK_NUM)
@@ -136,7 +159,13 @@ static t_node	*redirection(t_token **rest, t_token *tok)
 		return (node);
 	}
 	// '>>' word
-	// '<<' word
+	if (equal(tok, ">>"))
+	{
+		if (node == NULL)
+			node = new_node_num(STDOUT_FILENO, tok);
+		node = new_node_binary(ND_REDIR_APPEND, node, word(rest, tok->next), tok);
+		return (node);
+	}
 	err_exit("Invalid token for <redirection>");
 }
 

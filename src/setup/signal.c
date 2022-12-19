@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 13:10:41 by susami            #+#    #+#             */
-/*   Updated: 2022/12/16 13:55:27 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/19 14:15:47 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,8 @@ static void	sigint_handler(int signum)
 	{
 		while (pipeline)
 		{
-			kill(pipeline->pid, SIGINT);
+			if (pipeline->pid > 0)
+				kill(pipeline->pid, SIGINT);
 			pipeline = pipeline->next;
 		}
 	}

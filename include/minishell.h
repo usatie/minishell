@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/18 13:28:23 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/19 11:14:06 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,8 @@ enum e_node_kind {
 	ND_NUM,
 	ND_REDIR_OUT,
 	ND_REDIR_IN,
+	ND_REDIR_APPEND,
+	ND_REDIR_HEREDOC,
 	ND_CMD,
 	ND_PIPE,
 };
@@ -102,7 +104,7 @@ struct s_node {
 	t_token		*tok;
 
 	pid_t		pid;
-	// ND_PIPE, ND_REDIRECT_*
+	// ND_PIPE, ND_REDIR_*
 	t_node		*lhs;
 	t_node		*rhs;
 
@@ -124,13 +126,20 @@ typedef enum e_redirect_kind	t_redirect_kind;
 enum e_redirect_kind {
 	REDIR_OUTPUT,
 	REDIR_INPUT,
+	REDIR_APPEND,
+	REDIR_HEREDOC,
 };
+
 struct s_redirect {
 	t_redirect_kind	kind;
-	char			*path;
 	int				fd;
 	int				tmpfd;
 	t_redirect		*next;
+
+	// OUTPUT, INPUT, APPEND
+	char			*path;
+	// HEREDOC
+	int				heredoc_fd;
 };
 
 struct s_pipeline {
