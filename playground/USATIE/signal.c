@@ -18,7 +18,7 @@ int main(void)
 {
 	char *line;	
 
-	//signal(SIGINT, handler);
+	signal(SIGINT, handler);
 	while (1)
 	{
 		line = readline("nanoshell $ ");
