@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 08:36:12 by susami            #+#    #+#             */
-/*   Updated: 2022/12/20 13:51:02 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/20 20:52:47 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,18 +54,31 @@ void	redirect(t_pipeline *command)
 	}
 }
 
+// Same as dup() but returned fd is assured to be >= 10
+int	stashfd(int fd)
+{
+	int	tmpfd;
+
+	// If fd is invalid, return -1
+	if (!is_valid_fd(fd))
+	{
+		errno = EBADF;
+		return (-1);
+	}
+	// If fd is valid, duplicate it as tmpfd (which is greater than 10)
+	tmpfd = fd + 10;
+	while (is_valid_fd(tmpfd))
+		tmpfd++;
+	ft_dup2(fd, tmpfd);
+	return (tmpfd);
+}
+
 static void	redirect_output(t_redirect *redir)
 {
 	int	newfd;
 
 	// If fd is valid, duplicate it as tmpfd
-	if (is_valid_fd(redir->fd))
-	{
-		redir->tmpfd = redir->fd + 10;
-		while (is_valid_fd(redir->tmpfd))
-			redir->tmpfd++;
-		ft_dup2(redir->fd, redir->tmpfd);
-	}
+	redir->tmpfd = stashfd(redir->fd);
 	// open output path and map to fd
 	newfd = ft_open(redir->path, O_CREAT | O_WRONLY, 0644);
 	ft_dup2(newfd, redir->fd);
@@ -76,13 +89,7 @@ static void	redirect_input(t_redirect *redir)
 	int	newfd;
 
 	// If fd is valid, duplicate it as tmpfd
-	if (is_valid_fd(redir->fd))
-	{
-		redir->tmpfd = redir->fd + 10;
-		while (is_valid_fd(redir->tmpfd))
-			redir->tmpfd++;
-		ft_dup2(redir->fd, redir->tmpfd);
-	}
+	redir->tmpfd = stashfd(redir->fd);
 	// open input path and map to fd
 	newfd = ft_open(redir->path, O_RDONLY, 0);
 	ft_dup2(newfd, redir->fd);
@@ -93,13 +100,7 @@ static void	redirect_append(t_redirect *redir)
 	int	newfd;
 
 	// If fd is valid, duplicate it as tmpfd
-	if (is_valid_fd(redir->fd))
-	{
-		redir->tmpfd = redir->fd + 10;
-		while (is_valid_fd(redir->tmpfd))
-			redir->tmpfd++;
-		ft_dup2(redir->fd, redir->tmpfd);
-	}
+	redir->tmpfd = stashfd(redir->fd);
 	// open output path and map to fd
 	newfd = ft_open(redir->path, O_CREAT | O_APPEND | O_WRONLY, 0644);
 	ft_dup2(newfd, redir->fd);
@@ -114,7 +115,7 @@ void	restore_redirect(t_pipeline *command)
 	{
 		if (is_valid_fd(redir->tmpfd))
 			ft_dup2(redir->tmpfd, redir->fd);
-		else if (redir->tmpfd != redir->fd)
+		else if (is_valid_fd(redir->fd))
 			ft_close(redir->fd);
 		redir = redir->next;
 	}

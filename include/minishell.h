@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/20 16:03:10 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/20 22:16:44 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -219,5 +219,7 @@ void	setup_rl(void);
 t_redirect	*new_redirect(t_redirect_kind kind, char *path, int fd);
 void		redirect(t_pipeline *command);
 void		restore_redirect(t_pipeline *command);
+int			stashfd(int fd);
+
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 13:09:50 by susami            #+#    #+#             */
-/*   Updated: 2022/12/20 18:39:53 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/20 22:16:31 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,7 @@ int	exec_builtin(t_pipeline *command)
 	int		tmpfd;
 
 	// Stash stdin
-	tmpfd = dup(STDIN_FILENO);
-	close(STDIN_FILENO);
+	tmpfd = stashfd(STDIN_FILENO);
 	// Exec builtin
 	status = 0;
 	command_name = command->argv[0];
@@ -70,7 +69,6 @@ int	exec_builtin(t_pipeline *command)
 		status = 1;
 	}
 	// Restore stdin
-	dup2(tmpfd, STDIN_FILENO);
-	close(tmpfd);
+	ft_dup2(tmpfd, STDIN_FILENO);
 	return (status);
 }
