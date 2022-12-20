@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 06:45:04 by susami            #+#    #+#             */
-/*   Updated: 2022/12/20 14:58:47 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/21 08:35:30 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,9 @@ void	expand(t_node *node)
 			foreach_str(arg->str, expand_parameter_str);
 		for (t_node *redir = node->redirects; redir; redir = redir->next)
 		{
-			// TODO: if heredoc, do not expand
+			// If heredoc('<<' word), word is not expanded
+			if (redir->kind == ND_REDIR_HEREDOC)
+				continue;
 			foreach_str(redir->rhs->str, expand_parameter_str);
 		}
 	}
