@@ -11,22 +11,15 @@ int	interrupted = 0;
 
 int	check_state(void)
 {
-	//printf("check_state: sig = %d, eof = %d\n", sig, rl_eof_found);
 	if (sig == 1)
 	{
 		sig = 0;
 		interrupted = 1;
-		rl_done = 1;
+		write(STDERR_FILENO, "\n", 1);
 		rl_on_new_line(); // Regenerate the prompt on a newline
 		rl_replace_line("", 0); // Clear the previous text
 		rl_redisplay(); // Refresh the prompt
 	}
-	int result, nread;
-	errno = 0;
-	result = ioctl(STDIN_FILENO, FIONREAD, &nread);
-	printf("check_state: result = %d, nread = %d, errno = %d\n", result, nread, errno);
-	if (errno)
-		perror("ioctl error");
 	return (0);
 }
 
@@ -34,12 +27,6 @@ void	handler(int signum)
 {
 	sig = 1;
 	(void)signum;
-		interrupted = 1;
-		rl_done = 1;
-		rl_on_new_line(); // Regenerate the prompt on a newline
-		rl_replace_line("", 0); // Clear the previous text
-		rl_redisplay(); // Refresh the prompt
-		close(STDIN_FILENO);
 }
 
 void	setup_signal(void)
@@ -55,7 +42,9 @@ void	setup_signal(void)
 void	setup_readline(void)
 {
 	rl_outstream = stderr;
-	//rl_event_hook = check_state;
+	if (isatty(STDIN_FILENO))
+		rl_event_hook = check_state;
+	//rl_signal_event_hook = check_state;
 }
 
 #define BUFSIZE 1024
@@ -76,7 +65,7 @@ int	main(void)
 		if (line)
 			strlcat(buf, "\n", BUFSIZE);
 		line = readline("> ");
-		printf("[%s]", line);
+		printf("[%s]\n", line);
 		if (!line)
 		{
 			break;
