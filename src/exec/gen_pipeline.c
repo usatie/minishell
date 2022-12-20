@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/11 14:32:27 by susami            #+#    #+#             */
-/*   Updated: 2022/12/20 15:51:21 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/21 08:26:49 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,11 +68,11 @@ t_redirect	*gen_redirect(t_node *node)
 	path = convert_to_word(node->rhs->str);
 	fd = node->lhs->val;
 	if (node->kind == ND_REDIR_OUT)
-		return (new_redirect(REDIR_OUTPUT, path, fd));
+		return (new_redirect(RD_OUTPUT, path, fd));
 	else if (node->kind == ND_REDIR_IN)
-		return (new_redirect(REDIR_INPUT, path, fd));
+		return (new_redirect(RD_INPUT, path, fd));
 	else if (node->kind == ND_REDIR_APPEND)
-		return (new_redirect(REDIR_APPEND, path, fd));
+		return (new_redirect(RD_APPEND, path, fd));
 	else
 		fatal_exit("Unexpected Node Kind");
 }

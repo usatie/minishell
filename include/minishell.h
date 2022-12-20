@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/20 22:16:44 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/21 08:27:22 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,9 +125,9 @@ typedef struct s_redirect		t_redirect;
 typedef enum e_redirect_kind	t_redirect_kind;
 
 enum e_redirect_kind {
-	REDIR_OUTPUT,
-	REDIR_INPUT,
-	REDIR_APPEND,
+	RD_OUTPUT,
+	RD_INPUT,
+	RD_APPEND,
 };
 
 struct s_redirect {

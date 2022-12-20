@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 08:36:12 by susami            #+#    #+#             */
-/*   Updated: 2022/12/20 20:52:47 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/21 08:27:05 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,11 @@ void	redirect(t_pipeline *command)
 	redir = command->redirects;
 	while (redir)
 	{
-		if (redir->kind == REDIR_OUTPUT)
+		if (redir->kind == RD_OUTPUT)
 			redirect_output(redir);
-		else if (redir->kind == REDIR_INPUT)
+		else if (redir->kind == RD_INPUT)
 			redirect_input(redir);
-		else if (redir->kind == REDIR_APPEND)
+		else if (redir->kind == RD_APPEND)
 			redirect_append(redir);
 		else
 			err_exit("Unexpected Redirect kind");
