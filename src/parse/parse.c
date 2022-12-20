@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 15:34:36 by susami            #+#    #+#             */
-/*   Updated: 2022/12/20 16:05:37 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/21 08:31:13 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,8 @@ static bool	is_redirection(const t_token *tok)
 	else if (tok->kind == TK_NUM && equal(tok->next, ">>"))
 		return (true);
 	// '<<' word
+	else if (equal(tok, "<<"))
+		return (true);
 	// num '<<' word
 	// ^ This is invalid
 	return (false);
@@ -136,11 +138,18 @@ static t_node	*command(t_token **rest, t_token *tok)
 // redirection = num? '>' word
 //             | num? '<' word
 //             | num? '<<' word
-//             | num? '>>' word
+//             | '>>' word
 static t_node	*redirection(t_token **rest, t_token *tok)
 {
 	t_node	*node;
 
+	// '>>' word
+	if (equal(tok, ">>"))
+	{
+		node = new_node_num(STDIN_FILENO, tok);
+		node = new_node_binary(ND_REDIR_HEREDOC, node, word(rest, tok->next), tok);
+		return (node);
+	}
 	// num?
 	node = NULL;
 	if (tok->kind == TK_NUM)
