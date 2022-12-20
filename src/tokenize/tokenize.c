@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 10:25:51 by susami            #+#    #+#             */
-/*   Updated: 2022/12/20 14:29:46 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/20 15:56:43 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -246,10 +246,10 @@ t_str	*variable(char **rest, char *line)
 	
 	start = line;
 	if (*line != '$')
-		err_exit("Expected $\n");
+		fatal_exit("Expected $\n");
 	line++;
 	if (!is_alpha_under(*line))
-		err_exit("Expected alphabetic character or underscore.");
+		fatal_exit("Expected alphabetic character or underscore.");
 	line++;
 	while (is_alpha_num_under(*line))
 		line++;
@@ -265,10 +265,10 @@ t_str	*special_parameter(char **rest, char *line)
 	
 	start = line;
 	if (*line != '$')
-		err_exit("Expected $\n");
+		fatal_exit("Expected $\n");
 	line++;
 	if (!is_specialchr(*line))
-		err_exit("Expected special character.");
+		fatal_exit("Expected special character.");
 	line++;
 	str = new_str(start, line - start, STR_SPECIAL_PARAM);
 	*rest = line;
@@ -352,7 +352,7 @@ t_str	*plain_text(char **rest, char *line)
 		*rest = line;
 		return (str);
 	}
-	err_exit("Unexpected character\n");
+	fatal_exit("Unexpected character\n");
 }
 
 t_token	*string(char **rest, char *line)

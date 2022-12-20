@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 15:34:36 by susami            #+#    #+#             */
-/*   Updated: 2022/12/20 13:56:57 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/20 16:05:37 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,18 @@ static t_node	*pipeline(t_token **rest, t_token *tok);
 
 t_node	*parse(t_token *tok)
 {
+	g_env.syntax_error = false;
 	return (pipeline(&tok, tok));
+}
+
+static void	syntax_error(const char *msg, t_token **rest, t_token *tok)
+{
+	write(STDERR_FILENO, msg, strlen(msg));
+	write(STDERR_FILENO, "\n", 1);
+	while (!at_eof(tok))
+		tok = tok->next;
+	*rest = tok;
+	g_env.syntax_error = true;
 }
 
 // pipeline = command ('|' pipeline)*
@@ -115,7 +126,8 @@ static t_node	*command(t_token **rest, t_token *tok)
 			cmd->args = add_node_back(cmd->args, num(&tok, tok));
 			continue ;
 		}
-		err_exit("Invalid token for <command_element>");
+		// syntax error
+		syntax_error("Invalid token for <command_element>", &tok, tok);
 	}
 	*rest = tok;
 	return (cmd);
@@ -157,7 +169,9 @@ static t_node	*redirection(t_token **rest, t_token *tok)
 		node = new_node_binary(ND_REDIR_APPEND, node, word(rest, tok->next), tok);
 		return (node);
 	}
-	err_exit("Invalid token for <redirection>");
+	// syntax error
+	syntax_error("Invalid token for <redirection>", rest, tok);
+	return (NULL);
 }
 
 static t_node	*num(t_token **rest, t_token *tok)
@@ -171,7 +185,9 @@ static t_node	*num(t_token **rest, t_token *tok)
 		*rest = tok->next;
 		return (node);
 	}
-	err_exit("Invalid token for <num>");
+	// syntax error
+	syntax_error("Invalid token for <num>", rest, tok);
+	return (NULL);
 }
 
 static t_node	*word(t_token **rest, t_token *tok)
@@ -185,5 +201,7 @@ static t_node	*word(t_token **rest, t_token *tok)
 		*rest = tok->next;
 		return (node);
 	}
-	err_exit("Invalid token for <word>");
+	// syntax error
+	syntax_error("Invalid token for <word>", rest, tok);
+	return (NULL);
 }

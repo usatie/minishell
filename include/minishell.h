@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/20 14:33:18 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/20 16:03:10 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,9 @@ extern char					**environ;
 extern t_env				g_env;
 
 struct s_env {
-	int						status;
-	t_pipeline				*pipeline;
+	int			status;
+	t_pipeline	*pipeline;
+	bool		syntax_error;
 };
 
 enum e_token_kind {
