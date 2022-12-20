@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 10:25:51 by susami            #+#    #+#             */
-/*   Updated: 2022/12/16 16:27:56 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/20 14:29:46 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,6 @@ t_token	*tokenize(char *line)
 		}
 	}
 	cur->next = new_token(line, 0, TK_EOF);
-	expand_parameter(head.next);
 	return (head.next);
 }
 

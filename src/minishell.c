@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 14:21:05 by susami            #+#    #+#             */
-/*   Updated: 2022/12/20 13:55:12 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/20 14:31:04 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ bool	is_syntax_ok(char *cmd)
 	{
 		tok = tokenize(cmd);
 		node = parse(tok);
+		expand(node);
 		gen_pipeline(node);
 		exit(0);
 	}
@@ -65,6 +66,7 @@ int	exec(char *cmd)
 	// tokenize, parse, ...
 	tok = tokenize(cmd);
 	node = parse(tok);
+	expand(node);
 	pipeline = gen_pipeline(node);
 	g_env.pipeline = pipeline;
 	// empty command

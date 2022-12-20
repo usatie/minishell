@@ -15,9 +15,9 @@ SRCS      = src/minishell.c\
             src/tokenize/tokenize.c\
 			src/tokenize/str.c\
 			src/tokenize/token.c\
-			src/tokenize/expand.c\
             src/parse/parse.c\
 			src/parse/node.c\
+			src/expand/expand.c\
 			src/exec/gen_pipeline.c\
 			src/exec/fork_exec.c\
 			src/exec/redirect.c\

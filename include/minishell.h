@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/20 13:55:01 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/20 14:33:18 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,8 +156,8 @@ void	err_exit(char *s) __attribute__((noreturn));
 bool	startswith(const char *p, const char *q);
 t_token	*tokenize(char *line);
 
-// expansion.c
-void	expand_parameter(t_token *tok);
+// expand.c
+void	expand(t_node *node);
 
 // parser.c
 t_node	*parse(t_token *tok);

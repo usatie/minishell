@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 06:45:04 by susami            #+#    #+#             */
-/*   Updated: 2022/12/16 13:41:26 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/20 14:40:44 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,17 @@ static void	foreach_str(t_str *s, void f(t_str *))
 	}
 }
 
-void	expand_parameter(t_token *tok)
+void	expand(t_node *node)
 {
-	while (tok->kind != TK_EOF)
+	if (node->kind == ND_CMD)
 	{
-		if (tok->kind == TK_STRING)
-			foreach_str(tok->str, expand_parameter_str);
-		tok = tok->next;
+		for (t_node *arg = node->args; arg; arg = arg->next)
+			foreach_str(arg->str, expand_parameter_str);
+	}
+	else if (node->kind == ND_PIPE)
+	{
+		expand(node->lhs);
+		expand(node->rhs);
 	}
 }
 

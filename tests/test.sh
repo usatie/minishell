@@ -121,6 +121,11 @@ assert 'echo "Undefined variable $undefined_variable"'
 assert 'echo "These are not variable : $. $+ "'
 assert 'echo "These are variable     : $_foo $foo"'
 
+# Variable
+export foo="pwd"
+assert '$foo'
+unset foo
+
 # Special Parameter
 assert 'echo $?'
 assert 'echo "$?"'
@@ -129,6 +134,9 @@ assert 'echo "$?"'
 # export foo="a     b"
 # assert 'echo "$foo"'
 # assert 'echo $foo'
+# export foo="echo hello           world       42Tokyo"
+# assert '$foo'
+# unset foo
 
 # assert "ls -l"  # This test fails because out and cmp affects the output of `ls`
 
