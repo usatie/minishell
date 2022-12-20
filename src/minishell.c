@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 14:21:05 by susami            #+#    #+#             */
-/*   Updated: 2022/12/20 11:23:55 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/20 13:55:12 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,9 +114,7 @@ int	main(void)
 			break ;
 		if (*line)
 			add_history(line);
-		if (!g_env.interrupted)
-			g_env.status = exec(line);
-		g_env.interrupted = 0;
+		g_env.status = exec(line);
 		free(line);
 	}
 	return (g_env.status);

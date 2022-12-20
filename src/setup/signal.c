@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 13:10:41 by susami            #+#    #+#             */
-/*   Updated: 2022/12/20 12:34:16 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/20 13:55:32 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ static int	check_state(void)
 {
 	t_pipeline	*pipeline;
 
-	//printf("check_state: g_env.signal_handled = %d\n", g_env.signal_handled);
 	setup_term();
 	pipeline = g_env.pipeline;
 	if (pipeline)
@@ -44,20 +43,16 @@ static int	check_state(void)
 	}
 	else
 	{
-		//rl_done = 1;
 		write(STDERR_FILENO, "\n", 1);
 		rl_on_new_line(); // Regenerate the prompt on a newline
 		rl_replace_line("", 0); // Clear the previous text
 		rl_redisplay(); // Refresh the prompt
-		g_env.interrupted = 1;
-		close(STDIN_FILENO);
 	}
 	return (0);
 }
 
 static void	sigint_handler(int signum)
 {
-	g_env.signal_handled = 1;
 	check_state();
 	(void)signum;
 }

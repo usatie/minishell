@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/19 20:29:33 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/20 13:55:01 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,6 @@ extern t_env				g_env;
 struct s_env {
 	int						status;
 	t_pipeline				*pipeline;
-	volatile sig_atomic_t	signal_handled;
-	int						interrupted;
 };
 
 enum e_token_kind {
@@ -96,7 +94,6 @@ enum e_node_kind {
 	ND_REDIR_OUT,
 	ND_REDIR_IN,
 	ND_REDIR_APPEND,
-	ND_REDIR_HEREDOC,
 	ND_CMD,
 	ND_PIPE,
 };
@@ -130,7 +127,6 @@ enum e_redirect_kind {
 	REDIR_OUTPUT,
 	REDIR_INPUT,
 	REDIR_APPEND,
-	REDIR_HEREDOC,
 };
 
 struct s_redirect {
@@ -141,8 +137,6 @@ struct s_redirect {
 
 	// OUTPUT, INPUT, APPEND
 	char			*path;
-	// HEREDOC
-	int				heredoc_fd;
 };
 
 struct s_pipeline {
