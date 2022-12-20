@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 06:45:04 by susami            #+#    #+#             */
-/*   Updated: 2022/12/20 14:40:44 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/20 14:58:47 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,11 @@ void	expand(t_node *node)
 	{
 		for (t_node *arg = node->args; arg; arg = arg->next)
 			foreach_str(arg->str, expand_parameter_str);
+		for (t_node *redir = node->redirects; redir; redir = redir->next)
+		{
+			// TODO: if heredoc, do not expand
+			foreach_str(redir->rhs->str, expand_parameter_str);
+		}
 	}
 	else if (node->kind == ND_PIPE)
 	{

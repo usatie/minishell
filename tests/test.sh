@@ -124,6 +124,8 @@ assert 'echo "These are variable     : $_foo $foo"'
 # Variable
 export foo="pwd"
 assert '$foo'
+export foo="hello.txt"
+assert 'echo hello >$foo' 'hello.txt'
 unset foo
 
 # Special Parameter
