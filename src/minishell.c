@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 14:21:05 by susami            #+#    #+#             */
-/*   Updated: 2022/12/20 16:08:57 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/20 18:39:23 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,21 +44,9 @@ int	exec(char *cmd)
 		// builtin && single command
 		else if (isbuiltin(pipeline->argv[0]) && pipeline->next == NULL)
 		{
-			int		tmpfd;
-			tmpfd = -1;
-			if (isatty(STDIN_FILENO))
-			{
-				tmpfd = dup(STDIN_FILENO);
-				close(STDIN_FILENO);
-			}
 			redirect(pipeline);
 			status = exec_builtin(pipeline);
 			restore_redirect(pipeline);
-			if (isatty(tmpfd))
-			{
-				dup2(tmpfd, STDIN_FILENO);
-				close(tmpfd);
-			}
 		}
 		// multiple command or non-builtin
 		else

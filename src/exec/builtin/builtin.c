@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 13:09:50 by susami            #+#    #+#             */
-/*   Updated: 2022/12/17 12:09:53 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/20 18:39:53 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,12 @@ int	exec_builtin(t_pipeline *command)
 {
 	char	*command_name;
 	int		status;
+	int		tmpfd;
 
+	// Stash stdin
+	tmpfd = dup(STDIN_FILENO);
+	close(STDIN_FILENO);
+	// Exec builtin
 	status = 0;
 	command_name = command->argv[0];
 	if (strcmp(command_name, "exit") == 0)
@@ -64,5 +69,8 @@ int	exec_builtin(t_pipeline *command)
 		write(STDERR_FILENO, "Unknown Builtin\n", strlen("Unknown Builtin\n"));
 		status = 1;
 	}
+	// Restore stdin
+	dup2(tmpfd, STDIN_FILENO);
+	close(tmpfd);
 	return (status);
 }
