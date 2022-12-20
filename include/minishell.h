@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/19 11:14:06 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/19 20:29:33 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 // for printf debug
 # include <stdio.h>
 # include <string.h>
+# include <signal.h>
 
 typedef struct s_env		t_env;
 typedef struct s_token		t_token;
@@ -34,8 +35,10 @@ extern char					**environ;
 extern t_env				g_env;
 
 struct s_env {
-	int			status;
-	t_pipeline	*pipeline;
+	int						status;
+	t_pipeline				*pipeline;
+	volatile sig_atomic_t	signal_handled;
+	int						interrupted;
 };
 
 enum e_token_kind {

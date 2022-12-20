@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 08:36:12 by susami            #+#    #+#             */
-/*   Updated: 2022/12/19 12:38:21 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/20 12:35:54 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,9 +138,11 @@ void	heredoc(t_redirect *redir)
 {
 	int		pfd[2];
 	char	*line;
+	int		stdinfd;
 
 	if (pipe(pfd) < 0)
 		err_exit("pipe()");
+	stdinfd = dup(STDIN_FILENO);
 	line = NULL;
 	while (1)
 	{
@@ -149,11 +151,18 @@ void	heredoc(t_redirect *redir)
 		line = readline("> ");
 		if (!line)
 			err_exit("EOF while reading heredoc");
+		if (g_env.signal_handled)
+		{
+			g_env.signal_handled = 0;
+			break;
+		}
 		if (strcmp(line, redir->path) == 0)
 			break;
 		write(pfd[1], line, strlen(line));
 		free(line);
 	}
+	dup2(stdinfd, STDIN_FILENO);
+	close(stdinfd);
 	close(pfd[1]);
 	redir->heredoc_fd = pfd[0];
 }
