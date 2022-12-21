@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/21 18:46:38 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/21 19:16:35 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,19 @@
 # include <string.h>
 # include <signal.h>
 
-typedef struct s_env		t_env;
-typedef struct s_token		t_token;
-typedef enum e_token_kind	t_token_kind;
-typedef struct s_str		t_str;
-typedef enum e_str_kind		t_str_kind;
-typedef struct s_node		t_node;
-typedef enum e_node_kind	t_node_kind;
-typedef struct s_pipeline	t_pipeline;
+typedef struct s_env			t_env;
+typedef struct s_token			t_token;
+typedef enum e_token_kind		t_token_kind;
+typedef struct s_str			t_str;
+typedef enum e_str_kind			t_str_kind;
+typedef struct s_node			t_node;
+typedef enum e_node_kind		t_node_kind;
+typedef struct s_pipeline		t_pipeline;
+typedef struct s_redirect		t_redirect;
+typedef enum e_redirect_kind	t_redirect_kind;
 
-extern char					**environ;
-extern t_env				g_env;
+extern char						**environ;
+extern t_env					g_env;
 
 struct s_env {
 	int				status;
@@ -124,9 +126,6 @@ struct s_node {
 	long		val;
 };
 
-typedef struct s_redirect		t_redirect;
-typedef enum e_redirect_kind	t_redirect_kind;
-
 enum e_redirect_kind {
 	RD_OUTPUT,
 	RD_INPUT,
@@ -136,17 +135,17 @@ enum e_redirect_kind {
 
 struct s_redirect {
 	t_redirect_kind	kind;
-	int			fd;
-	int			tmpfd;
-	int			srcfd;
-	t_redirect	*next;
+	int				fd;
+	int				tmpfd;
+	int				srcfd;
+	t_redirect		*next;
 
 	// OUTPUT, INPUT, APPEND
-	char		*path;
+	char			*path;
 
 	// HEREDOC
-	char		*delimiter;
-	bool		is_delim_quoted;
+	char			*delimiter;
+	bool			is_delim_quoted;
 };
 
 struct s_pipeline {
@@ -159,37 +158,37 @@ struct s_pipeline {
 };
 
 // error.c
-void	fatal_exit(char *s) __attribute__((noreturn));
-void	err_exit(char *s) __attribute__((noreturn));
+void		fatal_exit(char *s) __attribute__((noreturn));
+void		err_exit(char *s) __attribute__((noreturn));
 
 // tokenizer.c
-bool	startswith(const char *p, const char *q);
-t_token	*tokenize(char *line);
+bool		startswith(const char *p, const char *q);
+t_token		*tokenize(char *line);
 
 // expand.c
-void	expand(t_node *node);
-char	*expand_line(char *line);
+void		expand(t_node *node);
+char		*expand_line(char *line);
 
 // parser.c
-t_node	*parse(t_token *tok);
+t_node		*parse(t_token *tok);
 
 // str.c
-t_str	*new_str(char *pos, size_t len, t_str_kind kind);
+t_str		*new_str(char *pos, size_t len, t_str_kind kind);
 
 // token.c
-t_token	*new_token(char *pos, size_t len, t_token_kind kind);
-bool	startswith(const char *p, const char *q);
+t_token		*new_token(char *pos, size_t len, t_token_kind kind);
+bool		startswith(const char *p, const char *q);
 
 // node.c
-t_node	*new_node(t_node_kind kind, t_token *tok);
-t_node	*new_node_binary(t_node_kind kind, t_node *lhs, t_node *rhs, t_token *tok);
-t_node	*new_node_num(long val, t_token *tok);
-t_node	*add_node_back(t_node *head, t_node *new_node);
-bool	equal(const t_token *tok, const char *op);
-bool	at_eof(const t_token *tok);
+t_node		*new_node(t_node_kind kind, t_token *tok);
+t_node		*new_node_binary(t_node_kind kind, t_node *lhs, t_node *rhs, t_token *tok);
+t_node		*new_node_num(long val, t_token *tok);
+t_node		*add_node_back(t_node *head, t_node *new_node);
+bool		equal(const t_token *tok, const char *op);
+bool		at_eof(const t_token *tok);
 
 // quotes.c
-char	*convert_to_word(t_str *str);
+char		*convert_to_word(t_str *str);
 
 // pipeline.c
 t_pipeline	*new_pipeline(void);
@@ -199,49 +198,49 @@ t_pipeline	*connect_pipeline(t_pipeline *lhs, t_pipeline *rhs);
 t_pipeline	*gen_pipelines(t_node *node);
 
 // builtin.c
-bool	isbuiltin(char *command);
-int		exec_builtin(t_pipeline *pipeline);
+bool		isbuiltin(char *command);
+int			exec_builtin(t_pipeline *pipeline);
 
 // builtin/ft_*.c
-int	ft_echo(char *argv[]);
-int	ft_cd(char **argv);
-int	ft_pwd(char *argv[]);
-int	ft_export(char **argv);
-int	ft_unset(char *argv[]);
-int	ft_env(char **argv);
-int	ft_exit(char **argv);
+int			ft_echo(char *argv[]);
+int			ft_cd(char **argv);
+int			ft_pwd(char *argv[]);
+int			ft_export(char **argv);
+int			ft_unset(char *argv[]);
+int			ft_env(char **argv);
+int			ft_exit(char **argv);
 
 // fork_exec.c
-int		forkexec_pipeline(t_pipeline *head);
+int			forkexec_pipeline(t_pipeline *head);
 
 // ft_syscall.c
-int		ft_open(char *path, int oflag, mode_t mode);
-void	ft_close(int fd);
-pid_t	ft_fork(void);
-void	ft_dup2(int oldfd, int newfd);
-int		stashfd(int fd);
-bool	is_valid_fd(int fd);
+int			ft_open(char *path, int oflag, mode_t mode);
+void		ft_close(int fd);
+pid_t		ft_fork(void);
+void		ft_dup2(int oldfd, int newfd);
+int			stashfd(int fd);
+bool		is_valid_fd(int fd);
 
 // ft_string.c
-bool	is_blank(char c);
-bool	is_alpha_under(char c);
-bool	is_alpha_num_under(char c);
-bool	is_metachr(char c);
-bool	is_control_operator(const char *s);
-bool	is_variable(const char *s);
-bool	is_specialchr(char c);
-bool	is_special_param(const char *s);
-bool	is_unquoted(const char *s);
-bool	is_number(const char *s);
+bool		is_blank(char c);
+bool		is_alpha_under(char c);
+bool		is_alpha_num_under(char c);
+bool		is_metachr(char c);
+bool		is_control_operator(const char *s);
+bool		is_variable(const char *s);
+bool		is_specialchr(char c);
+bool		is_special_param(const char *s);
+bool		is_unquoted(const char *s);
+bool		is_number(const char *s);
 
 // termios.c
-void	setup_term(void);
+void		setup_term(void);
 
 // signal.c
-void	setup_signal(void);
+void		setup_signal(void);
 
 // readline.c
-void	setup_rl(void);
+void		setup_rl(void);
 
 // redirect.c
 t_redirect	*new_redirect(t_redirect_kind kind, char *path, int fd);
@@ -252,11 +251,11 @@ void		open_srcfd(t_redirect *redir);
 void		close_srcfd(t_redirect *redir);
 
 // heredoc.c
-int	read_heredoc(const char *delimiter, bool is_delim_quoted);
+int			read_heredoc(const char *delimiter, bool is_delim_quoted);
 
 // destructor.c
-void	free_tok(t_token *tok);
-void	free_node(t_node *node);
-void	free_pipeline(t_pipeline *pipeline);
+void		free_tok(t_token *tok);
+void		free_node(t_node *node);
+void		free_pipeline(t_pipeline *pipeline);
 
 #endif
