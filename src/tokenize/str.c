@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/09 08:48:46 by susami            #+#    #+#             */
-/*   Updated: 2022/12/16 07:09:16 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/21 21:24:08 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ char	*convert_to_word(t_str *str)
 		else if (cur->kind == STR_DOUBLE)
 		{
 			// "hello $USER world"
-			char *p;
+			char	*p;
 			p = cur->pos + 1;
 			for (t_str *param = cur->parameters; param; param = param->next)
 			{

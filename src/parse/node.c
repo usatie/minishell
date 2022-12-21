@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 06:49:21 by susami            #+#    #+#             */
-/*   Updated: 2022/12/17 11:07:18 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/21 21:23:07 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ t_node	*new_node(t_node_kind kind, t_token *tok)
 	return (node);
 }
 
-t_node	*new_node_binary(t_node_kind kind, t_node *lhs, t_node *rhs, t_token *tok)
+t_node	*new_node_binary(t_node_kind kind, t_node *lhs, t_node *rhs,
+		t_token *tok)
 {
 	t_node	*node;
 

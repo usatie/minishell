@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 08:36:12 by susami            #+#    #+#             */
-/*   Updated: 2022/12/21 17:20:38 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/21 19:27:26 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,13 +46,16 @@ void	open_srcfd(t_redirect *redir)
 	while (redir)
 	{
 		if (redir->kind == RD_OUTPUT)
-			redir->srcfd = ft_open(redir->path, O_CREAT | O_TRUNC | O_WRONLY, 0644);
+			redir->srcfd = ft_open(redir->path, O_CREAT | O_TRUNC | O_WRONLY,
+					0644);
 		else if (redir->kind == RD_INPUT)
 			redir->srcfd = ft_open(redir->path, O_RDONLY, 0);
 		else if (redir->kind == RD_APPEND)
-			redir->srcfd = ft_open(redir->path, O_CREAT | O_APPEND | O_WRONLY, 0644);
+			redir->srcfd = ft_open(redir->path, O_CREAT | O_APPEND | O_WRONLY,
+					0644);
 		else if (redir->kind == RD_HEREDOC)
-			redir->srcfd = read_heredoc(redir->delimiter, redir->is_delim_quoted);
+			redir->srcfd = read_heredoc(redir->delimiter,
+					redir->is_delim_quoted);
 		else
 			err_exit("Unexpected Redirect kind");
 		redir = redir->next;

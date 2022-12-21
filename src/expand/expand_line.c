@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/21 15:35:03 by susami            #+#    #+#             */
-/*   Updated: 2022/12/21 16:12:35 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/21 19:25:56 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,8 @@ char	*expand_line(char *line)
 				line++;
 			value = xgetenv(start, line - start);
 			if (value)
-				newline = reallocf_strncat(newline, &size, value, strlen(value));
+				newline = reallocf_strncat(newline, &size, value,
+						strlen(value));
 		}
 		else
 		{

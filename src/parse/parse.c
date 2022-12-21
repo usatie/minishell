@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 15:34:36 by susami            #+#    #+#             */
-/*   Updated: 2022/12/21 09:46:34 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/21 21:19:35 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,8 @@ static t_node	*command(t_token **rest, t_token *tok)
 		// num '>>' word
 		if (is_redirection(tok))
 		{
-			cmd->redirects = add_node_back(cmd->redirects, redirection(&tok, tok));
+			cmd->redirects = add_node_back(cmd->redirects, redirection(&tok,
+						tok));
 			continue ;
 		}
 		// word
@@ -147,7 +148,8 @@ static t_node	*redirection(t_token **rest, t_token *tok)
 	if (equal(tok, "<<"))
 	{
 		node = new_node_num(STDIN_FILENO, tok);
-		node = new_node_binary(ND_REDIR_HEREDOC, node, word(rest, tok->next), tok);
+		node = new_node_binary(ND_REDIR_HEREDOC, node, word(rest, tok->next),
+				tok);
 		return (node);
 	}
 	// num?
@@ -175,7 +177,8 @@ static t_node	*redirection(t_token **rest, t_token *tok)
 	{
 		if (node == NULL)
 			node = new_node_num(STDOUT_FILENO, tok);
-		node = new_node_binary(ND_REDIR_APPEND, node, word(rest, tok->next), tok);
+		node = new_node_binary(ND_REDIR_APPEND, node, word(rest, tok->next),
+				tok);
 		return (node);
 	}
 	// syntax error

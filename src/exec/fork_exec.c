@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 10:26:01 by susami            #+#    #+#             */
-/*   Updated: 2022/12/21 19:01:24 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/21 21:24:59 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ int	forkexec_pipeline(t_pipeline *head)
 static void	forkexec(t_pipeline *command)
 {
 	char	*path;
+
 	command->pid = ft_fork();
 	if (command->pid == 0)
 	{
