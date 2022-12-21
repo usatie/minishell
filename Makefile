@@ -19,6 +19,7 @@ SRCS      = src/minishell.c\
 			src/parse/node.c\
 			src/parse/gen_pipeline.c\
 			src/expand/expand.c\
+			src/redirect/heredoc.c\
 			src/redirect/redirect.c\
 			src/exec/fork_exec.c\
 			src/exec/builtin/builtin.c\

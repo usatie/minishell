@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/11 14:32:27 by susami            #+#    #+#             */
-/*   Updated: 2022/12/21 12:20:39 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/21 14:07:23 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,19 +88,6 @@ t_redirect	*gen_redirect(t_node *node)
 		fatal_exit("Unexpected Node Kind");
 }
 
-t_redirect	*add_redir_back(t_redirect *head, t_redirect *new_redir)
-{
-	t_redirect	*cur;
-	
-	if (!head)
-		return (new_redir);
-	cur = head;
-	while (cur->next)
-		cur = cur->next;
-	cur->next = new_redir;
-	return (head);
-}
-
 t_pipeline	*gen_command(t_node *node)
 {
 	t_pipeline	*command;
@@ -114,7 +101,7 @@ t_pipeline	*gen_command(t_node *node)
 		command->redirects = add_redir_back(command->redirects, gen_redirect(redir));
 		redir = redir->next;
 	}
-	set_srcfd(command->redirects);
+	open_srcfd(command);
 	return (command);
 }
 

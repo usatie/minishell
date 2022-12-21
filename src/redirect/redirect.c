@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 08:36:12 by susami            #+#    #+#             */
-/*   Updated: 2022/12/21 12:36:32 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/21 14:07:56 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,71 +33,41 @@ t_redirect	*new_redirect(t_redirect_kind kind, char *path, int fd)
 	return (redirect);
 }
 
-
-static int	check_state(void)
+t_redirect	*add_redir_back(t_redirect *head, t_redirect *new_redir)
 {
-	if (!g_env.sig)
-		return (0);
-	g_env.sig = 0;
-	g_env.heredoc_interrupted = 1;
-	rl_done = 1;
-	setup_term();
-	return (0);
+	t_redirect	*cur;
+	
+	if (!head)
+		return (new_redir);
+	cur = head;
+	while (cur->next)
+		cur = cur->next;
+	cur->next = new_redir;
+	return (head);
 }
 
-int	read_heredoc(const char *delimiter, bool is_delim_quoted)
+void	open_srcfd(t_pipeline *pipeline)
 {
-	char	*line;
-	int		pfd[2];
+	t_redirect	*redir;
 
-	if (isatty(STDIN_FILENO))
-		rl_event_hook = check_state;
-	// Open pipe
-	pipe(pfd);
-	// Read from stdin, Write to pipe
-	line = NULL;
-	while (!g_env.heredoc_interrupted)
+	while (pipeline)
 	{
-		line = readline("> ");
-		if (g_env.heredoc_interrupted)
-			break;
-		// EOF
-		if (!line)
-			break;
-		// delimiter
-		if (strcmp(line, delimiter) == 0)
+		redir = pipeline->redirects;
+		while (redir)
 		{
-			free(line);
-			break;
+			if (redir->kind == RD_OUTPUT)
+				redir->srcfd = ft_open(redir->path, O_CREAT | O_WRONLY, 0644);
+			else if (redir->kind == RD_INPUT)
+				redir->srcfd = ft_open(redir->path, O_RDONLY, 0);
+			else if (redir->kind == RD_APPEND)
+				redir->srcfd = ft_open(redir->path, O_CREAT | O_APPEND | O_WRONLY, 0644);
+			else if (redir->kind == RD_HEREDOC)
+				redir->srcfd = read_heredoc(redir->delimiter, redir->is_delim_quoted);
+			else
+				err_exit("Unexpected Redirect kind");
+			redir = redir->next;
 		}
-		// Write to pipe
-		if (is_delim_quoted)
-			write(pfd[1], line, strlen(line));
-		else
-			write(pfd[1], line, strlen(line)); // TODO: expand parameters
-		write(pfd[1], "\n", 1);
-		free(line);
-	}
-	close(pfd[1]);
-	setup_rl();
-	return (pfd[0]);
-}
-
-void	set_srcfd(t_redirect *redir)
-{
-	while (redir)
-	{
-		if (redir->kind == RD_OUTPUT)
-			redir->srcfd = ft_open(redir->path, O_CREAT | O_WRONLY, 0644);
-		else if (redir->kind == RD_INPUT)
-			redir->srcfd = ft_open(redir->path, O_RDONLY, 0);
-		else if (redir->kind == RD_APPEND)
-			redir->srcfd = ft_open(redir->path, O_CREAT | O_APPEND | O_WRONLY, 0644);
-		else if (redir->kind == RD_HEREDOC)
-			redir->srcfd = read_heredoc(redir->delimiter, redir->is_delim_quoted);
-		else
-			err_exit("Unexpected Redirect kind");
-		redir = redir->next;
+		pipeline = pipeline->next;
 	}
 }
 

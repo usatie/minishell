@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/21 12:29:41 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/21 14:07:37 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -226,11 +226,14 @@ void	setup_rl(void);
 
 // redirect.c
 t_redirect	*new_redirect(t_redirect_kind kind, char *path, int fd);
+t_redirect	*add_redir_back(t_redirect *head, t_redirect *new_redir);
 void		redirect(t_pipeline *command);
 void		restore_redirect(t_pipeline *command);
 int			stashfd(int fd);
-void		set_srcfd(t_redirect *redir);
+void		open_srcfd(t_pipeline *pipeline);
 void		close_srcfd(t_pipeline *pipeline);
 
+// heredoc.c
+int	read_heredoc(const char *delimiter, bool is_delim_quoted);
 
 #endif
