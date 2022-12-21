@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 10:25:51 by susami            #+#    #+#             */
-/*   Updated: 2022/12/21 15:39:23 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/21 18:56:40 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ static t_str	*double_quotes(char **rest, char *line);
 static t_str	*plain_text(char **rest, char *line);
 static t_token	*string(char **rest, char *line);
 
-
 // "cat -e Makefile"
 //  ^   ^  ^
 
@@ -31,9 +30,10 @@ static t_token	*string(char **rest, char *line);
 //  ^    ^ 
 t_token	*tokenize(char *line)
 {
-	t_token	head = {};
+	t_token	head;
 	t_token	*cur;
 
+	head.next = NULL;
 	cur = &head;
 	while (*line)
 	{
@@ -89,7 +89,6 @@ static bool	consume_blank(char **rest, char *line)
 	return (false);
 }
 
-
 // echo $USER 
 //      ^    ^
 // (t_token *) or (t_str *)
@@ -102,7 +101,7 @@ t_str	*variable(char **rest, char *line)
 {
 	t_str	*str;
 	char	*start;
-	
+
 	start = line;
 	if (*line != '$')
 		fatal_exit("Expected $\n");
@@ -121,7 +120,7 @@ t_str	*special_parameter(char **rest, char *line)
 {
 	t_str	*str;
 	char	*start;
-	
+
 	start = line;
 	if (*line != '$')
 		fatal_exit("Expected $\n");
@@ -139,7 +138,7 @@ t_str	*single_quotes(char **rest, char *line)
 {
 	t_str	*str;
 	char	*start;
-	
+
 	start = line;
 	line++; // skip the opening quote
 	while (*line && *line != '\'')
@@ -162,9 +161,10 @@ t_str	*double_quotes(char **rest, char *line)
 {
 	t_str	*str;
 	char	*start;
-	t_str	paramhead = {0};
+	t_str	paramhead;
 	t_str	*param;
-	
+
+	paramhead.next = NULL;
 	param = &paramhead;
 	start = line;
 	line++; // skip the opening quote
@@ -201,7 +201,7 @@ t_str	*plain_text(char **rest, char *line)
 {
 	t_str	*str;
 	char	*start;
-	
+
 	start = line;
 	while (*line != '\0' && is_unquoted(line))
 		line++;
