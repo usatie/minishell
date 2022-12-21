@@ -6,11 +6,13 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 07:28:02 by susami            #+#    #+#             */
-/*   Updated: 2022/12/17 10:34:47 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/21 14:36:44 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <fcntl.h>
+#include <errno.h>
+#include <sys/stat.h>
 #include "minishell.h"
 
 int	ft_open(char *path, int oflag, mode_t mode)
@@ -49,4 +51,36 @@ void	ft_dup2(int oldfd, int newfd)
 			err_exit("dup2()");
 		ft_close(oldfd);
 	}
+}
+
+// Same as dup() but returned fd is assured to be >= 10
+int	stashfd(int fd)
+{
+	int	tmpfd;
+
+	// If fd is invalid, return -1
+	if (!is_valid_fd(fd))
+	{
+		errno = EBADF;
+		return (-1);
+	}
+	// If fd is valid, duplicate it as tmpfd (which is greater than 10)
+	tmpfd = fd + 10;
+	while (is_valid_fd(tmpfd))
+		tmpfd++;
+	ft_dup2(fd, tmpfd);
+	return (tmpfd);
+}
+
+// Return true if there is a open file descriptor
+bool	is_valid_fd(int fd)
+{
+	struct stat	st;
+
+	if (fd < 0)
+		return (false);
+	errno = 0;
+	if (fstat(fd, &st) < 0 && errno == EBADF)
+		return (false);
+	return (true);
 }

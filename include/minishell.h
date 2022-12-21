@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/21 14:07:37 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/21 14:25:44 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,6 +214,8 @@ int		ft_open(char *path, int oflag, mode_t mode);
 void	ft_close(int fd);
 pid_t	ft_fork(void);
 void	ft_dup2(int oldfd, int newfd);
+int		stashfd(int fd);
+bool	is_valid_fd(int fd);
 
 // termios.c
 void	setup_term(void);
@@ -227,11 +229,10 @@ void	setup_rl(void);
 // redirect.c
 t_redirect	*new_redirect(t_redirect_kind kind, char *path, int fd);
 t_redirect	*add_redir_back(t_redirect *head, t_redirect *new_redir);
-void		redirect(t_pipeline *command);
-void		restore_redirect(t_pipeline *command);
-int			stashfd(int fd);
-void		open_srcfd(t_pipeline *pipeline);
-void		close_srcfd(t_pipeline *pipeline);
+void		redirect(t_redirect *redir);
+void		restore_redirect(t_redirect *redir);
+void		open_srcfd(t_redirect *redir);
+void		close_srcfd(t_redirect *redir);
 
 // heredoc.c
 int	read_heredoc(const char *delimiter, bool is_delim_quoted);

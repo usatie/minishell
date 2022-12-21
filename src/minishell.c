@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 14:21:05 by susami            #+#    #+#             */
-/*   Updated: 2022/12/21 12:27:02 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/21 14:43:25 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,11 @@ int	exec(char *cmd)
 	else
 	{
 		expand(node);
+		pipeline = gen_pipeline(node);
+		// open srcfds
 		g_env.heredoc_interrupted = 0;
-		pipeline = gen_pipeline(node); // heredoc is read here
+		for (t_pipeline *pl = pipeline; pl; pl = pl->next)
+			open_srcfd(pl->redirects);
 		g_env.pipeline = pipeline;
 		// empty command
 		if (pipeline->argv[0] == NULL)
@@ -45,14 +48,14 @@ int	exec(char *cmd)
 		else if (g_env.heredoc_interrupted)
 		{
 			status = 1;
-			close_srcfd(pipeline);
+			close_srcfd(pipeline->redirects);
 		}
 		// builtin && single command
 		else if (isbuiltin(pipeline->argv[0]) && pipeline->next == NULL)
 		{
-			redirect(pipeline);
+			redirect(pipeline->redirects);
 			status = exec_builtin(pipeline);
-			restore_redirect(pipeline);
+			restore_redirect(pipeline->redirects);
 		}
 		// multiple command or non-builtin
 		else
