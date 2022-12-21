@@ -9,6 +9,7 @@ LIBS      = -lreadline -L$(RLDIR)/lib -lft -L libft          # linker flags
 SRCS      = src/minishell.c\
             src/error.c\
 			src/ft_syscall.c\
+			src/ft_string.c\
 			src/setup/signal.c\
 			src/setup/termios.c\
 			src/setup/readline.c\
@@ -20,6 +21,7 @@ SRCS      = src/minishell.c\
 			src/pipeline/pipeline.c\
 			src/gen/gen.c\
 			src/expand/expand.c\
+			src/expand/expand_line.c\
 			src/redirect/heredoc.c\
 			src/redirect/redirect.c\
 			src/exec/fork_exec.c\

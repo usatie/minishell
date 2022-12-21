@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/21 15:21:14 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/21 15:38:49 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,6 +168,7 @@ t_token	*tokenize(char *line);
 
 // expand.c
 void	expand(t_node *node);
+char	*expand_line(char *line);
 
 // parser.c
 t_node	*parse(t_token *tok);
@@ -220,6 +221,18 @@ pid_t	ft_fork(void);
 void	ft_dup2(int oldfd, int newfd);
 int		stashfd(int fd);
 bool	is_valid_fd(int fd);
+
+// ft_string.c
+bool	is_blank(char c);
+bool	is_alpha_under(char c);
+bool	is_alpha_num_under(char c);
+bool	is_metachr(char c);
+bool	is_control_operator(const char *s);
+bool	is_variable(const char *s);
+bool	is_specialchr(char c);
+bool	is_special_param(const char *s);
+bool	is_unquoted(const char *s);
+bool	is_number(const char *s);
 
 // termios.c
 void	setup_term(void);

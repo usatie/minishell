@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/21 14:01:00 by susami            #+#    #+#             */
-/*   Updated: 2022/12/21 14:03:46 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/21 15:41:24 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ static int	check_state(void)
 int	read_heredoc(const char *delimiter, bool is_delim_quoted)
 {
 	char	*line;
+	char	*expanded_line;
 	int		pfd[2];
 
 	if (isatty(STDIN_FILENO))
@@ -53,7 +54,11 @@ int	read_heredoc(const char *delimiter, bool is_delim_quoted)
 		if (is_delim_quoted)
 			write(pfd[1], line, strlen(line));
 		else
-			write(pfd[1], line, strlen(line)); // TODO: expand parameters
+		{
+			expanded_line = expand_line(line);
+			write(pfd[1], expanded_line, strlen(expanded_line));
+			//free(expanded_line);
+		}
 		write(pfd[1], "\n", 1);
 		free(line);
 	}
