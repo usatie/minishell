@@ -63,5 +63,10 @@ fclean: clean
 
 re: fclean all
 
+norm:
+	norminette include src libft |\
+		grep Error |\
+		grep -v 'WRONG_SCOPE_COMMENT'
+
 .PHONY: test all clean fclean re
 -include $(DEPS)
