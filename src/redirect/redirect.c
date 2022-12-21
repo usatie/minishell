@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 08:36:12 by susami            #+#    #+#             */
-/*   Updated: 2022/12/21 14:34:58 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/21 17:20:38 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	open_srcfd(t_redirect *redir)
 	while (redir)
 	{
 		if (redir->kind == RD_OUTPUT)
-			redir->srcfd = ft_open(redir->path, O_CREAT | O_WRONLY, 0644);
+			redir->srcfd = ft_open(redir->path, O_CREAT | O_TRUNC | O_WRONLY, 0644);
 		else if (redir->kind == RD_INPUT)
 			redir->srcfd = ft_open(redir->path, O_RDONLY, 0);
 		else if (redir->kind == RD_APPEND)
@@ -78,14 +78,14 @@ void	redirect(t_redirect *redir)
 	}
 }
 
+// Restore from tail to head
 void	restore_redirect(t_redirect *redir)
 {
-	while (redir)
-	{
-		if (is_valid_fd(redir->tmpfd))
-			ft_dup2(redir->tmpfd, redir->fd);
-		else if (is_valid_fd(redir->fd))
-			ft_close(redir->fd);
-		redir = redir->next;
-	}
+	if (!redir)
+		return ;
+	restore_redirect(redir->next);
+	if (is_valid_fd(redir->tmpfd))
+		ft_dup2(redir->tmpfd, redir->fd);
+	else if (is_valid_fd(redir->fd))
+		ft_close(redir->fd);
 }
