@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/21 08:28:05 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/21 08:41:35 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,16 +129,21 @@ enum e_redirect_kind {
 	RD_OUTPUT,
 	RD_INPUT,
 	RD_APPEND,
+	RD_HEREDOC,
 };
 
 struct s_redirect {
 	t_redirect_kind	kind;
-	int				fd;
-	int				tmpfd;
-	t_redirect		*next;
+	int			fd;
+	int			tmpfd;
+	t_redirect	*next;
 
 	// OUTPUT, INPUT, APPEND
-	char			*path;
+	char		*path;
+
+	// HEREDOC
+	char		*delimiter;
+	bool		is_delim_quoted;
 };
 
 struct s_pipeline {
