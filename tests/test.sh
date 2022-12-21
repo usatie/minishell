@@ -101,6 +101,9 @@ assert 'cat <test_hello.txt'
 # echo 0 >test_zero.txt && echo 1 >test_one.txt && echo 2 >test_two.txt && echo 3 >test_three.txt
 # assert 'echo 1<test_one.txt 2<test_two.txt 3<test_three.txt'
 
+## Heredoc
+assert 'cat <<EOF\nhello\nworld\nEOF'
+
 # Pipe
 assert 'cat Makefile | grep minishell'
 assert 'cat Makefile | grep c | sort -r'

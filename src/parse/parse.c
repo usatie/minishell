@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 15:34:36 by susami            #+#    #+#             */
-/*   Updated: 2022/12/21 08:31:13 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/21 09:46:34 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,8 +143,8 @@ static t_node	*redirection(t_token **rest, t_token *tok)
 {
 	t_node	*node;
 
-	// '>>' word
-	if (equal(tok, ">>"))
+	// '<<' word
+	if (equal(tok, "<<"))
 	{
 		node = new_node_num(STDIN_FILENO, tok);
 		node = new_node_binary(ND_REDIR_HEREDOC, node, word(rest, tok->next), tok);
