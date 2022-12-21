@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 14:21:05 by susami            #+#    #+#             */
-/*   Updated: 2022/12/21 15:19:31 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/21 18:50:17 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ int	exec(char *cmd)
 	// tokenize, parse, ...
 	tok = tokenize(cmd);
 	node = parse(tok);
+	pipelines = NULL;
 	if (g_env.syntax_error)
 		status = 258;
 	else
@@ -61,9 +62,9 @@ int	exec(char *cmd)
 		else
 			status = forkexec_pipeline(pipelines);
 	}
-	//free_all_tok(tok);
-	//free_all_node(node);
-	//free_all_pipeline(head);
+	free_tok(tok);
+	free_node(node);
+	free_pipeline(pipelines);
 	g_env.pipeline = NULL;
 	return (status);
 }

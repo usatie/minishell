@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/21 15:38:49 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/21 18:46:38 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -253,5 +253,10 @@ void		close_srcfd(t_redirect *redir);
 
 // heredoc.c
 int	read_heredoc(const char *delimiter, bool is_delim_quoted);
+
+// destructor.c
+void	free_tok(t_token *tok);
+void	free_node(t_node *node);
+void	free_pipeline(t_pipeline *pipeline);
 
 #endif
