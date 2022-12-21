@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/21 14:01:00 by susami            #+#    #+#             */
-/*   Updated: 2022/12/21 15:41:24 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/21 15:53:31 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int	read_heredoc(const char *delimiter, bool is_delim_quoted)
 		{
 			expanded_line = expand_line(line);
 			write(pfd[1], expanded_line, strlen(expanded_line));
-			//free(expanded_line);
+			free(expanded_line);
 		}
 		write(pfd[1], "\n", 1);
 		free(line);
