@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 08:36:12 by susami            #+#    #+#             */
-/*   Updated: 2022/12/21 11:14:52 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/21 12:36:32 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,18 +33,34 @@ t_redirect	*new_redirect(t_redirect_kind kind, char *path, int fd)
 	return (redirect);
 }
 
+
+static int	check_state(void)
+{
+	if (!g_env.sig)
+		return (0);
+	g_env.sig = 0;
+	g_env.heredoc_interrupted = 1;
+	rl_done = 1;
+	setup_term();
+	return (0);
+}
+
 int	read_heredoc(const char *delimiter, bool is_delim_quoted)
 {
 	char	*line;
 	int		pfd[2];
 
+	if (isatty(STDIN_FILENO))
+		rl_event_hook = check_state;
 	// Open pipe
 	pipe(pfd);
 	// Read from stdin, Write to pipe
 	line = NULL;
-	while (1)
+	while (!g_env.heredoc_interrupted)
 	{
 		line = readline("> ");
+		if (g_env.heredoc_interrupted)
+			break;
 		// EOF
 		if (!line)
 			break;
@@ -63,6 +79,7 @@ int	read_heredoc(const char *delimiter, bool is_delim_quoted)
 		free(line);
 	}
 	close(pfd[1]);
+	setup_rl();
 	return (pfd[0]);
 }
 
@@ -84,11 +101,26 @@ void	set_srcfd(t_redirect *redir)
 	}
 }
 
+void	close_srcfd(t_pipeline *pipeline)
+{
+	t_redirect	*redir;
+
+	while (pipeline)
+	{
+		redir = pipeline->redirects;
+		while (redir)
+		{
+			close(redir->srcfd);
+			redir = redir->next;
+		}
+		pipeline = pipeline->next;
+	}
+}
+
 void	redirect(t_pipeline *command)
 {
 	t_redirect	*redir;
 
-	set_srcfd(command->redirects);
 	redir = command->redirects;
 	while (redir)
 	{

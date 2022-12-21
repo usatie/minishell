@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/21 11:15:26 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/21 12:29:41 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,11 @@ extern char					**environ;
 extern t_env				g_env;
 
 struct s_env {
-	int			status;
-	t_pipeline	*pipeline;
-	bool		syntax_error;
+	int				status;
+	t_pipeline		*pipeline;
+	sig_atomic_t	sig;
+	bool			syntax_error;
+	bool			heredoc_interrupted;
 };
 
 enum e_token_kind {
@@ -227,6 +229,8 @@ t_redirect	*new_redirect(t_redirect_kind kind, char *path, int fd);
 void		redirect(t_pipeline *command);
 void		restore_redirect(t_pipeline *command);
 int			stashfd(int fd);
+void		set_srcfd(t_redirect *redir);
+void		close_srcfd(t_pipeline *pipeline);
 
 
 #endif

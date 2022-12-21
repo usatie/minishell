@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 14:21:05 by susami            #+#    #+#             */
-/*   Updated: 2022/12/20 18:39:23 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/21 12:27:02 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,17 @@ int	exec(char *cmd)
 	else
 	{
 		expand(node);
-		pipeline = gen_pipeline(node);
+		g_env.heredoc_interrupted = 0;
+		pipeline = gen_pipeline(node); // heredoc is read here
 		g_env.pipeline = pipeline;
 		// empty command
 		if (pipeline->argv[0] == NULL)
 			status = 0;
+		else if (g_env.heredoc_interrupted)
+		{
+			status = 1;
+			close_srcfd(pipeline);
+		}
 		// builtin && single command
 		else if (isbuiltin(pipeline->argv[0]) && pipeline->next == NULL)
 		{

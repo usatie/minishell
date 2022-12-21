@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/11 14:32:27 by susami            #+#    #+#             */
-/*   Updated: 2022/12/21 08:43:04 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/21 12:20:39 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,7 @@ t_pipeline	*gen_command(t_node *node)
 		command->redirects = add_redir_back(command->redirects, gen_redirect(redir));
 		redir = redir->next;
 	}
+	set_srcfd(command->redirects);
 	return (command);
 }
 

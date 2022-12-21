@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 13:10:41 by susami            #+#    #+#             */
-/*   Updated: 2022/12/20 13:55:32 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/21 11:39:22 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,34 +26,9 @@ void	setup_signal(void)
 	setup_sigquit();
 }
 
-static int	check_state(void)
-{
-	t_pipeline	*pipeline;
-
-	setup_term();
-	pipeline = g_env.pipeline;
-	if (pipeline)
-	{
-		while (pipeline)
-		{
-			if (pipeline->pid > 0)
-				kill(pipeline->pid, SIGINT);
-			pipeline = pipeline->next;
-		}
-	}
-	else
-	{
-		write(STDERR_FILENO, "\n", 1);
-		rl_on_new_line(); // Regenerate the prompt on a newline
-		rl_replace_line("", 0); // Clear the previous text
-		rl_redisplay(); // Refresh the prompt
-	}
-	return (0);
-}
-
 static void	sigint_handler(int signum)
 {
-	check_state();
+	g_env.sig = 1;
 	(void)signum;
 }
 
