@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/21 14:25:44 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/21 15:21:14 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,8 +190,12 @@ bool	at_eof(const t_token *tok);
 // quotes.c
 char	*convert_to_word(t_str *str);
 
-// gen_command.c
-t_pipeline	*gen_pipeline(t_node *node);
+// pipeline.c
+t_pipeline	*new_pipeline(void);
+t_pipeline	*connect_pipeline(t_pipeline *lhs, t_pipeline *rhs);
+
+// gen.c
+t_pipeline	*gen_pipelines(t_node *node);
 
 // builtin.c
 bool	isbuiltin(char *command);
