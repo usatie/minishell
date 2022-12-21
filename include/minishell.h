@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/21 08:41:35 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/21 11:15:26 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,6 +136,7 @@ struct s_redirect {
 	t_redirect_kind	kind;
 	int			fd;
 	int			tmpfd;
+	int			srcfd;
 	t_redirect	*next;
 
 	// OUTPUT, INPUT, APPEND

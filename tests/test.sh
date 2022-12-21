@@ -103,6 +103,7 @@ assert 'cat <test_hello.txt'
 
 ## Heredoc
 assert 'cat <<EOF\nhello\nworld\nEOF'
+assert 'cat <<EOF <<EOF2\nhello\nEOF\nworld\nEOF2'
 
 # Pipe
 assert 'cat Makefile | grep minishell'
