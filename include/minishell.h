@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/21 21:23:42 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/21 23:02:05 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,7 +196,7 @@ t_pipeline	*new_pipeline(void);
 t_pipeline	*connect_pipeline(t_pipeline *lhs, t_pipeline *rhs);
 
 // gen.c
-t_pipeline	*gen_pipelines(t_node *node);
+t_pipeline	*gen(t_node *node);
 
 // builtin.c
 bool		isbuiltin(char *command);
@@ -248,8 +248,6 @@ t_redirect	*new_redirect(t_redirect_kind kind, char *path, int fd);
 t_redirect	*add_redir_back(t_redirect *head, t_redirect *new_redir);
 void		redirect(t_redirect *redir);
 void		restore_redirect(t_redirect *redir);
-void		open_srcfd(t_redirect *redir);
-void		close_srcfd(t_redirect *redir);
 
 // heredoc.c
 int			read_heredoc(const char *delimiter, bool is_delim_quoted);
@@ -258,5 +256,8 @@ int			read_heredoc(const char *delimiter, bool is_delim_quoted);
 void		free_tok(t_token *tok);
 void		free_node(t_node *node);
 void		free_pipeline(t_pipeline *pipeline);
+
+// exec.c
+int			exec(t_pipeline *pipelines);
 
 #endif

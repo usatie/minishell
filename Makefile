@@ -25,6 +25,7 @@ SRCS      = src/minishell.c\
 			src/expand/expand_line.c\
 			src/redirect/heredoc.c\
 			src/redirect/redirect.c\
+			src/exec/exec.c\
 			src/exec/fork_exec.c\
 			src/exec/builtin/builtin.c\
 			src/exec/builtin/ft_echo.c\

@@ -6,12 +6,11 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 08:36:12 by susami            #+#    #+#             */
-/*   Updated: 2022/12/21 19:27:26 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/21 23:01:43 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include <fcntl.h>
 #include "minishell.h"
 
 t_redirect	*new_redirect(t_redirect_kind kind, char *path, int fd)
@@ -39,36 +38,6 @@ t_redirect	*add_redir_back(t_redirect *head, t_redirect *new_redir)
 		cur = cur->next;
 	cur->next = new_redir;
 	return (head);
-}
-
-void	open_srcfd(t_redirect *redir)
-{
-	while (redir)
-	{
-		if (redir->kind == RD_OUTPUT)
-			redir->srcfd = ft_open(redir->path, O_CREAT | O_TRUNC | O_WRONLY,
-					0644);
-		else if (redir->kind == RD_INPUT)
-			redir->srcfd = ft_open(redir->path, O_RDONLY, 0);
-		else if (redir->kind == RD_APPEND)
-			redir->srcfd = ft_open(redir->path, O_CREAT | O_APPEND | O_WRONLY,
-					0644);
-		else if (redir->kind == RD_HEREDOC)
-			redir->srcfd = read_heredoc(redir->delimiter,
-					redir->is_delim_quoted);
-		else
-			err_exit("Unexpected Redirect kind");
-		redir = redir->next;
-	}
-}
-
-void	close_srcfd(t_redirect *redir)
-{
-	while (redir)
-	{
-		close(redir->srcfd);
-		redir = redir->next;
-	}
 }
 
 void	redirect(t_redirect *redir)

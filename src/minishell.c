@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 14:21:05 by susami            #+#    #+#             */
-/*   Updated: 2022/12/21 18:50:17 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/21 23:11:19 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 
 t_env	g_env = {0};
 
-int	exec(char *cmd)
+int	interpret(char *line)
 {
 	int			status;
 	t_token		*tok;
@@ -29,7 +29,7 @@ int	exec(char *cmd)
 	t_pipeline	*pipelines;
 
 	// tokenize, parse, ...
-	tok = tokenize(cmd);
+	tok = tokenize(line);
 	node = parse(tok);
 	pipelines = NULL;
 	if (g_env.syntax_error)
@@ -37,30 +37,8 @@ int	exec(char *cmd)
 	else
 	{
 		expand(node);
-		pipelines = gen_pipelines(node);
-		// open srcfds
-		g_env.heredoc_interrupted = 0;
-		for (t_pipeline *pl = pipelines; pl; pl = pl->next)
-			open_srcfd(pl->redirects);
-		g_env.pipeline = pipelines;
-		// empty command
-		if (pipelines->argv[0] == NULL)
-			status = 0;
-		else if (g_env.heredoc_interrupted)
-		{
-			status = 1;
-			close_srcfd(pipelines->redirects);
-		}
-		// builtin && single command
-		else if (isbuiltin(pipelines->argv[0]) && pipelines->next == NULL)
-		{
-			redirect(pipelines->redirects);
-			status = exec_builtin(pipelines);
-			restore_redirect(pipelines->redirects);
-		}
-		// multiple command or non-builtin
-		else
-			status = forkexec_pipeline(pipelines);
+		pipelines = gen(node);
+		status = exec(pipelines);
 	}
 	free_tok(tok);
 	free_node(node);
@@ -84,7 +62,7 @@ int	main(void)
 			break ;
 		if (*line)
 			add_history(line);
-		g_env.status = exec(line);
+		g_env.status = interpret(line);
 		free(line);
 	}
 	return (g_env.status);
