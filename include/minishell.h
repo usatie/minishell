@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/21 23:02:05 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/21 23:25:43 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,6 +174,7 @@ t_node		*parse(t_token *tok);
 
 // str.c
 t_str		*new_str(char *pos, size_t len, t_str_kind kind);
+bool		is_any_quoted(t_str *s);
 
 // token.c
 t_token		*new_token(char *pos, size_t len, t_token_kind kind);

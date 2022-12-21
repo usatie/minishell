@@ -6,14 +6,14 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 08:36:12 by susami            #+#    #+#             */
-/*   Updated: 2022/12/21 23:01:43 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/21 23:17:30 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include "minishell.h"
 
-t_redirect	*new_redirect(t_redirect_kind kind, char *path, int fd)
+t_redirect	*new_redirect(t_redirect_kind kind, char *word, int fd)
 {
 	t_redirect	*redirect;
 
@@ -21,7 +21,10 @@ t_redirect	*new_redirect(t_redirect_kind kind, char *path, int fd)
 	if (!redirect)
 		fatal_exit("calloc()");
 	redirect->kind = kind;
-	redirect->path = path;
+	if (kind == RD_HEREDOC)
+		redirect->delimiter = word;
+	else
+		redirect->path = word;
 	redirect->fd = fd;
 	redirect->tmpfd = -1;
 	return (redirect);

@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/11 14:32:27 by susami            #+#    #+#             */
-/*   Updated: 2022/12/21 21:45:27 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/21 23:27:00 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,28 +33,24 @@ char	**gen_argv(t_node *node)
 
 t_redirect	*gen_redirect(t_node *node)
 {
-	char	*path;
-	int		fd;
+	char		*word;
+	int			fd;
+	t_redirect	*rd;
 
 	// [num] > path
 	// [num] < path
-	path = convert_to_word(node->rhs->str);
+	word = convert_to_word(node->rhs->str);
 	fd = node->lhs->val;
 	if (node->kind == ND_REDIR_OUT)
-		return (new_redirect(RD_OUTPUT, path, fd));
+		return (new_redirect(RD_OUTPUT, word, fd));
 	else if (node->kind == ND_REDIR_IN)
-		return (new_redirect(RD_INPUT, path, fd));
+		return (new_redirect(RD_INPUT, word, fd));
 	else if (node->kind == ND_REDIR_APPEND)
-		return (new_redirect(RD_APPEND, path, fd));
+		return (new_redirect(RD_APPEND, word, fd));
 	else if (node->kind == ND_REDIR_HEREDOC)
 	{
-		t_redirect	*rd;
-		rd = new_redirect(RD_HEREDOC, path, fd);
-		rd->path = NULL;
-		rd->delimiter = path;
-		for (t_str *s = node->rhs->str; s; s = s->next)
-			if (s->kind == STR_SINGLE || s->kind == STR_DOUBLE)
-				rd->is_delim_quoted = true;
+		rd = new_redirect(RD_HEREDOC, word, fd);
+		rd->is_delim_quoted = is_any_quoted(node->rhs->str);
 		return (rd);
 	}
 	else

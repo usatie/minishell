@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/09 08:48:46 by susami            #+#    #+#             */
-/*   Updated: 2022/12/21 21:24:08 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/21 23:25:24 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,4 +108,15 @@ char	*convert_to_word(t_str *str)
 		cur = cur->next;
 	}
 	return (s);
+}
+
+bool	is_any_quoted(t_str *s)
+{
+	while (s)
+	{
+		if (s->kind == STR_SINGLE || s->kind == STR_DOUBLE)
+			return (true);
+		s = s->next;
+	}
+	return (false);
 }
