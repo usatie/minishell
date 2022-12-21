@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/21 15:38:04 by susami            #+#    #+#             */
-/*   Updated: 2022/12/21 15:40:27 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/21 19:18:49 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,8 @@ bool	is_metachr(char c)
 bool	is_control_operator(const char *s)
 {
 	return (startswith(s, "&&")
-			|| startswith(s, "|")
-			|| startswith(s, "\n"));
+		|| startswith(s, "|")
+		|| startswith(s, "\n"));
 	//return (startswith(s, "||")
 	//		|| startswith(s, "&")
 	//		|| startswith(s, "&&")
@@ -128,10 +128,10 @@ bool	is_special_param(const char *s)
 bool	is_unquoted(const char *s)
 {
 	return (*s != '\"'
-			&& *s != '\''
-			&& !is_metachr(*s)
-			&& !is_variable(s)
-			&& !is_control_operator(s));
+		&& *s != '\''
+		&& !is_metachr(*s)
+		&& !is_variable(s)
+		&& !is_control_operator(s));
 }
 
 bool	is_number(const char *s)
