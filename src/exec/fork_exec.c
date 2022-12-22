@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 10:26:01 by susami            #+#    #+#             */
-/*   Updated: 2022/12/21 23:30:04 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/22 13:08:41 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,35 +22,53 @@
 static void	forkexec(t_pipeline *command);
 static char	*find_path(char *cmd);
 
-int	forkexec_pipeline(t_pipeline *head)
+static void	exec_pipelines(t_pipeline *pipelines)
 {
-	int			status;
-	t_pipeline	*pipeline;
+	t_pipeline	*cur;
 
-	status = 0;
-	pipeline = head;
-	while (pipeline)
+	cur = pipelines;
+	while (cur)
 	{
-		forkexec(pipeline);
-		pipeline = pipeline->next;
+		forkexec(cur);
+		cur = cur->next;
 	}
-	// wait all pipeline processes to exit
-	pipeline = head;
-	while (pipeline)
+}
+
+static int	wait_pipelines(t_pipeline *pipelines, int *stat_loc)
+{
+	bool		interrupted;
+	t_pipeline	*cur;
+
+	interrupted = false;
+	cur = pipelines;
+	// TODO: SIGINT, SARESTART, etc...
+	while (cur)
 	{
 		errno = 0;
-		if (waitpid(pipeline->pid, &status, 0) < 0)
+		if (waitpid(cur->pid, stat_loc, 0) < 0)
 		{
 			if (errno == EINTR)
-				return (128 + SIGINT);
-				//status = 1;
+				interrupted = true;
 			else if (errno == ECHILD)
-				status = 0; // ?
+				*stat_loc = 0; // ?
 			else
 				fatal_exit("waitpid()");
 		}
-		pipeline = pipeline->next;
+		cur = cur->next;
 	}
+	if (interrupted)
+		return (-1);
+	return (0);
+}
+
+int	forkexec_pipeline(t_pipeline *pipelines)
+{
+	int			status;
+
+	status = 0;
+	exec_pipelines(pipelines);
+	if (wait_pipelines(pipelines, &status) < 0)
+		return (128 + SIGINT);
 	return (WEXITSTATUS(status));
 }
 
@@ -61,44 +79,54 @@ int	forkexec_pipeline(t_pipeline *head)
 //     |    ||   pipe2
 //     |_ child3
 //               pipe_to_terminal_stdout
-static void	forkexec(t_pipeline *command)
+static void	close_dup_pipes(t_pipeline *pipeline)
 {
+	ft_close(pipeline->inpipe[1]); // write end is not necessary
+	ft_close(pipeline->outpipe[0]); // read end is not necessary
+	ft_dup2(pipeline->inpipe[0], STDIN_FILENO);
+	ft_dup2(pipeline->outpipe[1], STDOUT_FILENO);
+}
+
+static void	exec_pipeline(t_pipeline *pipeline)
+{
+	char	*name;
 	char	*path;
 
-	command->pid = ft_fork();
-	if (command->pid == 0)
+	name = pipeline->argv[0];
+	// Empty command
+	if (name == NULL)
+		exit(0);
+	// Builtin
+	if (isbuiltin(name))
+	{
+		exec_builtin(pipeline);
+		exit(0);
+	}
+	path = find_path(name);
+	// No such file
+	if (path == NULL)
+		err_exit(name);
+	// Execute
+	execve(path, pipeline->argv, environ);
+	fatal_exit("execve");
+}
+
+static void	forkexec(t_pipeline *pipeline)
+{
+	pipeline->pid = ft_fork();
+	if (pipeline->pid == 0)
 	{
 		// child
-		// pipe
-		ft_close(command->inpipe[1]); // write end is not necessary
-		ft_close(command->outpipe[0]); // read end is not necessary
-		ft_dup2(command->inpipe[0], STDIN_FILENO);
-		ft_dup2(command->outpipe[1], STDOUT_FILENO);
+		close_dup_pipes(pipeline);
 		// redirect
-		redirect(command->redirects);
-		// path
-		if (command->argv[0] == NULL)
-			exit(0);
-		// exec
-		if (isbuiltin(command->argv[0]))
-		{
-			exec_builtin(command);
-			exit(0);
-		}
-		else
-		{
-			path = find_path(command->argv[0]);
-			execve(path, command->argv, environ);
-			err_exit("execve");
-		}
+		redirect(pipeline->redirects);
+		// execute
+		exec_pipeline(pipeline);
 	}
-	else
-	{
-		// parent
-		if (command->inpipe[0] != STDIN_FILENO)
-			ft_close(command->inpipe[0]); // inpipe is not necessary anymore
-		ft_close(command->inpipe[1]); // inpipe is not necessary anymore
-	}
+	// parent
+	if (pipeline->inpipe[0] != STDIN_FILENO)
+		ft_close(pipeline->inpipe[0]); // inpipe is not necessary anymore
+	ft_close(pipeline->inpipe[1]); // inpipe is not necessary anymore
 }
 
 // find_path("cat") -> "/bin/cat"
