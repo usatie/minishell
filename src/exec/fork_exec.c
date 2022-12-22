@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 10:26:01 by susami            #+#    #+#             */
-/*   Updated: 2022/12/22 17:19:12 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/22 17:42:39 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static int	wait_pipelines(t_pipeline *pipelines, int *stat_loc)
 			if (errno == EINTR)
 			{
 				interrupted = true;
-				continue;
+				continue ;
 			}
 			else if (errno == ECHILD)
 				*stat_loc = 0; // ?
