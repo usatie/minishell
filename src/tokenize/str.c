@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/09 08:48:46 by susami            #+#    #+#             */
-/*   Updated: 2022/12/22 10:12:43 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/22 14:36:43 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 //
 // char *s = "hello world"
 
-t_str	*new_str(char *pos, size_t len, t_str_kind kind)
+t_str	*new_str(t_str_kind kind, char *pos, size_t len, t_str *params)
 {
 	t_str	*s;
 
@@ -35,7 +35,21 @@ t_str	*new_str(char *pos, size_t len, t_str_kind kind)
 	s->pos = pos;
 	s->len = len;
 	s->kind = kind;
+	s->parameters = params;
 	return (s);
+}
+
+t_str	*add_str_back(t_str *dst, t_str *s)
+{
+	t_str	*cur;
+
+	if (!dst)
+		return (s);
+	cur = dst;
+	while (cur->next)
+		cur = cur->next;
+	cur->next = s;
+	return (dst);
 }
 
 static bool	is_parameter(t_str *s)

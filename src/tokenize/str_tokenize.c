@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   to_str.c                                           :+:      :+:    :+:   */
+/*   str_tokenize.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 11:34:21 by susami            #+#    #+#             */
-/*   Updated: 2022/12/22 11:36:00 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/22 14:36:36 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ t_str	*variable(char **rest, char *line)
 	line++;
 	while (is_alpha_num_under(*line))
 		line++;
-	str = new_str(start, line - start, STR_VAR);
+	str = new_str(STR_VAR, start, line - start, NULL);
 	*rest = line;
 	return (str);
 }
@@ -51,7 +51,7 @@ t_str	*special_parameter(char **rest, char *line)
 	if (!is_specialchr(*line))
 		fatal_exit("Expected special character.");
 	line++;
-	str = new_str(start, line - start, STR_SPECIAL_PARAM);
+	str = new_str(STR_SPECIAL_PARAM, start, line - start, NULL);
 	*rest = line;
 	return (str);
 }
@@ -68,12 +68,12 @@ t_str	*single_quotes(char **rest, char *line)
 		line++;
 	if (*line != '\'')
 	{
-		str = new_str(start, line - start, STR_PLAIN);
+		str = new_str(STR_PLAIN, start, line - start, NULL);
 		*rest = line;
 		return (str);
 	}
 	line++;
-	str = new_str(start, line - start, STR_SINGLE);
+	str = new_str(STR_SINGLE, start, line - start, NULL);
 	*rest = line;
 	return (str);
 }
@@ -82,41 +82,30 @@ t_str	*single_quotes(char **rest, char *line)
 // $parameter may be contained
 t_str	*double_quotes(char **rest, char *line)
 {
-	t_str	*str;
 	char	*start;
-	t_str	paramhead;
-	t_str	*param;
+	t_str	*params;
 
-	paramhead.next = NULL;
-	param = &paramhead;
+	params = NULL;
 	start = line;
 	line++; // skip the opening quote
 	while (*line && *line != '"')
 	{
 		if (is_variable(line))
-		{
-			param->next = variable(&line, line);
-			param = param->next;
-		}
+			params = add_str_back(params, variable(&line, line));
 		else if (is_special_param(line))
-		{
-			param->next = special_parameter(&line, line);
-			param = param->next;
-		}
+			params = add_str_back(params, special_parameter(&line, line));
 		else
 			line++;
 	}
 	if (*line != '"')
 	{
-		str = new_str(start, line - start, STR_PLAIN);
+		free_str(params);
 		*rest = line;
-		return (str);
+		return (new_str(STR_PLAIN, start, line - start, NULL));
 	}
 	line++;
-	str = new_str(start, line - start, STR_DOUBLE);
-	str->parameters = paramhead.next;
 	*rest = line;
-	return (str);
+	return (new_str(STR_DOUBLE, start, line - start, params));
 }
 
 // Read until next punctuator or space
@@ -130,7 +119,7 @@ t_str	*plain_text(char **rest, char *line)
 		line++;
 	if (line - start > 0)
 	{
-		str = new_str(start, line - start, STR_PLAIN);
+		str = new_str(STR_PLAIN, start, line - start, NULL);
 		*rest = line;
 		return (str);
 	}

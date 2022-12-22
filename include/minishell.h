@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/22 11:58:50 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/22 14:37:41 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,7 +176,8 @@ char		*expand_line(char *line);
 t_node		*parse(t_token *tok);
 
 // str.c
-t_str		*new_str(char *pos, size_t len, t_str_kind kind);
+t_str		*new_str(t_str_kind kind, char *pos, size_t len, t_str *params);
+t_str		*add_str_back(t_str *dst, t_str *s);
 char		*str_to_word(t_str *str, bool expand);
 bool		is_any_quoted(t_str *s);
 
@@ -262,6 +263,7 @@ void		restore_redirect(t_redirect *redir);
 int			read_heredoc(const char *delimiter, bool is_delim_quoted);
 
 // destructor.c
+void		free_str(t_str *str);
 void		free_tok(t_token *tok);
 void		free_node(t_node *node);
 void		free_pipeline(t_pipeline *pipeline);

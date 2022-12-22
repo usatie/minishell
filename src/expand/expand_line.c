@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/21 15:35:03 by susami            #+#    #+#             */
-/*   Updated: 2022/12/22 11:59:30 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/22 14:34:23 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ t_str	*non_parameter_plain_text(char **rest, char *line)
 	while (*line && !is_parameter(line))
 		line++;
 	*rest = line;
-	return (new_str(start, line - start, STR_PLAIN));
+	return (new_str(STR_PLAIN, start, line - start, NULL));
 }
 
 t_str	*line_to_str(char *line)

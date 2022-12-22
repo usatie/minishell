@@ -6,14 +6,14 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/21 18:33:42 by susami            #+#    #+#             */
-/*   Updated: 2022/12/21 18:46:40 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/22 14:22:48 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include "minishell.h"
 
-static void	free_str(t_str *str)
+void	free_str(t_str *str)
 {
 	if (!str)
 		return ;

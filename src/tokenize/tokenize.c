@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 10:25:51 by susami            #+#    #+#             */
-/*   Updated: 2022/12/22 11:34:53 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/22 14:33:58 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ t_token	*tokenize(char *line)
 			cur = cur->next;
 			cur->val = strtol(line, &line, 10);
 			cur->len = line - cur->pos;
-			cur->str = new_str(cur->pos, cur->len, STR_PLAIN);
+			cur->str = new_str(STR_PLAIN, cur->pos, cur->len, NULL);
 			continue ;
 		}
 		// String
