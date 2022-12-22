@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/22 09:18:04 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/22 11:58:50 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,6 +167,9 @@ t_token		*tokenize(char *line);
 
 // expand.c
 void		expand(t_node *node);
+void		expand_str(t_str *s);
+
+// expand_line.c
 char		*expand_line(char *line);
 
 // parser.c
@@ -176,6 +179,13 @@ t_node		*parse(t_token *tok);
 t_str		*new_str(char *pos, size_t len, t_str_kind kind);
 char		*str_to_word(t_str *str, bool expand);
 bool		is_any_quoted(t_str *s);
+
+// str_tokenize.c
+t_str		*variable(char **rest, char *line);
+t_str		*special_parameter(char **rest, char *line);
+t_str		*single_quotes(char **rest, char *line);
+t_str		*double_quotes(char **rest, char *line);
+t_str		*plain_text(char **rest, char *line);
 
 // token.c
 t_token		*new_token(char *pos, size_t len, t_token_kind kind);

@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 06:45:04 by susami            #+#    #+#             */
-/*   Updated: 2022/12/22 11:09:04 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/22 11:59:04 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,7 @@
 #include <stdlib.h>
 #include "minishell.h"
 
-static void	expand_parameter_str(t_str *s);
-
-static void	foreach_str(t_str *s, void f(t_str *))
-{
-	while (s)
-	{
-		f(s);
-		s = s->next;
-	}
-}
+static void	foreach_str(t_str *s, void f(t_str *));
 
 void	expand(t_node *node)
 {
@@ -33,7 +24,7 @@ void	expand(t_node *node)
 		expand(node->next);
 	else
 	{
-		foreach_str(node->str, expand_parameter_str);
+		foreach_str(node->str, expand_str);
 		expand(node->rhs);
 		expand(node->lhs);
 		expand(node->args);
@@ -42,7 +33,7 @@ void	expand(t_node *node)
 	}
 }
 
-static void	expand_parameter_str(t_str *s)
+void	expand_str(t_str *s)
 {
 	char	*name;
 
@@ -68,5 +59,14 @@ static void	expand_parameter_str(t_str *s)
 			err_exit("Unexpected special param");
 	}
 	else if (s->kind == STR_DOUBLE)
-		foreach_str(s->parameters, expand_parameter_str);
+		foreach_str(s->parameters, expand_str);
+}
+
+static void	foreach_str(t_str *s, void f(t_str *))
+{
+	while (s)
+	{
+		f(s);
+		s = s->next;
+	}
 }

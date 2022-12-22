@@ -15,8 +15,9 @@ SRCS      = src/minishell.c\
 			src/setup/termios.c\
 			src/setup/readline.c\
             src/tokenize/tokenize.c\
-			src/tokenize/str.c\
 			src/tokenize/token.c\
+			src/tokenize/str.c\
+			src/tokenize/str_tokenize.c\
             src/parse/parse.c\
 			src/parse/node.c\
 			src/pipeline/pipeline.c\

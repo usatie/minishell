@@ -6,66 +6,58 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/21 15:35:03 by susami            #+#    #+#             */
-/*   Updated: 2022/12/21 19:25:56 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/22 11:59:30 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
+#include <ctype.h>
 #include "libft.h"
 #include "minishell.h"
 
-char	*xgetenv(const char *s, size_t name_len)
+bool	is_parameter(char *line)
 {
-	char	*name;
-	char	*value;
-
-	name = strndup(s, name_len);
-	value = getenv(name);
-	free(name);
-	return (value);
+	return (is_special_param(line) || is_variable(line));
 }
 
-char	*reallocf_strncat(char *dst, size_t *dst_size, char *src, size_t n)
+t_str	*non_parameter_plain_text(char **rest, char *line)
 {
-	char	*newdst;
+	char	*start;
 
-	newdst = ft_reallocf(dst, *dst_size + n, *dst_size);
-	*dst_size += n;
-	strncat(newdst, src, n);
-	return (newdst);
+	start = line;
+	while (*line && !is_parameter(line))
+		line++;
+	*rest = line;
+	return (new_str(start, line - start, STR_PLAIN));
+}
+
+t_str	*line_to_str(char *line)
+{
+	t_str	head;
+	t_str	*s;
+
+	s = &head;
+	while (*line)
+	{
+		// Special Parameter
+		if (is_special_param(line))
+			s->next = special_parameter(&line, line);
+		// Parameter
+		else if (is_variable(line))
+			s->next = variable(&line, line);
+		// Non parameter plain text
+		else
+			s->next = non_parameter_plain_text(&line, line);
+		s = s->next;
+	}
+	return (head.next);
 }
 
 char	*expand_line(char *line)
 {
-	char	*newline;
-	size_t	size;
-	char	*start;
-	char	*value;
+	t_str	*str;
 
-	size = 1;
-	newline = calloc(size, sizeof(char));
-	while (*line)
-	{
-		if (is_variable(line))
-		{
-			// $
-			line++;
-			start = line;
-			while (is_alpha_num_under(*line))
-				line++;
-			value = xgetenv(start, line - start);
-			if (value)
-				newline = reallocf_strncat(newline, &size, value,
-						strlen(value));
-		}
-		else
-		{
-			// "hello $USER"
-			start = line;
-			while (*line && *line != '$')
-				line++;
-			newline = reallocf_strncat(newline, &size, start, line - start);
-		}
-	}
-	return (newline);
+	str = line_to_str(line);
+	expand_str(str);
+	return (str_to_word(str, true));
 }
