@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/11 14:32:27 by susami            #+#    #+#             */
-/*   Updated: 2022/12/22 09:19:58 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/22 17:19:11 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ char	**gen_argv(t_node *node)
 	t_node	*arg;
 
 	i = 0;
-	argv = calloc(node->nargs + 1, sizeof(char *));
+	argv = ft_calloc(node->nargs + 1, sizeof(char *));
 	arg = node->args;
 	while (i < node->nargs)
 	{

@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 10:25:51 by susami            #+#    #+#             */
-/*   Updated: 2022/12/22 15:04:30 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/22 17:33:30 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ t_token	*tokenize(char *line)
 			line += 2;
 		}
 		// Single character punctuator
-		else if (strchr("|<>", *line) != NULL)
+		else if (ft_strchr("|<>", *line) != NULL)
 			cur->next = new_token(line++, 1, TK_PUNCT);
 		else if (is_number(line))
 			cur->next = number(&line, line);
@@ -71,7 +71,7 @@ static t_token	*number(char **rest, char *line)
 	t_token	*tok;
 
 	tok = new_token(line, 0, TK_NUM);
-	tok->val = strtol(line, &line, 10);
+	tok->val = ft_strtol(line, &line, 10);
 	tok->len = line - tok->pos;
 	tok->str = new_str(STR_PLAIN, tok->pos, tok->len, NULL);
 	*rest = line;
@@ -86,7 +86,7 @@ static t_token	*string(char **rest, char *line)
 
 	tok = new_token(line, 0, TK_STRING);
 	cur = &head;
-	while (*line && !isspace(*line))
+	while (*line && !is_blank(*line))
 	{
 		if (*line == '\'')
 			cur->next = single_quotes(&line, line);

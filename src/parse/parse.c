@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 15:34:36 by susami            #+#    #+#             */
-/*   Updated: 2022/12/22 15:28:52 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/22 17:24:14 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ t_node	*parse(t_token *tok)
 
 static void	syntax_error(const char *msg, t_token **rest, t_token *tok)
 {
-	write(STDERR_FILENO, msg, strlen(msg));
+	write(STDERR_FILENO, msg, ft_strlen(msg));
 	write(STDERR_FILENO, "\n", 1);
 	while (!at_eof(tok))
 		tok = tok->next;

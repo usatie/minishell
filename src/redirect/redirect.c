@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 08:36:12 by susami            #+#    #+#             */
-/*   Updated: 2022/12/21 23:17:30 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/22 17:19:11 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@ t_redirect	*new_redirect(t_redirect_kind kind, char *word, int fd)
 {
 	t_redirect	*redirect;
 
-	redirect = calloc(1, sizeof(t_redirect));
+	redirect = ft_calloc(1, sizeof(t_redirect));
 	if (!redirect)
-		fatal_exit("calloc()");
+		fatal_exit("ft_calloc()");
 	redirect->kind = kind;
 	if (kind == RD_HEREDOC)
 		redirect->delimiter = word;

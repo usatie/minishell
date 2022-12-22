@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 09:32:31 by susami            #+#    #+#             */
-/*   Updated: 2022/12/21 23:31:03 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/22 17:22:57 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	ft_echo(char **argv)
 
 	printnl = true;
 	start = 1;
-	if (argv[1] && strcmp(argv[1], "-n") == 0)
+	if (argv[1] && ft_strcmp(argv[1], "-n") == 0)
 	{
 		printnl = false;
 		start = 2;

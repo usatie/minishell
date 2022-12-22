@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/21 15:38:04 by susami            #+#    #+#             */
-/*   Updated: 2022/12/21 21:25:34 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/22 17:36:25 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,18 +49,18 @@ bool	is_blank(char c)
 
 bool	is_alpha_under(char c)
 {
-	return (isalpha(c) || c == '_');
+	return (ft_isalpha(c) || c == '_');
 }
 
 bool	is_alpha_num_under(char c)
 {
-	return (is_alpha_under(c) || isdigit(c));
+	return (is_alpha_under(c) || ft_isdigit(c));
 }
 
 bool	is_metachr(char c)
 {
-	//return (strchr("&;()<>", c) || is_blank(c));
-	return (strchr("<>", c) || is_blank(c));
+	//return (ft_strchr("&;()<>", c) || is_blank(c));
+	return (ft_strchr("<>", c) || is_blank(c));
 }
 
 bool	is_control_operator(const char *s)
@@ -131,8 +131,8 @@ Special Parameters
 */
 bool	is_specialchr(char c)
 {
-	return (strchr("?", c));
-	//return (strchr("*@#?-$!0_", s[1]));
+	return (ft_strchr("?", c));
+	//return (ft_strchr("*@#?-$!0_", s[1]));
 }
 
 bool	is_special_param(const char *s)
@@ -151,9 +151,9 @@ bool	is_unquoted(const char *s)
 
 bool	is_number(const char *s)
 {
-	if (!isdigit(*s))
+	if (!ft_isdigit(*s))
 		return (false);
-	while (isdigit(*s))
+	while (ft_isdigit(*s))
 		s++;
 	return (is_blank(*s) || is_metachr(*s) || is_control_operator(s));
 }

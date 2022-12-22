@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 06:45:04 by susami            #+#    #+#             */
-/*   Updated: 2022/12/22 11:59:04 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/22 18:45:10 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,19 +41,19 @@ void	expand_str(t_str *s)
 	{
 		if (s->value)
 			return ;
-		name = strndup(s->pos + 1, s->len - 1);
+		name = ft_strndup(s->pos + 1, s->len - 1);
 		s->value = getenv(name);
 		if (s->value)
-			s->value_len = strlen(s->value);
+			s->value_len = ft_strlen(s->value);
 		free(name);
 	}
 	if (s->kind == STR_SPECIAL_PARAM)
 	{
 		if (startswith(s->pos, "$?"))
 		{
-			s->value = calloc(12, sizeof(char));
+			s->value = ft_calloc(12, sizeof(char));
 			sprintf(s->value, "%d", g_env.status);
-			s->value_len = strlen(s->value);
+			s->value_len = ft_strlen(s->value);
 		}
 		else
 			err_exit("Unexpected special param");

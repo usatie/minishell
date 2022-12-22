@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 07:10:22 by susami            #+#    #+#             */
-/*   Updated: 2022/12/16 16:28:50 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/22 17:24:14 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@ t_token	*new_token(char *pos, size_t len, t_token_kind kind)
 {
 	t_token	*tok;
 
-	tok = calloc(sizeof(t_token), 1);
+	tok = ft_calloc(sizeof(t_token), 1);
 	if (tok == NULL)
-		fatal_exit("calloc()");
+		fatal_exit("ft_calloc()");
 	tok->pos = pos;
 	tok->len = len;
 	tok->kind = kind;
@@ -29,5 +29,5 @@ t_token	*new_token(char *pos, size_t len, t_token_kind kind)
 
 bool	startswith(const char *p, const char *q)
 {
-	return (memcmp(p, q, strlen(q)) == 0);
+	return (ft_memcmp(p, q, ft_strlen(q)) == 0);
 }

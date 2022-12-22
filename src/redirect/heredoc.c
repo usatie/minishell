@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/21 14:01:00 by susami            #+#    #+#             */
-/*   Updated: 2022/12/22 16:29:49 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/22 17:24:14 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ static bool	break_loop(const char *line, const char *delimiter)
 	if (!line)
 		return (true);
 	// delimiter
-	if (strcmp(line, delimiter) == 0)
+	if (ft_strcmp(line, delimiter) == 0)
 		return (true);
 	return (false);
 }
@@ -77,10 +77,10 @@ static void	putendl_fd_expand(char *s, int fd, bool expand)
 	if (expand)
 	{
 		expanded = expand_line(s);
-		write(fd, expanded, strlen(expanded));
+		write(fd, expanded, ft_strlen(expanded));
 		free(expanded);
 	}
 	else
-		write(fd, s, strlen(s));
+		write(fd, s, ft_strlen(s));
 	write(fd, "\n", 1);
 }

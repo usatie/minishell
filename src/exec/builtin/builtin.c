@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 13:09:50 by susami            #+#    #+#             */
-/*   Updated: 2022/12/22 14:16:27 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/22 17:22:57 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ bool	isbuiltin(char *command)
 	i = 0;
 	while (i < sizeof(builtins) / sizeof(*builtins))
 	{
-		if (strcmp(command, builtins[i]) == 0)
+		if (ft_strcmp(command, builtins[i]) == 0)
 			return (true);
 		i++;
 	}
@@ -46,19 +46,19 @@ int	exec_builtin(t_pipeline *command)
 	// Stash stdin
 	tmpfd = stashfd(STDIN_FILENO);
 	status = 0;
-	if (strcmp(command->argv[0], "exit") == 0)
+	if (ft_strcmp(command->argv[0], "exit") == 0)
 		ft_exit(command->argv);
-	else if (strcmp(command->argv[0], "pwd") == 0)
+	else if (ft_strcmp(command->argv[0], "pwd") == 0)
 		status = ft_pwd(command->argv);
-	else if (strcmp(command->argv[0], "cd") == 0)
+	else if (ft_strcmp(command->argv[0], "cd") == 0)
 		status = ft_cd(command->argv);
-	else if (strcmp(command->argv[0], "export") == 0)
+	else if (ft_strcmp(command->argv[0], "export") == 0)
 		status = ft_export(command->argv);
-	else if (strcmp(command->argv[0], "env") == 0)
+	else if (ft_strcmp(command->argv[0], "env") == 0)
 		status = ft_env(command->argv);
-	else if (strcmp(command->argv[0], "unset") == 0)
+	else if (ft_strcmp(command->argv[0], "unset") == 0)
 		status = ft_unset(command->argv);
-	else if (strcmp(command->argv[0], "echo") == 0)
+	else if (ft_strcmp(command->argv[0], "echo") == 0)
 		status = ft_echo(command->argv);
 	else
 		fatal_exit("Unknown Builtin");

@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/21 15:16:43 by susami            #+#    #+#             */
-/*   Updated: 2022/12/21 15:18:05 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/22 17:19:10 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@ t_pipeline	*new_pipeline(void)
 {
 	t_pipeline	*pipeline;
 
-	pipeline = calloc(1, sizeof(t_pipeline));
+	pipeline = ft_calloc(1, sizeof(t_pipeline));
 	if (pipeline == NULL)
-		fatal_exit("calloc()");
+		fatal_exit("ft_calloc()");
 	cpy_pipe(pipeline->inpipe, (int []){STDIN_FILENO, -1});
 	cpy_pipe(pipeline->outpipe, (int []){-1, STDOUT_FILENO});
 	return (pipeline);

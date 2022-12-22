@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/09 08:48:46 by susami            #+#    #+#             */
-/*   Updated: 2022/12/22 14:50:25 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/22 17:19:12 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,9 @@ t_str	*new_str(t_str_kind kind, char *pos, size_t len, t_str *params)
 {
 	t_str	*s;
 
-	s = calloc(sizeof(t_str), 1);
+	s = ft_calloc(sizeof(t_str), 1);
 	if (s == NULL)
-		fatal_exit("calloc()");
+		fatal_exit("ft_calloc()");
 	s->pos = pos;
 	s->len = len;
 	s->kind = kind;
@@ -127,7 +127,7 @@ char	*str_to_word(t_str *str, bool expand)
 {
 	char	*s;
 
-	s = calloc(wordlen(str, expand) + 1, sizeof(char));
+	s = ft_calloc(wordlen(str, expand) + 1, sizeof(char));
 	if (s == NULL)
 		fatal_exit("malloc()");
 	return (joinstr(s, str, expand));
