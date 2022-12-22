@@ -6,7 +6,7 @@
 /*   By: mkunimot <hatopopo142@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 15:14:03 by mkunimot          #+#    #+#             */
-/*   Updated: 2022/12/23 05:50:20 by mkunimot         ###   ########.fr       */
+/*   Updated: 2022/12/23 05:59:33 by mkunimot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,8 @@ int	main(void)
 		line = readline(PROMPT);
 		if (line == NULL)
 			break ;
+		if (*line)
+			add_history(line);
 		if (strcmp(line, "exit") == 0)
 			exit(0);
 		status = ft_system(line);
