@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 21:56:29 by susami            #+#    #+#             */
-/*   Updated: 2022/12/23 00:30:29 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/23 08:48:37 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static int	find_environ_idx(char *name, size_t name_len)
 	return (i);
 }
 
-static int	internal_putenv(char *string, char *name, int i)
+static int	internal_putenv(char *string, int i)
 {
 	extern char	**environ;
 
@@ -43,10 +43,7 @@ static int	internal_putenv(char *string, char *name, int i)
 		environ = (char **)ft_reallocf(environ, (i + 2) * sizeof(char *),
 				i * sizeof(char *));
 		if (environ == NULL)
-		{
-			free(name);
 			return (-1);
-		}
 		environ[i] = string;
 		environ[i + 1] = NULL;
 	}
@@ -71,5 +68,8 @@ int	ft_putenv(char *string)
 	if (name == NULL)
 		return (-1);
 	idx = find_environ_idx(name, name_len);
-	return (internal_putenv(string, name, idx));
+	free(name);
+	if (internal_putenv(string, idx) < 0)
+		return (-1);
+	return (0);
 }
