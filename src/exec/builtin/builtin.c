@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 13:09:50 by susami            #+#    #+#             */
-/*   Updated: 2022/12/22 18:34:40 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/22 23:26:55 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ bool	isbuiltin(char *command)
 	return (false);
 }
 
-int	exec_builtin(t_pipeline *command)
+int	exec_builtin(char **argv)
 {
 	int		status;
 	int		tmpfd;
@@ -46,20 +46,20 @@ int	exec_builtin(t_pipeline *command)
 	// Stash stdin
 	tmpfd = stashfd(STDIN_FILENO);
 	status = 0;
-	if (ft_strcmp(command->argv[0], "exit") == 0)
-		status = ft_exit(command->argv);
-	else if (ft_strcmp(command->argv[0], "pwd") == 0)
-		status = ft_pwd(command->argv);
-	else if (ft_strcmp(command->argv[0], "cd") == 0)
-		status = ft_cd(command->argv);
-	else if (ft_strcmp(command->argv[0], "export") == 0)
-		status = ft_export(command->argv);
-	else if (ft_strcmp(command->argv[0], "env") == 0)
-		status = ft_env(command->argv);
-	else if (ft_strcmp(command->argv[0], "unset") == 0)
-		status = ft_unset(command->argv);
-	else if (ft_strcmp(command->argv[0], "echo") == 0)
-		status = ft_echo(command->argv);
+	if (ft_strcmp(argv[0], "exit") == 0)
+		status = ft_exit(argv);
+	else if (ft_strcmp(argv[0], "pwd") == 0)
+		status = ft_pwd(argv);
+	else if (ft_strcmp(argv[0], "cd") == 0)
+		status = ft_cd(argv);
+	else if (ft_strcmp(argv[0], "export") == 0)
+		status = ft_export(argv);
+	else if (ft_strcmp(argv[0], "env") == 0)
+		status = ft_env(argv);
+	else if (ft_strcmp(argv[0], "unset") == 0)
+		status = ft_unset(argv);
+	else if (ft_strcmp(argv[0], "echo") == 0)
+		status = ft_echo(argv);
 	else
 		fatal_exit("Unknown Builtin");
 	// Restore stdin

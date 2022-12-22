@@ -6,10 +6,11 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/21 22:53:54 by susami            #+#    #+#             */
-/*   Updated: 2022/12/22 16:32:16 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/23 00:16:53 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdlib.h>
 #include <fcntl.h>
 #include "minishell.h"
 #include <readline/readline.h>
@@ -78,15 +79,13 @@ int	exec(t_pipeline *pipelines)
 	else if (isbuiltin(pipelines->argv[0]) && pipelines->next == NULL)
 	{
 		redirect(pipelines->redirects);
-		status = exec_builtin(pipelines);
+		status = exec_builtin(pipelines->argv);
 		restore_redirect(pipelines->redirects);
 	}
 	// multiple command or non-builtin
 	else
 	{
-		status = forkexec_pipeline(pipelines);
-		if (g_env.sig)
-			write(STDERR_FILENO, "\n", 1);
+		status = exec_pipelines(pipelines);
 		g_env.sig = 0;
 	}
 	return (status);

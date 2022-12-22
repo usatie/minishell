@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/22 22:37:48 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/23 00:17:18 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -220,7 +220,7 @@ t_pipeline	*gen(t_node *node);
 
 // builtin.c
 bool		isbuiltin(char *command);
-int			exec_builtin(t_pipeline *pipeline);
+int			exec_builtin(char **argv);
 
 // builtin/ft_*.c
 int			ft_echo(char *argv[]);
@@ -231,8 +231,15 @@ int			ft_unset(char *argv[]);
 int			ft_env(char **argv);
 int			ft_exit(char **argv);
 
-// fork_exec.c
-int			forkexec_pipeline(t_pipeline *head);
+// exec/search_path.c
+char		*search_path(char *cmd);
+// exec/ft_execvp.c
+void		ft_execvp(char *file, char *argv[]);
+// exec/pipe.c
+void		prepare_pipes_child(t_pipeline *pipeline);
+void		prepare_pipes_parent(t_pipeline *pipeline);
+// exec/exec_pipelines.c
+int			exec_pipelines(t_pipeline *pipelines);
 
 // ft_syscall.c
 int			ft_open(char *path, int oflag, mode_t mode);

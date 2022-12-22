@@ -42,7 +42,10 @@ SRCS      = src/minishell.c\
 			src/redirect/heredoc.c\
 			src/redirect/redirect.c\
 			src/exec/exec.c\
-			src/exec/fork_exec.c\
+			src/exec/ft_execvp.c\
+			src/exec/pipe.c\
+			src/exec/search_path.c\
+			src/exec/exec_pipelines.c\
 			src/exec/builtin/builtin.c\
 			src/exec/builtin/ft_echo.c\
 			src/exec/builtin/ft_cd.c\
