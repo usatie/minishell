@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 13:09:50 by susami            #+#    #+#             */
-/*   Updated: 2022/12/20 22:16:31 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/22 14:16:27 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,34 +40,28 @@ bool	isbuiltin(char *command)
 
 int	exec_builtin(t_pipeline *command)
 {
-	char	*command_name;
 	int		status;
 	int		tmpfd;
 
 	// Stash stdin
 	tmpfd = stashfd(STDIN_FILENO);
-	// Exec builtin
 	status = 0;
-	command_name = command->argv[0];
-	if (strcmp(command_name, "exit") == 0)
+	if (strcmp(command->argv[0], "exit") == 0)
 		ft_exit(command->argv);
-	else if (strcmp(command_name, "pwd") == 0)
+	else if (strcmp(command->argv[0], "pwd") == 0)
 		status = ft_pwd(command->argv);
-	else if (strcmp(command_name, "cd") == 0)
+	else if (strcmp(command->argv[0], "cd") == 0)
 		status = ft_cd(command->argv);
-	else if (strcmp(command_name, "export") == 0)
+	else if (strcmp(command->argv[0], "export") == 0)
 		status = ft_export(command->argv);
-	else if (strcmp(command_name, "env") == 0)
+	else if (strcmp(command->argv[0], "env") == 0)
 		status = ft_env(command->argv);
-	else if (strcmp(command_name, "unset") == 0)
+	else if (strcmp(command->argv[0], "unset") == 0)
 		status = ft_unset(command->argv);
-	else if (strcmp(command_name, "echo") == 0)
+	else if (strcmp(command->argv[0], "echo") == 0)
 		status = ft_echo(command->argv);
 	else
-	{
-		write(STDERR_FILENO, "Unknown Builtin\n", strlen("Unknown Builtin\n"));
-		status = 1;
-	}
+		fatal_exit("Unknown Builtin");
 	// Restore stdin
 	ft_dup2(tmpfd, STDIN_FILENO);
 	return (status);
