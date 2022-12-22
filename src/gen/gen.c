@@ -6,14 +6,44 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/11 14:32:27 by susami            #+#    #+#             */
-/*   Updated: 2022/12/22 17:19:11 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/23 00:26:02 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include "minishell.h"
 
-char	**gen_argv(t_node *node)
+static t_pipeline	*gen_pipeline(t_node *node);
+static char			**gen_argv(t_node *node);
+static t_redirect	*gen_redirect(t_node *node);
+
+t_pipeline	*gen(t_node *node)
+{
+	if (node->kind == ND_CMD)
+		return (gen_pipeline(node));
+	else if (node->kind == ND_PIPE)
+		return (connect_pipeline(gen(node->lhs), gen(node->rhs)));
+	fatal_exit("Unexpected Node\n");
+}
+
+static t_pipeline	*gen_pipeline(t_node *node)
+{
+	t_pipeline	*command;
+	t_node		*redir;
+
+	command = new_pipeline();
+	command->argv = gen_argv(node);
+	redir = node->redirects;
+	while (redir)
+	{
+		command->redirects = add_redir_back(command->redirects,
+				gen_redirect(redir));
+		redir = redir->next;
+	}
+	return (command);
+}
+
+static char	**gen_argv(t_node *node)
 {
 	int		i;
 	char	**argv;
@@ -31,7 +61,7 @@ char	**gen_argv(t_node *node)
 	return (argv);
 }
 
-t_redirect	*gen_redirect(t_node *node)
+static t_redirect	*gen_redirect(t_node *node)
 {
 	int			fd;
 	t_redirect	*rd;
@@ -51,30 +81,4 @@ t_redirect	*gen_redirect(t_node *node)
 	}
 	else
 		fatal_exit("Unexpected Node Kind");
-}
-
-t_pipeline	*gen_pipeline(t_node *node)
-{
-	t_pipeline	*command;
-	t_node		*redir;
-
-	command = new_pipeline();
-	command->argv = gen_argv(node);
-	redir = node->redirects;
-	while (redir)
-	{
-		command->redirects = add_redir_back(command->redirects,
-				gen_redirect(redir));
-		redir = redir->next;
-	}
-	return (command);
-}
-
-t_pipeline	*gen(t_node *node)
-{
-	if (node->kind == ND_CMD)
-		return (gen_pipeline(node));
-	else if (node->kind == ND_PIPE)
-		return (connect_pipeline(gen(node->lhs), gen(node->rhs)));
-	fatal_exit("Unexpected Node\n");
 }
