@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/09 08:48:46 by susami            #+#    #+#             */
-/*   Updated: 2022/12/22 14:36:43 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/22 14:50:25 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,16 +67,12 @@ static size_t	wordlen(t_str *s, bool expand)
 	if (!s)
 		return (0);
 	len = wordlen(s->next, expand);
-	if (s->kind == STR_PLAIN)
+	if (s->kind == STR_PLAIN || (!expand && is_parameter(s)))
 		len += s->len;
-	else if (s->kind == STR_SINGLE)
+	else if (s->kind == STR_SINGLE || (!expand && s->kind == STR_DOUBLE))
 		len += s->len - 2;
-	else if (!expand && is_parameter(s))
-		len += s->len;
 	else if (expand && is_parameter(s))
 		len += s->value_len;
-	else if (!expand && s->kind == STR_DOUBLE)
-		len += s->len - 2;
 	else if (expand && s->kind == STR_DOUBLE)
 	{
 		len += s->len - 2;
@@ -88,47 +84,42 @@ static size_t	wordlen(t_str *s, bool expand)
 			param = param->next;
 		}
 	}
-	else
-		err_exit("Unexpected STR type");
 	return (len);
 }
 
-static char	*joinstr(char *s, t_str *str, bool expand)
+static void	strcat_expanded_double_quote(char *s, t_str *str)
 {
 	char	*p;
 	t_str	*param;
 
+	// "hello $USER world"
+	p = str->pos + 1;
+	param = str->parameters;
+	while (param)
+	{
+		// plain text
+		strncat(s, p, param->pos - p);
+		// parameter expansion
+		if (param->value)
+			strncat(s, param->value, param->value_len);
+		p = param->pos + param->len;
+		param = param->next;
+	}
+	strncat(s, p, (str->len - 1) - (p - str->pos));
+}
+
+static char	*joinstr(char *s, t_str *str, bool expand)
+{
 	if (!str)
 		return (s);
-	if (str->kind == STR_PLAIN)
+	if (str->kind == STR_PLAIN || (!expand && is_parameter(str)))
 		strncat(s, str->pos, str->len);
-	else if (str->kind == STR_SINGLE)
+	else if (str->kind == STR_SINGLE || (!expand && str->kind == STR_DOUBLE))
 		strncat(s, str->pos + 1, str->len - 2);
-	else if (!expand && is_parameter(str))
-		strncat(s, str->pos, str->len);
 	else if (expand && is_parameter(str))
 		strncat(s, str->value, str->value_len);
-	else if (!expand && str->kind == STR_DOUBLE)
-		strncat(s, str->pos + 1, str->len - 2);
 	else if (expand && str->kind == STR_DOUBLE)
-	{
-		// "hello $USER world"
-		p = str->pos + 1;
-		param = str->parameters;
-		while (param)
-		{
-			// plain text
-			strncat(s, p, param->pos - p);
-			// parameter expansion
-			if (param->value)
-				strncat(s, param->value, param->value_len);
-			p = param->pos + param->len;
-			param = param->next;
-		}
-		strncat(s, p, (str->len - 1) - (p - str->pos));
-	}
-	else
-		err_exit("Unexpected STR type");
+		strcat_expanded_double_quote(s, str);
 	return (joinstr(s, str->next, expand));
 }
 
