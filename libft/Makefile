@@ -6,7 +6,7 @@
 #    By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/06 07:33:20 by susami            #+#    #+#              #
-#    Updated: 2022/09/14 21:53:32 by susami           ###   ########.fr        #
+#    Updated: 2022/12/22 10:20:45 by susami           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -125,7 +125,7 @@ endif
 # ARM mac
 UNAME_P := $(shell uname -p)
 ifneq ($(filter arm%, $(UNAME_P)),)
-debug: CFLAGS += -Weverything -Wno-padded -Wno-strict-prototypes -Wno-packed -Wno-poison-system-directories
+debug: CFLAGS += -Weverything -Wno-padded -Wno-strict-prototypes -Wno-packed -Wno-poison-system-directories -Wno-cast-qual
 endif
 debug: re
 	norminette include ft_*.c ft_error_functions ft_argparse ft_printf

@@ -58,9 +58,11 @@ test: $(NAME)
 
 clean:
 	$(RM) -r $(OBJDIR)
+	make -C $(LIBFTDIR) clean
 
 fclean: clean
 	$(RM) $(NAME)
+	make -C $(LIBFTDIR) fclean
 
 re: fclean all
 
