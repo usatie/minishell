@@ -6,7 +6,7 @@
 #    By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/06 07:33:20 by susami            #+#    #+#              #
-#    Updated: 2022/12/22 10:20:45 by susami           ###   ########.fr        #
+#    Updated: 2022/12/22 18:41:23 by susami           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -65,6 +65,7 @@ EXTRA_SRCS	=	ft_isspace.c			\
 				ft_strncat.c			\
 				ft_realloc.c			\
 				ft_reallocf.c			\
+				ft_strndup.c			\
 
 GNL_SRCS	=	get_next_line/get_next_line.c	\
 

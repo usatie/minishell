@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 23:02:10 by susami            #+#    #+#             */
-/*   Updated: 2022/06/01 16:42:44 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/22 18:42:05 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,23 +25,6 @@ static size_t	strclen(char *str, char sep)
 		str++;
 	}
 	return (cnt);
-}
-
-// The strndup() function copies at most n characters from the string s1
-// always NUL terminating the copied string.
-static char	*ft_strndup(char *src, size_t size)
-{
-	size_t	len;
-	char	*new;
-
-	len = ft_strlen(src);
-	if (len > size)
-		len = size;
-	new = ft_calloc(len + 1, sizeof(char));
-	if (new == NULL)
-		return (NULL);
-	ft_memmove(new, src, len);
-	return (new);
 }
 
 // RETURN VALUE
