@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 14:21:05 by susami            #+#    #+#             */
-/*   Updated: 2022/12/22 16:24:16 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/23 00:21:31 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 #define PROMPT "minishell $ "
 
 extern int	_rl_echo_control_chars;
-t_env	g_env = {0};
+t_env		g_env = {0};
 
 int	interpret(char *line)
 {
@@ -32,7 +32,6 @@ int	interpret(char *line)
 	// tokenize, parse, ...
 	tok = tokenize(line);
 	node = parse(tok);
-	pipelines = NULL;
 	if (g_env.syntax_error)
 		status = 258;
 	else
@@ -40,10 +39,10 @@ int	interpret(char *line)
 		expand(node);
 		pipelines = gen(node);
 		status = exec(pipelines);
+		free_pipeline(pipelines);
 	}
 	free_tok(tok);
 	free_node(node);
-	free_pipeline(pipelines);
 	return (status);
 }
 
