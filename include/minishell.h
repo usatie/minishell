@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/22 15:43:41 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/22 16:29:32 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -242,9 +242,6 @@ bool		is_specialchr(char c);
 bool		is_special_param(const char *s);
 bool		is_unquoted(const char *s);
 bool		is_number(const char *s);
-
-// termios.c
-void		setup_term(void);
 
 // signal.c
 void		setup_signal(void);

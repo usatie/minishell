@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 14:21:05 by susami            #+#    #+#             */
-/*   Updated: 2022/12/22 15:43:48 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/22 16:24:16 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 
 #define PROMPT "minishell $ "
 
+extern int	_rl_echo_control_chars;
 t_env	g_env = {0};
 
 int	interpret(char *line)
@@ -52,7 +53,7 @@ int	main(void)
 
 	setup_rl();
 	setup_signal();
-	setup_term();
+	_rl_echo_control_chars = 0;
 	g_env.status = 0;
 	while (1)
 	{

@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/21 14:01:00 by susami            #+#    #+#             */
-/*   Updated: 2022/12/22 12:14:25 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/22 16:29:49 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@ static int	check_state(void)
 	g_env.sig = 0;
 	g_env.heredoc_interrupted = 1;
 	rl_done = 1;
-	setup_term();
 	return (0);
 }
 

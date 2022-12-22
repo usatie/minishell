@@ -12,7 +12,6 @@ SRCS      = src/minishell.c\
 			src/ft_string.c\
 			src/destructor.c\
 			src/setup/signal.c\
-			src/setup/termios.c\
 			src/setup/readline.c\
             src/tokenize/tokenize.c\
 			src/tokenize/token.c\

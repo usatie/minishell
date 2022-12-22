@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 13:20:08 by susami            #+#    #+#             */
-/*   Updated: 2022/12/22 15:42:55 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/22 16:30:12 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ static int	check_state(void)
 	if (!g_env.sig)
 		return (0);
 	g_env.sig = 0;
-	setup_term();
 	write(STDERR_FILENO, "\n", 1);
 	rl_on_new_line(); // Regenerate the prompt on a newline
 	rl_replace_line("", 0); // Clear the previous text
