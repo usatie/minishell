@@ -6,12 +6,13 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/21 22:53:54 by susami            #+#    #+#             */
-/*   Updated: 2022/12/22 15:43:59 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/22 15:47:01 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <fcntl.h>
 #include "minishell.h"
+#include <readline/readline.h>
 
 static void	open_redirect_srcfd(t_pipeline *pipelines);
 static void	close_redirect_srcfd(t_pipeline *pipelines);
@@ -65,6 +66,7 @@ int	exec(t_pipeline *pipelines)
 	g_env.heredoc_interrupted = 0;
 	// open redirect path/pipe file descriptors
 	open_redirect_srcfd(pipelines);
+	rl_event_hook = 0;
 	// empty command
 	if (pipelines->argv[0] == NULL)
 		status = 0;
@@ -83,5 +85,7 @@ int	exec(t_pipeline *pipelines)
 	// multiple command or non-builtin
 	else
 		status = forkexec_pipeline(pipelines);
+	g_env.sig = 0;
+	setup_rl();
 	return (status);
 }
