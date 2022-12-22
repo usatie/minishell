@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 06:49:21 by susami            #+#    #+#             */
-/*   Updated: 2022/12/22 17:20:38 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/22 22:00:34 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,14 +65,4 @@ t_node	*add_node_back(t_node *head, t_node *new_node)
 		cur = cur->next;
 	cur->next = new_node;
 	return (head);
-}
-
-bool	equal(const t_token *tok, const char *op)
-{
-	return (ft_memcmp(tok->pos, op, tok->len) == 0 && op[tok->len] == '\0');
-}
-
-bool	at_eof(const t_token *tok)
-{
-	return (tok->kind == TK_EOF);
 }

@@ -1,37 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse.c                                            :+:      :+:    :+:   */
+/*   num.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/06 15:34:36 by susami            #+#    #+#             */
-/*   Updated: 2022/12/22 22:22:04 by susami           ###   ########.fr       */
+/*   Created: 2022/12/22 22:12:51 by susami            #+#    #+#             */
+/*   Updated: 2022/12/22 22:13:37 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <string.h>
-#include <stdlib.h>
-#include <limits.h>
-
-#include "libft.h"
 #include "minishell.h"
 
-/*
-EBNF syntax
-
-redirection       = num? '>' word
-                  | num? '<' word
-			      | num? '>>' word
-			      | num? '<<' word
-
-simple_command    = (redirection | word)*
-
-pipeline          = simple_command ('|' pipeline)*
-*/
-
-t_node	*parse(t_token *tok)
+t_node	*num(t_token **rest, t_token *tok)
 {
-	g_env.syntax_error = false;
-	return (pipeline(&tok, tok));
+	t_node	*node;
+
+	if (tok->kind == TK_NUM)
+	{
+		node = new_node_num(tok->val, tok);
+		node->str = tok->str;
+		*rest = tok->next;
+		return (node);
+	}
+	// syntax error
+	syntax_error("Invalid token for <num>", rest, tok);
+	return (NULL);
 }
