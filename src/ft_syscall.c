@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 07:28:02 by susami            #+#    #+#             */
-/*   Updated: 2022/12/22 19:02:16 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/22 19:11:56 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,36 @@ void	ft_dup2(int oldfd, int newfd)
 	}
 }
 
+int	ft_unsetenv(const char *name)
+{
+	size_t	len;
+	char	**ep;
+	char	**sp;
+
+	if (name == NULL || name[0] == '\0' || ft_strchr(name, '=') != NULL)
+	{
+		errno = EINVAL;
+		return (-1);
+	}
+	len = ft_strlen(name);
+	ep = environ;
+	while (*ep)
+	{
+		if (ft_strncmp(*ep, name, len) == 0 && (*ep)[len] == '=')
+		{
+			sp = ep;
+			while (*sp)
+			{
+				*sp = *(sp + 1);
+				sp++;
+			}
+		}
+		else
+			ep++;
+	}
+	return (0);
+}
+
 int	ft_setenv(const char *name, const char *value, int overwrite)
 {
 	size_t	size;
@@ -67,7 +97,7 @@ int	ft_setenv(const char *name, const char *value, int overwrite)
 	}
 	if (getenv(name) != NULL && overwrite == 0)
 		return (0);
-	unsetenv(name);
+	ft_unsetenv(name);
 	size = ft_strlen(name) + ft_strlen(value) + 2;
 	es = malloc(size);
 	if (es == NULL)
