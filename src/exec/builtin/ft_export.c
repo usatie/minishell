@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 09:25:42 by susami            #+#    #+#             */
-/*   Updated: 2022/12/22 17:23:33 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/22 20:58:16 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static int	putenv_all(char **argv)
 		assignment = ft_strdup(argv[i]);
 		if (!assignment)
 			fatal_exit("ft_strdup");
-		if (putenv(assignment) < 0)
+		if (ft_putenv(assignment) < 0)
 			return (1);
 		i++;
 	}

@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 07:28:02 by susami            #+#    #+#             */
-/*   Updated: 2022/12/22 19:11:56 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/22 21:00:14 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,11 +54,22 @@ void	ft_dup2(int oldfd, int newfd)
 	}
 }
 
+void	internal_unsetenv(char **ep)
+{
+	char	**sp;
+
+	sp = ep;
+	while (*sp)
+	{
+		*sp = *(sp + 1);
+		sp++;
+	}
+}
+
 int	ft_unsetenv(const char *name)
 {
 	size_t	len;
 	char	**ep;
-	char	**sp;
 
 	if (name == NULL || name[0] == '\0' || ft_strchr(name, '=') != NULL)
 	{
@@ -70,14 +81,7 @@ int	ft_unsetenv(const char *name)
 	while (*ep)
 	{
 		if (ft_strncmp(*ep, name, len) == 0 && (*ep)[len] == '=')
-		{
-			sp = ep;
-			while (*sp)
-			{
-				*sp = *(sp + 1);
-				sp++;
-			}
-		}
+			internal_unsetenv(ep);
 		else
 			ep++;
 	}
@@ -105,9 +109,67 @@ int	ft_setenv(const char *name, const char *value, int overwrite)
 	ft_strlcpy(es, name, size);
 	ft_strlcat(es, "=", size);
 	ft_strlcat(es, value, size);
-	if (putenv(es) < 0)
+	if (ft_putenv(es) < 0)
 		return (-1);
 	return (0);
+}
+
+static int	find_environ_idx(char *name, size_t name_len)
+{
+	int	i;
+
+	i = 0;
+	while (environ[i])
+	{
+		if (ft_strncmp(environ[i], name, name_len) == 0
+			&& environ[i][name_len] == '=')
+			break ;
+		i++;
+	}
+	return (i);
+}
+
+static int	internal_putenv(char *string, char *name, int i)
+{
+	if (environ[i])
+	{
+		free(environ[i]);
+		environ[i] = string;
+	}
+	else
+	{
+		environ = (char **)ft_reallocf(environ, (i + 2) * sizeof(char *),
+				i * sizeof(char *));
+		if (environ == NULL)
+		{
+			free(name);
+			return (-1);
+		}
+		environ[i] = string;
+		environ[i + 1] = NULL;
+	}
+	return (0);
+}
+
+int	ft_putenv(char *string)
+{
+	char	*name_end;
+	size_t	name_len;
+	char	*name;
+	int		idx;
+
+	name_end = ft_strchr(string, '=');
+	if (name_end == NULL)
+	{
+		ft_unsetenv(string);
+		return (0);
+	}
+	name_len = name_end - string;
+	name = ft_strndup(string, name_len);
+	if (name == NULL)
+		return (-1);
+	idx = find_environ_idx(name, name_len);
+	return (internal_putenv(string, name, idx));
 }
 
 // Same as dup() but returned fd is assured to be >= 10
