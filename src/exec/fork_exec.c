@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 10:26:01 by susami            #+#    #+#             */
-/*   Updated: 2022/12/22 13:08:41 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/22 15:23:32 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,10 @@ static int	wait_pipelines(t_pipeline *pipelines, int *stat_loc)
 		if (waitpid(cur->pid, stat_loc, 0) < 0)
 		{
 			if (errno == EINTR)
+			{
 				interrupted = true;
+				continue;
+			}
 			else if (errno == ECHILD)
 				*stat_loc = 0; // ?
 			else
