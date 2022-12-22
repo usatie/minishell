@@ -6,13 +6,14 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 07:28:02 by susami            #+#    #+#             */
-/*   Updated: 2022/12/21 14:36:44 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/22 19:02:16 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <fcntl.h>
 #include <errno.h>
 #include <sys/stat.h>
+#include <stdlib.h>
 #include "minishell.h"
 
 int	ft_open(char *path, int oflag, mode_t mode)
@@ -51,6 +52,32 @@ void	ft_dup2(int oldfd, int newfd)
 			err_exit("dup2()");
 		ft_close(oldfd);
 	}
+}
+
+int	ft_setenv(const char *name, const char *value, int overwrite)
+{
+	size_t	size;
+	char	*es;
+
+	if (name == NULL || name[0] == '\0' || ft_strchr(name, '=') != NULL
+		|| value == NULL)
+	{
+		errno = EINVAL;
+		return (-1);
+	}
+	if (getenv(name) != NULL && overwrite == 0)
+		return (0);
+	unsetenv(name);
+	size = ft_strlen(name) + ft_strlen(value) + 2;
+	es = malloc(size);
+	if (es == NULL)
+		return (-1);
+	ft_strlcpy(es, name, size);
+	ft_strlcat(es, "=", size);
+	ft_strlcat(es, value, size);
+	if (putenv(es) < 0)
+		return (-1);
+	return (0);
 }
 
 // Same as dup() but returned fd is assured to be >= 10

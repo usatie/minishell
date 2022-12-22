@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/22 17:19:26 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/22 18:57:27 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -229,6 +229,7 @@ int			ft_open(char *path, int oflag, mode_t mode);
 void		ft_close(int fd);
 pid_t		ft_fork(void);
 void		ft_dup2(int oldfd, int newfd);
+int			ft_setenv(const char *name, const char *value, int overwrite);
 int			stashfd(int fd);
 bool		is_valid_fd(int fd);
 

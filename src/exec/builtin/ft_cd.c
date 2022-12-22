@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 09:26:21 by susami            #+#    #+#             */
-/*   Updated: 2022/12/16 09:26:22 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/22 18:58:27 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,9 @@ int	ft_cd(char *argv[])
 	}
 	pwd = getenv("PWD");
 	if (pwd)
-		setenv("OLDPWD", pwd, 1);
+		ft_setenv("OLDPWD", pwd, 1);
 	else if (getcwd(cwd, PATH_MAX))
-		setenv("OLDPWD", cwd, 1);
-	setenv("PWD", path, 1);
+		ft_setenv("OLDPWD", cwd, 1);
+	ft_setenv("PWD", path, 1);
 	return (0);
 }
