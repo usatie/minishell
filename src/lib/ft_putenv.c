@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 21:56:29 by susami            #+#    #+#             */
-/*   Updated: 2022/12/22 21:56:30 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/23 00:30:29 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 
 static int	find_environ_idx(char *name, size_t name_len)
 {
-	int	i;
+	extern char	**environ;
+	int			i;
 
 	i = 0;
 	while (environ[i])
@@ -30,6 +31,8 @@ static int	find_environ_idx(char *name, size_t name_len)
 
 static int	internal_putenv(char *string, char *name, int i)
 {
+	extern char	**environ;
+
 	if (environ[i])
 	{
 		free(environ[i]);

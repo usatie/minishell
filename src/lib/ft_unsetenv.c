@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 21:11:17 by susami            #+#    #+#             */
-/*   Updated: 2022/12/22 21:11:25 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/23 00:31:02 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,9 @@ void	internal_unsetenv(char **ep)
 
 int	ft_unsetenv(const char *name)
 {
-	size_t	len;
-	char	**ep;
+	extern char	**environ;
+	size_t		len;
+	char		**ep;
 
 	if (name == NULL || name[0] == '\0' || ft_strchr(name, '=') != NULL)
 	{

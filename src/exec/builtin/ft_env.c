@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 09:24:31 by susami            #+#    #+#             */
-/*   Updated: 2022/12/21 23:31:43 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/23 00:29:32 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 
 int	ft_env(char **argv)
 {
-	int	i;
+	extern char	**environ;
+	int			i;
 
 	(void)argv;
 	i = 0;

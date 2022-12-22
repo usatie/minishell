@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 09:25:42 by susami            #+#    #+#             */
-/*   Updated: 2022/12/22 20:58:16 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/23 00:29:58 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@
 // So it must be allocated and dismissed here.
 static int	print_all_variables(void)
 {
-	int	i;
+	extern char	**environ;
+	int			i;
 
 	i = 0;
 	while (environ[i])

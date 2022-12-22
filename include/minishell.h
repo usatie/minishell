@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/23 00:17:18 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/23 00:29:13 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ typedef struct s_pipeline		t_pipeline;
 typedef struct s_redirect		t_redirect;
 typedef enum e_redirect_kind	t_redirect_kind;
 
-extern char						**environ;
 extern t_env					g_env;
 
 struct s_env {

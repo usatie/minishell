@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 23:55:55 by susami            #+#    #+#             */
-/*   Updated: 2022/12/22 23:56:21 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/23 00:30:12 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 
 void	ft_execvp(char *file, char *argv[])
 {
-	char	*path;
+	extern char	**environ;
+	char		*path;
 
 	// Empty command
 	if (file == NULL)
