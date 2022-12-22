@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/28 23:18:22 by susami            #+#    #+#             */
-/*   Updated: 2022/06/01 17:10:07 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/22 17:27:39 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,17 +53,21 @@ static void	preprocess_strtol(const char **str, int *base, BOOL *isneg)
 static BOOL	internal_strtol(const char **str, int base,
 	unsigned long *ul_val, BOOL *isneg)
 {
+	BOOL	overflow;
+
+	overflow = FALSE;
 	preprocess_strtol(str, &base, isneg);
 	*ul_val = 0;
 	while (ft_isdigit(**str))
 	{
 		if (is_cut(*ul_val, (unsigned long)**str - '0', (unsigned long)base))
-			return (TRUE);
-		*ul_val = (*ul_val) * (unsigned long)base
-			+ (unsigned long)(**str - '0');
+			overflow = TRUE;
+		if (!overflow)
+			*ul_val = (*ul_val) * (unsigned long)base
+				+ (unsigned long)(**str - '0');
 		(*str)++;
 	}
-	return (FALSE);
+	return (overflow);
 }
 
 // Original strtol takes endptr and base
