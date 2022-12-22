@@ -32,10 +32,14 @@ assert() {
 assert ""
 assert "exit"
 assert "pwd"
-assert "ls | grep .c"
+#assert "ls | grep .c"
 assert "invalid command"
 assert 'exit\npwd'
-assert 'exit \n pwd'
+assert 'cat Makefile'
+assert 'cat -e Makefile'
+assert 'grep mini Makefile'
+assert '/bin/cat Makefile'
+
 
 echo "OK :D"
 cleanup

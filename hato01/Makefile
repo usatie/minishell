@@ -1,10 +1,15 @@
-NAME	= minishell
-CC      = cc
-CFLAGS	= -Wall -Werror -Wextra
-LIBS    = -lreadline
-SRCS    = src/minishell.c
-OBJDIR  = obj
-OBJS    = $(SRCS:src/%.c=$(OBJDIR)/%.o)
+NAME	 = minishell
+CC       = cc
+CFLAGS	 = -Wall -Werror -Wextra
+INCLUDES = -I include
+
+LIBFTDIR = libft
+LIBFT    = libft/libft.a
+
+LIBS     = -lreadline -lft -L libft
+SRCS     = src/minishell.c
+OBJDIR   = obj
+OBJS     = $(SRCS:src/%.c=$(OBJDIR)/%.o)
 
 all: $(NAME)
 
@@ -13,7 +18,10 @@ $(NAME): $(OBJS)
 
 $(OBJDIR)/%.o: src/%.c
 	mkdir -p $(OBJDIR)
-	$(CC) $^ -o $@ -c $(CFLAGS)
+	$(CC) $^ -o $@ -c $(CFLAGS) $(INCLUDES)
+
+$(LIBFT):
+	make -C $(LIBFTDIR)
 
 test: $(NAME)
 	./tests/test.sh

@@ -1,24 +1,18 @@
-#include <errno.h>
-#include <readline/readline.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#include <limits.h>
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mkunimot <hatopopo142@gmail.com>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/12/22 15:14:03 by mkunimot          #+#    #+#             */
+/*   Updated: 2022/12/23 05:50:20 by mkunimot         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-//#include "minishell.h"
+#include "../include/minishell.h"
 
-#define PROMPT "minishell > "
-
-typedef struct s_token	t_token;
-
-struct s_token {
-	char	*pos;
-	size_t	len;
-	t_token	*next;
-};
-
-t_token *new_token(char *pos, size_t len)
+t_token	*new_token(char *pos, size_t len)
 {
 	t_token	*tok;
 
@@ -28,22 +22,7 @@ t_token *new_token(char *pos, size_t len)
 	return (tok);
 }
 
-char *find_path(char *cmd)
-{
-	char *path;
-
-	path = malloc(PATH_MAX);
-	path[0] = '\0';
-	if (cmd[0] != '/')
-		strcpy(path, "/bin/");
-	strcat(path, cmd);
-	if (access(path, X_OK) == 0)
-		return (path);
-	free(path);
-	return (NULL);
-}
-
-t_token *tokenize(char *line)
+t_token	*tokenize(char *line)
 {
 	t_token	*tok;
 	size_t	len;
@@ -60,7 +39,31 @@ t_token *tokenize(char *line)
 	return (tok);
 }
 
-int ft_system(char *cmd)
+char	*find_path(char *cmd)
+{
+	char	*path;
+	char	*envpath;
+	char	**paths;
+
+	if (access(cmd, X_OK) == 0)
+		return (cmd);
+	path = calloc(sizeof(char), PATH_MAX);
+
+	envpath = getenv("PATH");
+	paths = ft_split(envpath, ':');
+	for (int i = 0; paths[i]; i++)
+	{
+		strcpy(path, paths[i]);
+		strcat(path, "/");
+		strcat(path, cmd);
+		if (access(path, X_OK) == 0)
+			return (path);
+	}
+	free(path);
+	return (NULL);
+}
+
+int	ft_system(char *cmd)
 {
 	extern char		**environ;
 	int				status;
@@ -98,7 +101,7 @@ int ft_system(char *cmd)
 		return (status);
 }
 
-int main(void)
+int	main(void)
 {
 	char	*line;
 	int		status;
@@ -107,9 +110,9 @@ int main(void)
 	{
 		line = readline(PROMPT);
 		if (line == NULL)
-			break;
+			break ;
 		if (strcmp(line, "exit") == 0)
-			exit(1);
+			exit(0);
 		status = ft_system(line);
 		free(line);
 	}
