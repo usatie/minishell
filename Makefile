@@ -70,8 +70,6 @@ norm:
 	norminette include src libft\
 		| grep Error\
 		| grep -v 'WRONG_SCOPE_COMMENT'\
-		| grep -v 'TOO_MANY_LINES'\
-		| grep -v 'TOO_MANY_FUNCS'
 
 .PHONY: test all clean fclean re
 -include $(DEPS)

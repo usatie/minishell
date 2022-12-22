@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 06:45:04 by susami            #+#    #+#             */
-/*   Updated: 2022/12/21 23:14:32 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/22 11:09:04 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,33 +27,18 @@ static void	foreach_str(t_str *s, void f(t_str *))
 
 void	expand(t_node *node)
 {
-	t_node	*cur;
-
-	if (node->kind == ND_CMD)
+	if (!node)
+		return ;
+	if (node->kind == ND_REDIR_HEREDOC)
+		expand(node->next);
+	else
 	{
-		cur = node->args;
-		while (cur)
-		{
-			foreach_str(cur->str, expand_parameter_str);
-			cur = cur->next;
-		}
-		cur = node->redirects;
-		while (cur)
-		{
-			// If heredoc('<<' word), word is not expanded
-			if (cur->kind == ND_REDIR_HEREDOC)
-			{
-				cur = cur->next;
-				continue ;
-			}
-			foreach_str(cur->rhs->str, expand_parameter_str);
-			cur = cur->next;
-		}
-	}
-	else if (node->kind == ND_PIPE)
-	{
-		expand(node->lhs);
+		foreach_str(node->str, expand_parameter_str);
 		expand(node->rhs);
+		expand(node->lhs);
+		expand(node->args);
+		expand(node->redirects);
+		expand(node->next);
 	}
 }
 
