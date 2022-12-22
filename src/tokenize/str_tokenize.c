@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 11:34:21 by susami            #+#    #+#             */
-/*   Updated: 2022/12/22 14:36:36 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/22 21:29:34 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,17 +42,9 @@ t_str	*variable(char **rest, char *line)
 t_str	*special_parameter(char **rest, char *line)
 {
 	t_str	*str;
-	char	*start;
 
-	start = line;
-	if (*line != '$')
-		fatal_exit("Expected $\n");
-	line++;
-	if (!is_specialchr(*line))
-		fatal_exit("Expected special character.");
-	line++;
-	str = new_str(STR_SPECIAL_PARAM, start, line - start, NULL);
-	*rest = line;
+	str = new_str(STR_SPECIAL_PARAM, line, 2, NULL);
+	*rest = line + 2;
 	return (str);
 }
 
