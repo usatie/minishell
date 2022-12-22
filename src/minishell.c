@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 14:21:05 by susami            #+#    #+#             */
-/*   Updated: 2022/12/21 23:11:19 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/22 15:43:48 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ int	interpret(char *line)
 	free_tok(tok);
 	free_node(node);
 	free_pipeline(pipelines);
-	g_env.pipeline = NULL;
 	return (status);
 }
 

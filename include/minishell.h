@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/22 14:37:41 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/22 15:43:41 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ extern t_env					g_env;
 
 struct s_env {
 	int				status;
-	t_pipeline		*pipeline;
 	sig_atomic_t	sig;
 	bool			syntax_error;
 	bool			heredoc_interrupted;
