@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 13:09:50 by susami            #+#    #+#             */
-/*   Updated: 2022/12/22 17:22:57 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/22 18:34:40 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	exec_builtin(t_pipeline *command)
 	tmpfd = stashfd(STDIN_FILENO);
 	status = 0;
 	if (ft_strcmp(command->argv[0], "exit") == 0)
-		ft_exit(command->argv);
+		status = ft_exit(command->argv);
 	else if (ft_strcmp(command->argv[0], "pwd") == 0)
 		status = ft_pwd(command->argv);
 	else if (ft_strcmp(command->argv[0], "cd") == 0)

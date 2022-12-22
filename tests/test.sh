@@ -182,6 +182,10 @@ assert 'echo -n hello world'
 assert 'echo hello -n'
 assert 'exit 42'
 assert '>>>\nexit'
+assert 'exit hello'
+assert 'exit 1 2 3'
+assert 'exit 123abc'
+assert 'exit 9999999999999999999999'
 
 test_sigint
 
