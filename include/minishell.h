@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/22 22:23:57 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/22 22:37:48 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,14 +176,14 @@ char		*expand_line(char *line);
 t_node		*parse(t_token *tok);
 
 // parse/util.c
-void	syntax_error(const char *msg, t_token **rest, t_token *tok);
+void		syntax_error(const char *msg, t_token **rest, t_token *tok);
 
 // parse/*.c
-t_node	*num(t_token **rest, t_token *tok);
-t_node	*word(t_token **rest, t_token *tok);
-t_node	*redirection(t_token **rest, t_token *tok);
-t_node	*simple_command(t_token **rest, t_token *tok);
-t_node	*pipeline(t_token **rest, t_token *tok);
+t_node		*num(t_token **rest, t_token *tok);
+t_node		*word(t_token **rest, t_token *tok);
+t_node		*redirection(t_token **rest, t_token *tok);
+t_node		*simple_command(t_token **rest, t_token *tok);
+t_node		*pipeline(t_token **rest, t_token *tok);
 
 // str.c
 t_str		*new_str(t_str_kind kind, char *pos, size_t len, t_str *params);

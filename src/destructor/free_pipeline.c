@@ -6,41 +6,24 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/21 18:33:42 by susami            #+#    #+#             */
-/*   Updated: 2022/12/22 14:22:48 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/22 22:32:44 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include "minishell.h"
 
-void	free_str(t_str *str)
-{
-	if (!str)
-		return ;
-	free_str(str->next);
-	free_str(str->parameters);
-	free(str);
-}
+static void	free_redirect(t_redirect *redirect);
+static void	free_argv(char **argv);
 
-void	free_tok(t_token *tok)
+void	free_pipeline(t_pipeline *pipeline)
 {
-	if (!tok)
+	if (!pipeline)
 		return ;
-	free_tok(tok->next);
-	free_str(tok->str);
-	free(tok);
-}
-
-void	free_node(t_node *node)
-{
-	if (!node)
-		return ;
-	free_node(node->next);
-	free_node(node->lhs);
-	free_node(node->rhs);
-	free_node(node->args);
-	free_node(node->redirects);
-	free(node);
+	free_pipeline(pipeline->next);
+	free_redirect(pipeline->redirects);
+	free_argv(pipeline->argv);
+	free(pipeline);
 }
 
 static void	free_redirect(t_redirect *redirect)
@@ -66,14 +49,4 @@ static void	free_argv(char **argv)
 		i++;
 	}
 	free(argv);
-}
-
-void	free_pipeline(t_pipeline *pipeline)
-{
-	if (!pipeline)
-		return ;
-	free_pipeline(pipeline->next);
-	free_redirect(pipeline->redirects);
-	free_argv(pipeline->argv);
-	free(pipeline);
 }
