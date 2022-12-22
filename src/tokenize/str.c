@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/09 08:48:46 by susami            #+#    #+#             */
-/*   Updated: 2022/12/21 23:25:24 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/22 10:12:43 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,76 +38,94 @@ t_str	*new_str(char *pos, size_t len, t_str_kind kind)
 	return (s);
 }
 
-size_t	get_len(t_str *str)
+static bool	is_parameter(t_str *s)
+{
+	if (s->kind == STR_VAR || s->kind == STR_SPECIAL_PARAM)
+		return (true);
+	return (false);
+}
+
+static size_t	wordlen(t_str *s, bool expand)
 {
 	size_t	len;
-	t_str	*cur;
+	t_str	*param;
 
-	len = 0;
-	cur = str;
-	while (cur)
+	if (!s)
+		return (0);
+	len = wordlen(s->next, expand);
+	if (s->kind == STR_PLAIN)
+		len += s->len;
+	else if (s->kind == STR_SINGLE)
+		len += s->len - 2;
+	else if (!expand && is_parameter(s))
+		len += s->len;
+	else if (expand && is_parameter(s))
+		len += s->value_len;
+	else if (!expand && s->kind == STR_DOUBLE)
+		len += s->len - 2;
+	else if (expand && s->kind == STR_DOUBLE)
 	{
-		if (cur->kind == STR_VAR || cur->kind == STR_SPECIAL_PARAM)
-			len += cur->value_len;
-		else if (cur->kind == STR_PLAIN)
-			len += cur->len;
-		else if (cur->kind == STR_DOUBLE)
+		len += s->len - 2;
+		param = s->parameters;
+		while (param)
 		{
-			len += cur->len - 2;
-			for (t_str *param = cur->parameters; param; param = param->next)
-			{
-				len -= param->len;
-				len += param->value_len;
-			}
+			len -= param->len;
+			len += param->value_len;
+			param = param->next;
 		}
-		else if (cur->kind == STR_SINGLE)
-			len += cur->len - 2;
-		else
-			err_exit("Unexpected STR type");
-		cur = cur->next;
 	}
+	else
+		err_exit("Unexpected STR type");
 	return (len);
 }
 
-char	*convert_to_word(t_str *str)
+static char	*joinstr(char *s, t_str *str, bool expand)
+{
+	char	*p;
+	t_str	*param;
+
+	if (!str)
+		return (s);
+	if (str->kind == STR_PLAIN)
+		strncat(s, str->pos, str->len);
+	else if (str->kind == STR_SINGLE)
+		strncat(s, str->pos + 1, str->len - 2);
+	else if (!expand && is_parameter(str))
+		strncat(s, str->pos, str->len);
+	else if (expand && is_parameter(str))
+		strncat(s, str->value, str->value_len);
+	else if (!expand && str->kind == STR_DOUBLE)
+		strncat(s, str->pos + 1, str->len - 2);
+	else if (expand && str->kind == STR_DOUBLE)
+	{
+		// "hello $USER world"
+		p = str->pos + 1;
+		param = str->parameters;
+		while (param)
+		{
+			// plain text
+			strncat(s, p, param->pos - p);
+			// parameter expansion
+			if (param->value)
+				strncat(s, param->value, param->value_len);
+			p = param->pos + param->len;
+			param = param->next;
+		}
+		strncat(s, p, (str->len - 1) - (p - str->pos));
+	}
+	else
+		err_exit("Unexpected STR type");
+	return (joinstr(s, str->next, expand));
+}
+
+char	*str_to_word(t_str *str, bool expand)
 {
 	char	*s;
-	t_str	*cur;
 
-	cur = str;
-	s = calloc(get_len(str) + 1, sizeof(char));
+	s = calloc(wordlen(str, expand) + 1, sizeof(char));
 	if (s == NULL)
 		fatal_exit("malloc()");
-	while (cur)
-	{
-		if (cur->kind == STR_PLAIN)
-			strncat(s, cur->pos, cur->len);
-		else if (cur->kind == STR_VAR || cur->kind == STR_SPECIAL_PARAM)
-		{
-			if (cur->value)
-				strncat(s, cur->value, cur->value_len);
-		}
-		else if (cur->kind == STR_DOUBLE)
-		{
-			// "hello $USER world"
-			char	*p;
-			p = cur->pos + 1;
-			for (t_str *param = cur->parameters; param; param = param->next)
-			{
-				// plain text
-				strncat(s, p, param->pos - p);
-				// paramible expansion
-				if (param->value)
-					strncat(s, param->value, param->value_len);
-				p = param->pos + param->len;
-			}
-			strncat(s, p, (cur->len - 1) - (p - cur->pos));
-		}
-		else
-			strncat(s, cur->pos + 1, cur->len - 2);
-		cur = cur->next;
-	}
-	return (s);
+	return (joinstr(s, str, expand));
 }
 
 bool	is_any_quoted(t_str *s)

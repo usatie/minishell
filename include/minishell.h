@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/21 23:25:43 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/22 09:18:04 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,6 +174,7 @@ t_node		*parse(t_token *tok);
 
 // str.c
 t_str		*new_str(char *pos, size_t len, t_str_kind kind);
+char		*str_to_word(t_str *str, bool expand);
 bool		is_any_quoted(t_str *s);
 
 // token.c
@@ -188,9 +189,6 @@ t_node		*new_node_num(long val, t_token *tok);
 t_node		*add_node_back(t_node *head, t_node *new_node);
 bool		equal(const t_token *tok, const char *op);
 bool		at_eof(const t_token *tok);
-
-// quotes.c
-char		*convert_to_word(t_str *str);
 
 // pipeline.c
 t_pipeline	*new_pipeline(void);

@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 10:26:01 by susami            #+#    #+#             */
-/*   Updated: 2022/12/21 21:24:59 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/21 23:30:04 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,19 +107,22 @@ static char	*find_path(char *cmd)
 	char	*path;
 	char	*envpath;
 	char	**paths;
+	int		i;
 
 	if (access(cmd, X_OK) == 0)
 		return (cmd);
 	path = calloc(sizeof(char), PATH_MAX);
 	envpath = getenv("PATH");
 	paths = ft_split(envpath, ':');
-	for (int i = 0; paths[i]; i++)
+	i = 0;
+	while (paths[i])
 	{
 		strcpy(path, paths[i]);
 		strcat(path, "/");
 		strcat(path, cmd);
 		if (access(path, X_OK) == 0)
 			return (path);
+		i++;
 	}
 	free(path);
 	return (NULL);

@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/11 14:32:27 by susami            #+#    #+#             */
-/*   Updated: 2022/12/21 23:27:00 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/22 09:19:58 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ char	**gen_argv(t_node *node)
 	arg = node->args;
 	while (i < node->nargs)
 	{
-		argv[i] = convert_to_word(arg->str);
+		argv[i] = str_to_word(arg->str, true);
 		arg = arg->next;
 		i++;
 	}
@@ -33,23 +33,19 @@ char	**gen_argv(t_node *node)
 
 t_redirect	*gen_redirect(t_node *node)
 {
-	char		*word;
 	int			fd;
 	t_redirect	*rd;
 
-	// [num] > path
-	// [num] < path
-	word = convert_to_word(node->rhs->str);
 	fd = node->lhs->val;
 	if (node->kind == ND_REDIR_OUT)
-		return (new_redirect(RD_OUTPUT, word, fd));
+		return (new_redirect(RD_OUTPUT, str_to_word(node->rhs->str, true), fd));
 	else if (node->kind == ND_REDIR_IN)
-		return (new_redirect(RD_INPUT, word, fd));
+		return (new_redirect(RD_INPUT, str_to_word(node->rhs->str, true), fd));
 	else if (node->kind == ND_REDIR_APPEND)
-		return (new_redirect(RD_APPEND, word, fd));
+		return (new_redirect(RD_APPEND, str_to_word(node->rhs->str, true), fd));
 	else if (node->kind == ND_REDIR_HEREDOC)
 	{
-		rd = new_redirect(RD_HEREDOC, word, fd);
+		rd = new_redirect(RD_HEREDOC, str_to_word(node->rhs->str, false), fd);
 		rd->is_delim_quoted = is_any_quoted(node->rhs->str);
 		return (rd);
 	}

@@ -105,10 +105,23 @@ assert 'cat <test_hello.txt'
 # assert 'echo 1<test_one.txt 2<test_two.txt 3<test_three.txt'
 
 ## Heredoc
-assert 'cat <<EOF\nhello\nworld\nEOF'
-assert 'cat <<EOF <<EOF2\nhello\nEOF\nworld\nEOF2'
+assert 'cat <<EOF          \nhello\nworld\nEOF'
+assert 'cat <<EOF <<EOF2   \nhello\nEOF\nworld\nEOF2'
 assert 'cat <<EOF | cat <<EOF2 | cat <<EOF3\nhello\nEOF\nworld\nEOF242Tokyo\nEOF3'
-assert 'cat <<EOF\n$USER\n$NO_SUCH_VAR\n$FOO$BAR\nEOF'
+assert 'cat <<EOF          \n$USER\n$NO_SUCH_VAR\n$FOO$BAR\nEOF'
+assert 'cat <<E"O"F        \nhello\nworld\nEOF'
+export EOF="eof"
+assert 'cat <<$EOF         \neof\n$EOF\nEOF'
+assert 'cat <<"$EOF"       \neof\n$EOF\nEOF'
+unset EOF
+export E="e"
+export O="o"
+export F="f"
+assert 'cat <<$E"of"       \n$E"of"\n$Eof\neof'
+assert 'cat <<e$O$F       \n$E"of"\n$Eof\ne$O$F\neof'
+unset E
+unset O
+unset F
 
 # Pipe
 assert 'cat Makefile | grep minishell'
