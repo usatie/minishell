@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/23 13:20:49 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/23 13:37:03 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,8 +170,8 @@ void		expand(t_node *node);
 // expand/expand_parameter.c
 void		expand_parameter(t_node *node);
 void		expand_parameter_str(t_str *str);
-// expand/word_split.c
-void		word_split(t_node *node);
+// expand/split_word.c
+void		split_word(t_node *node);
 // expand/expand_line.c
 char		*expand_line(char *line);
 
