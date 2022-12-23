@@ -153,6 +153,7 @@ unset foo
 # Special Parameter
 assert 'echo $?'
 assert 'echo "$?"'
+# assert 'invalid\n\n\n'
 
 # Word splitting
 # export foo="a     b"
@@ -165,14 +166,25 @@ assert 'echo "$?"'
 # assert "ls -l"  # This test fails because out and cmp affects the output of `ls`
 
 # Builtin
+## cd/pwd
 assert 'pwd'
 assert 'cd\npwd'
 assert 'cd src\npwd'
-assert 'cd /etc\npwd' # bash doesn't follow symlink? or cd/pwd implementation is strange?
+assert 'cd /etc\npwd'
+
+## env
 # assert 'env' # output doesn't match bash's
 assert 'env | grep "USER"'
+
+## export
 assert 'export foo=bar\nenv | grep "foo=bar"'
+assert 'export bar \n env | grep bar'
+assert 'export foobar \n export | grep foobar'
+
+## unset
 assert 'export foo=bar\nunset foo\necho $foo'
+
+## echo
 assert 'echo'
 assert 'echo hello'
 assert 'echo hello "    " world'
@@ -180,6 +192,8 @@ assert 'echo -n'
 assert 'echo -n hello'
 assert 'echo -n hello world'
 assert 'echo hello -n'
+
+## exit
 assert 'exit 42'
 assert '>>>\nexit'
 assert 'exit hello'

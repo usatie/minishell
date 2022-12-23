@@ -47,6 +47,7 @@ SRCS      = src/minishell.c\
 			src/exec/search_path.c\
 			src/exec/exec_pipelines.c\
 			src/exec/builtin/builtin.c\
+			src/exec/builtin/env_name.c\
 			src/exec/builtin/ft_echo.c\
 			src/exec/builtin/ft_cd.c\
 			src/exec/builtin/ft_pwd.c\

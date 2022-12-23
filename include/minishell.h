@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/23 00:29:13 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/23 11:27:44 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ struct s_env {
 	sig_atomic_t	sig;
 	bool			syntax_error;
 	bool			heredoc_interrupted;
+	char			**environ_name;
 };
 
 enum e_token_kind {
@@ -229,6 +230,9 @@ int			ft_export(char **argv);
 int			ft_unset(char *argv[]);
 int			ft_env(char **argv);
 int			ft_exit(char **argv);
+// builtin/env_name.c
+int			putenv_name(char *name);
+int			unsetenv_name(char *name);
 
 // exec/search_path.c
 char		*search_path(char *cmd);

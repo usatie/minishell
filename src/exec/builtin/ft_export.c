@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 09:25:42 by susami            #+#    #+#             */
-/*   Updated: 2022/12/23 08:51:15 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/23 11:27:15 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,45 @@ static void	print_all_variables(void)
 		ft_putendl_fd(environ[i], STDOUT_FILENO);
 		i++;
 	}
+	i = 0;
+	while (g_env.environ_name[i])
+	{
+		ft_putstr_fd("declare -x ", STDOUT_FILENO);
+		ft_putendl_fd(g_env.environ_name[i], STDOUT_FILENO);
+		i++;
+	}
 }
 
 // Assignment string should be allocated and should not be freed.
-static void	putenv_all(char **argv)
+static void	export_single_assignment(char *string)
+{
+	char	*name;
+	char	*name_end;
+
+	// export name
+	name_end = ft_strchr(string, '=');
+	if (name_end == NULL)
+	{
+		// If already exists, do nothing
+		if (getenv(string))
+			return ;
+		// If not exists, add to nameonly environ
+		if (putenv_name(string) < 0)
+			fatal_exit("putenv_name()");
+		return ;
+	}
+	name = ft_strndup(string, name_end - string);
+	if (name == NULL)
+		fatal_exit("strndup()");
+	unsetenv_name(name);
+	free(name);
+	// export name=value
+	if (ft_putenv(string) < 0)
+		fatal_exit("ft_putenv()");
+	return ;
+}
+
+static void	export_all(char **argv)
 {
 	char	*assignment;
 	int		i;
@@ -40,8 +75,7 @@ static void	putenv_all(char **argv)
 		assignment = ft_strdup(argv[i]);
 		if (!assignment)
 			fatal_exit("ft_strdup");
-		if (ft_putenv(assignment) < 0)
-			fatal_exit("ft_putenv");
+		export_single_assignment(assignment);
 		i++;
 	}
 }
@@ -51,6 +85,6 @@ int	ft_export(char **argv)
 	if (argv[1] == NULL)
 		print_all_variables();
 	else
-		putenv_all(argv);
+		export_all(argv);
 	return (0);
 }

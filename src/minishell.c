@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 14:21:05 by susami            #+#    #+#             */
-/*   Updated: 2022/12/23 00:27:10 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/23 11:06:12 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,15 @@
 
 #define PROMPT "minishell $ "
 
-t_env		g_env = {0};
+t_env		g_env = {};
+
+void	init_env(t_env *e)
+{
+	ft_bzero(e, sizeof(t_env));
+	e->environ_name = ft_calloc(1, sizeof(char *));
+	if (e->environ_name == NULL)
+		fatal_exit("ft_calloc");
+}
 
 int	interpret(char *line)
 {
@@ -50,6 +58,7 @@ int	main(void)
 	char		*line;
 	extern int	_rl_echo_control_chars;
 
+	init_env(&g_env);
 	setup_rl();
 	setup_signal();
 	_rl_echo_control_chars = 0;
