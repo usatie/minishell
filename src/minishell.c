@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 14:21:05 by susami            #+#    #+#             */
-/*   Updated: 2022/12/23 11:06:12 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/23 11:38:51 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,9 @@ int	interpret(char *line)
 	// tokenize, parse, ...
 	tok = tokenize(line);
 	node = parse(tok);
-	if (g_env.syntax_error)
+	if (at_eof(tok))
+		status = g_env.status;
+	else if (g_env.syntax_error)
 		status = 258;
 	else
 	{

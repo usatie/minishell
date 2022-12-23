@@ -85,6 +85,15 @@ assert "     pwd   "
 assert "echo hello'world'\"42\""
 assert 'ec"ho" he"ll"o'
 assert 'echo 1.txt'
+assert '\n\n\n'
+assert 'invalid command\n\n\n'
+assert '>tmp.txt' 'tmp.txt'
+assert '>>tmp.txt' 'tmp.txt'
+assert '<tmp.txt'
+assert '<<EOF'
+assert 'echo hello >tmp \n >tmp' 'tmp'
+assert 'echo hello >tmp \n >>tmp' 'tmp'
+assert 'echo hello >tmp \n <tmp'
 
 # Redirection
 ## Redirect Output
@@ -153,7 +162,6 @@ unset foo
 # Special Parameter
 assert 'echo $?'
 assert 'echo "$?"'
-# assert 'invalid\n\n\n'
 
 # Word splitting
 # export foo="a     b"
