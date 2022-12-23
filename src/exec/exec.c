@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/21 22:53:54 by susami            #+#    #+#             */
-/*   Updated: 2022/12/23 12:00:01 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/23 12:53:54 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,10 @@ static int	open_redirect_srcfd(t_pipeline *pipelines)
 		else
 			err_exit("Unexpected Redirect kind");
 		if (rd->srcfd < 0)
+		{
+			perror(rd->path);
 			return (-1);
+		}
 		rd = rd->next;
 	}
 	return (open_redirect_srcfd(pipelines->next));
