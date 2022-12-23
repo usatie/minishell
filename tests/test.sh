@@ -93,7 +93,7 @@ assert '<tmp.txt'
 assert '<<EOF'
 assert 'echo hello >tmp \n >tmp' 'tmp'
 assert 'echo hello >tmp \n >>tmp' 'tmp'
-assert 'echo hello >tmp \n <tmp'
+assert 'echo hello >tmp \n <tmp' 'tmp'
 
 # Redirection
 ## Redirect Output
