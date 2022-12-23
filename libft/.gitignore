@@ -8,6 +8,7 @@
 !ft_argparse
 !ft_error_functions
 !get_next_line
+!get_next_line/*.c
 !test.sh
 !test-all.sh
 !rsync.sh
