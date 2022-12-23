@@ -38,6 +38,8 @@ SRCS      = src/minishell.c\
 			src/pipeline/pipeline.c\
 			src/gen/gen.c\
 			src/expand/expand.c\
+			src/expand/expand_parameter.c\
+			src/expand/word_split.c\
 			src/expand/expand_line.c\
 			src/redirect/heredoc.c\
 			src/redirect/redirect.c\
