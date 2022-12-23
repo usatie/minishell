@@ -89,9 +89,7 @@ fclean: clean
 re: fclean all
 
 norm:
-	norminette include src libft\
-		| grep Error\
-		| grep -v 'WRONG_SCOPE_COMMENT'
+	norminette include src libft
 	nm -u $(NAME) | grep -v -E "_(readline|rl_clear_history|rl_on_new_line|\
 	rl_replace_line|rl_redisplay|add_history|printf|malloc|free|write|\
 	access|open|read|close|fork|wait|waitpid|wait3|wait4|signal|\

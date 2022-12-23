@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/21 15:35:03 by susami            #+#    #+#             */
-/*   Updated: 2022/12/27 09:50:10 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/27 18:11:35 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,10 @@ t_str	*line_to_str(char *line)
 	s = &head;
 	while (*line)
 	{
-		// Special Parameter
 		if (is_special_param(line))
 			s->next = special_parameter(&line, line);
-		// Parameter
 		else if (is_variable(line))
 			s->next = variable(&line, line);
-		// Non parameter plain text
 		else
 			s->next = non_parameter_plain_text(&line, line);
 		s = s->next;

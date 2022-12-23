@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 10:25:51 by susami            #+#    #+#             */
-/*   Updated: 2022/12/26 14:52:46 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/27 17:39:19 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,11 @@ t_token	*tokenize(char *line)
 	{
 		if (consume_blank(&line, line))
 			continue ;
-		// Multi character punctuator
 		else if (startswith(line, "<<") || startswith(line, ">>"))
 		{
 			cur->next = new_token(line, 2, TK_PUNCT);
 			line += 2;
 		}
-		// Single character punctuator
 		else if (ft_strchr("|<>", *line) != NULL)
 			cur->next = new_token(line++, 1, TK_PUNCT);
 		else if (is_number(line))

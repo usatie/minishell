@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 11:34:21 by susami            #+#    #+#             */
-/*   Updated: 2022/12/26 15:19:57 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/27 17:40:43 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ t_str	*variable(char **rest, char *line)
 	char	*start;
 
 	start = line;
-	line += 2; // '$' + '[a-zA-z_]' 
+	line += 2;
 	while (is_alpha_num_under(*line))
 		line++;
 	str = new_str(STR_VAR, start, line - start, NULL);
@@ -40,7 +40,7 @@ t_str	*special_parameter(char **rest, char *line)
 	char	*start;
 
 	start = line;
-	line += 2; // '$' + '?'
+	line += 2;
 	str = new_str(STR_SPECIAL_PARAM, start, 2, NULL);
 	*rest = line;
 	return (str);
@@ -53,7 +53,7 @@ t_str	*single_quotes(char **rest, char *line)
 	char	*start;
 
 	start = line;
-	line++; // skip the opening quote
+	line++;
 	while (*line && *line != '\'')
 		line++;
 	if (*line != '\'')
@@ -77,7 +77,7 @@ t_str	*double_quotes(char **rest, char *line)
 
 	params = NULL;
 	start = line;
-	line++; // skip the opening quote
+	line++;
 	while (*line && *line != '"')
 	{
 		if (is_variable(line))
@@ -87,7 +87,6 @@ t_str	*double_quotes(char **rest, char *line)
 		else
 			line++;
 	}
-	// How to handle unclosed quote? -> treat it as plain text
 	if (*line != '"')
 	{
 		free_str(params);

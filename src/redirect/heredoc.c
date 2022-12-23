@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/21 14:01:00 by susami            #+#    #+#             */
-/*   Updated: 2022/12/27 16:20:22 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/27 18:12:00 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,8 @@ int	read_heredoc(const char *delimiter, bool is_delim_quoted)
 
 	if (isatty(STDIN_FILENO))
 		rl_event_hook = check_state;
-	// Open pipe
 	if (pipe(pfd) < 0)
 		fatal_exit("pipe");
-	// Read from stdin, Write to pipe
 	while (!g_env.heredoc_interrupted)
 	{
 		line = readline("> ");
@@ -38,7 +36,6 @@ int	read_heredoc(const char *delimiter, bool is_delim_quoted)
 			free(line);
 			break ;
 		}
-		// Write to pipe
 		putendl_fd_expand(line, pfd[1], !is_delim_quoted);
 		free(line);
 	}
@@ -59,13 +56,10 @@ static int	check_state(void)
 
 static bool	break_loop(const char *line, const char *delimiter)
 {
-	// SIGINT(Ctrl-C)
 	if (g_env.heredoc_interrupted)
 		return (true);
-	// EOF
 	if (!line)
 		return (true);
-	// delimiter
 	if (ft_strcmp(line, delimiter) == 0)
 		return (true);
 	return (false);

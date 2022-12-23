@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 10:26:01 by susami            #+#    #+#             */
-/*   Updated: 2022/12/27 16:24:17 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/27 18:14:19 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ static void	forkexec(t_pipeline *pipeline)
 		return ;
 	prepare_pipes_before_fork(pipeline);
 	pipeline->pid = ft_fork();
-	// child
 	if (pipeline->pid == 0)
 	{
 		default_signal(SIGQUIT);
@@ -48,7 +47,6 @@ static void	forkexec(t_pipeline *pipeline)
 		redirect(pipeline->redirects);
 		ft_execvp(pipeline->argv[0], pipeline->argv);
 	}
-	// parent
 	prepare_pipes_parent(pipeline);
 	forkexec(pipeline->next);
 }

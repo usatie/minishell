@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 22:12:51 by susami            #+#    #+#             */
-/*   Updated: 2022/12/22 22:13:37 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/23 00:37:39 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ t_node	*num(t_token **rest, t_token *tok)
 		*rest = tok->next;
 		return (node);
 	}
-	// syntax error
 	syntax_error("Invalid token for <num>", rest, tok);
 	return (NULL);
 }

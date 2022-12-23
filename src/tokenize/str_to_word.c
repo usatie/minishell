@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 21:51:40 by susami            #+#    #+#             */
-/*   Updated: 2022/12/27 16:19:16 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/27 17:39:54 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,9 +89,7 @@ static void	strcat_expanded_double_quote(char *s, t_str *str)
 	param = str->parameters;
 	while (param)
 	{
-		// plain text
 		ft_strncat(s, p, param->pos - p);
-		// parameter expansion
 		if (param->value)
 			ft_strncat(s, param->value, param->value_len);
 		p = param->pos + param->len;

@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 09:26:21 by susami            #+#    #+#             */
-/*   Updated: 2022/12/27 20:43:04 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/27 21:04:30 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,12 +51,10 @@ int	ft_cd(char *argv[])
 	}
 	if (ft_setenv("OLDPWD", pwd, 1) < 0)
 		fatal_exit("ft_setenv");
-	// Initialize newpwd
 	if (path[0] == '/')
 		ft_strlcpy(newpwd, "/", PATH_MAX);
 	else
 		ft_strlcpy(newpwd, pwd, PATH_MAX);
-	// Append path to newpwd
 	resolve_filepath(newpwd, PATH_MAX, path);
 	if (ft_setenv("PWD", newpwd, 1) < 0)
 		fatal_exit("ft_setenv");

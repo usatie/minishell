@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/27 17:33:51 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/27 17:37:24 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,18 +43,18 @@ struct s_env {
 };
 
 enum e_token_kind {
-	TK_PUNCT, // Punctuator
-	TK_STRING, // String (plain text, single quotes, double quotes)
-	TK_NUM, // Integer Literal
-	TK_EOF, // EOF
+	TK_PUNCT,
+	TK_STRING,
+	TK_NUM,
+	TK_EOF,
 };
 
 enum e_str_kind {
-	STR_PLAIN, // str
-	STR_SINGLE, // 'str'
-	STR_DOUBLE, // "str"
-	STR_VAR, // $variable
-	STR_SPECIAL_PARAM, // $?
+	STR_PLAIN,
+	STR_SINGLE,
+	STR_DOUBLE,
+	STR_VAR,
+	STR_SPECIAL_PARAM,
 };
 
 // echo "hello $USER $USER world" "world!"
@@ -70,10 +70,8 @@ struct s_str {
 	size_t		len;
 	t_str		*next;
 
-	// Only for STR_DOUBLE
 	t_str		*parameters;
 
-	// Only for STR_VAR
 	char		*value;
 	size_t		value_len;
 };
@@ -84,10 +82,8 @@ struct s_token {
 	t_token_kind	kind;
 	t_token			*next;
 
-	// Only for TK_STRING
 	t_str			*str;
 
-	// Only for TK_NUM
 	long			val;
 };
 
@@ -107,19 +103,15 @@ struct s_node {
 	t_node		*next;
 	t_token		*tok;
 
-	// ND_PIPE, ND_REDIR_*
 	t_node		*lhs;
 	t_node		*rhs;
 
-	// Only for ND_CMD
 	int			nargs;
 	t_node		*args;
 	t_node		*redirects;
 
-	// Only for ND_WORD;
 	t_str		*str;
 
-	// Only for ND_NUM
 	long		val;
 };
 
@@ -137,10 +129,8 @@ struct s_redirect {
 	int				srcfd;
 	t_redirect		*next;
 
-	// OUTPUT, INPUT, APPEND
 	char			*path;
 
-	// HEREDOC
 	char			*delimiter;
 	bool			is_delim_quoted;
 };

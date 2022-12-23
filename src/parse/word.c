@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 22:13:17 by susami            #+#    #+#             */
-/*   Updated: 2022/12/22 22:13:32 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/23 00:37:45 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ t_node	*word(t_token **rest, t_token *tok)
 		*rest = tok->next;
 		return (node);
 	}
-	// syntax error
 	syntax_error("Invalid token for <word>", rest, tok);
 	return (NULL);
 }

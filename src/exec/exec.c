@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/21 22:53:54 by susami            #+#    #+#             */
-/*   Updated: 2022/12/27 16:46:48 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/27 18:12:35 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,26 +68,21 @@ int	exec(t_pipeline *pipelines)
 	int	status;
 
 	g_env.heredoc_interrupted = 0;
-	// Open file descriptors for redirections
 	if (open_redirect_srcfd(pipelines) < 0)
 		status = 1;
-	// Heredoc interrupted
 	else if (g_env.heredoc_interrupted)
 	{
 		close_redirect_srcfd(pipelines);
 		status = 1;
 	}
-	// Redirection only
 	else if (pipelines->argv[0] == NULL)
 		status = 0;
-	// Builtin && single command
 	else if (isbuiltin(pipelines->argv[0]) && pipelines->next == NULL)
 	{
 		redirect(pipelines->redirects);
 		status = exec_builtin(pipelines->argv);
 		restore_redirect(pipelines->redirects);
 	}
-	// Non-builtin or multiple command
 	else
 	{
 		status = exec_pipelines(pipelines);

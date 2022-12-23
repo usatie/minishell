@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 13:20:08 by susami            #+#    #+#             */
-/*   Updated: 2022/12/27 16:42:08 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/27 17:38:52 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,9 @@ static int	check_state(void)
 	{
 		g_env.sig = 0;
 		write(STDERR_FILENO, "\n", 1);
-		rl_on_new_line(); // Regenerate the prompt on a newline
-		rl_replace_line("", 0); // Clear the previous text
-		rl_redisplay(); // Refresh the prompt
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
 	}
 	else
 		impl_err_exit("check_state", "Caught unexpected signal");

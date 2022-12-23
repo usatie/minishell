@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 14:21:05 by susami            #+#    #+#             */
-/*   Updated: 2022/12/27 09:40:55 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/27 17:38:19 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,6 @@ int	interpret(char *line)
 	t_node		*node;
 	t_pipeline	*pipelines;
 
-	// tokenize, parse, ...
 	tok = tokenize(line);
 	node = parse(tok);
 	if (at_eof(tok))
