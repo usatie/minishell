@@ -6,19 +6,20 @@
 /*   By: mkunimot <hatopopo142@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 15:14:03 by mkunimot          #+#    #+#             */
-/*   Updated: 2022/12/23 05:59:33 by mkunimot         ###   ########.fr       */
+/*   Updated: 2022/12/23 06:58:05 by mkunimot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-t_token	*new_token(char *pos, size_t len)
+t_token	*new_token(char *pos, size_t len, t_token_type type)
 {
 	t_token	*tok;
 
 	tok = calloc(sizeof(t_token), 1);
 	tok->pos = pos;
 	tok->len = len;
+	tok->type = type;
 	return (tok);
 }
 
@@ -29,13 +30,28 @@ t_token	*tokenize(char *line)
 
 	while (*line == ' ')
 		line++;
-	len = 0;
-	while (line[len] && line[len] != ' ')
-		len++;
-	if (len == 0)
+	if (*line == '\0')
 		return (NULL);
-	tok = new_token(line, len);
-	tok->next = tokenize(line + len);
+	len = 0;
+	//while (line[len] && line[len] != ' ')
+	//	len++;
+	//if (len == 0)
+	//	return (NULL);
+	//tok = new_token(line, len);
+	//tok->next = tokenize(line + len);
+		
+	if (strchr("\"'|<>", *line) != NULL)
+	{
+		tok = new_token(line, 1, TK_PUNCT);
+		tok->next = tokenize(line + 1);
+	}
+	else // Identifier
+	{
+		while (line[len] && line[len] != ' ' && strchr("\"'<>", line[len]) == NULL)
+			len++;
+		tok = new_token(line, len, TK_IDENT);
+		tok->next = tokenize(line + len);
+	}
 	return (tok);
 }
 
@@ -82,6 +98,11 @@ int	ft_system(char *cmd)
 	i = 0;
 	while (tok)
 	{
+		if (tok->type == TK_PUNCT)
+		{
+			tok = tok->next;
+			continue ;
+		}
 		argv[i] = strndup(tok->pos, tok->len);
 		i++;
 		tok = tok->next;

@@ -39,7 +39,8 @@ assert 'cat Makefile'
 assert 'cat -e Makefile'
 assert 'grep mini Makefile'
 assert '/bin/cat Makefile'
-assert './tests/hello.sh'
+#assert './tests/hello.sh'
+assert 'echo "hello"'
 
 
 echo "OK :D"
