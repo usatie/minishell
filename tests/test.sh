@@ -131,6 +131,7 @@ assert 'cat <<e$O$F       \n$E"of"\n$Eof\ne$O$F\neof'
 unset E
 unset O
 unset F
+assert 'cat <<EOF\nHello $USER $FOO $BAR $USER'
 
 # Pipe
 assert 'cat Makefile | grep minishell'

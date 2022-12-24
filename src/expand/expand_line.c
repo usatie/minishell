@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/21 15:35:03 by susami            #+#    #+#             */
-/*   Updated: 2022/12/22 14:34:23 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/24 09:25:00 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ t_str	*line_to_str(char *line)
 	t_str	head;
 	t_str	*s;
 
+	head.next = NULL;
 	s = &head;
 	while (*line)
 	{
