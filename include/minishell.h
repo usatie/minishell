@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/25 07:20:26 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/25 07:24:52 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -242,7 +242,6 @@ void		prepare_pipes_parent(t_pipeline *pipeline);
 int			exec_pipelines(t_pipeline *pipelines);
 
 // ft_syscall.c
-int			ft_open(char *path, int oflag, mode_t mode);
 void		ft_close(int fd);
 pid_t		ft_fork(void);
 void		ft_dup2(int oldfd, int newfd);
