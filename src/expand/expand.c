@@ -6,12 +6,12 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 06:45:04 by susami            #+#    #+#             */
-/*   Updated: 2022/12/24 09:24:33 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/24 09:37:27 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <string.h>
 #include <stdlib.h>
+#include "ft_printf.h"
 #include "minishell.h"
 
 void	expand(t_node *node)
@@ -48,8 +48,8 @@ static void	expand_special_parameter(t_str *s)
 {
 	if (startswith(s->pos, "$?"))
 	{
-		s->value = ft_calloc(12, sizeof(char));
-		sprintf(s->value, "%d", g_env.status);
+		s->value = g_env.status_str;
+		ft_sprintf(s->value, "%d", g_env.status);
 		s->value_len = ft_strlen(s->value);
 	}
 	else
