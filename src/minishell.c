@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 14:21:05 by susami            #+#    #+#             */
-/*   Updated: 2022/12/24 09:39:36 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/24 23:00:53 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,21 @@
 #define PROMPT "minishell $ "
 
 t_env		g_env = {};
+
+void	dup_environ(void)
+{
+	extern char	**environ;
+	int			i;
+
+	i = 0;
+	while (environ[i])
+	{
+		environ[i] = ft_strdup(environ[i]);
+		if (environ[i] == NULL)
+			fatal_exit("ft_strdup");
+		i++;
+	}
+}
 
 void	init_env(t_env *e)
 {
@@ -61,6 +76,7 @@ int	main(void)
 	char		*line;
 	extern int	_rl_echo_control_chars;
 
+	dup_environ();
 	init_env(&g_env);
 	setup_rl();
 	setup_signal();
