@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 09:26:21 by susami            #+#    #+#             */
-/*   Updated: 2022/12/22 18:58:27 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/24 09:50:13 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,12 @@ int	ft_cd(char *argv[])
 		path = getenv("HOME");
 	if (!path)
 	{
-		perror("getenv");
+		ft_perror("getenv");
 		return (1);
 	}
 	if (chdir(path) < 0)
 	{
-		perror("cd");
+		ft_perror("cd");
 		return (1);
 	}
 	pwd = getenv("PWD");

@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 21:51:40 by susami            #+#    #+#             */
-/*   Updated: 2022/12/22 21:55:46 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/24 09:40:44 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,11 +67,11 @@ static char	*joinstr(char *s, t_str *str, bool expand)
 	if (!str)
 		return (s);
 	if (str->kind == STR_PLAIN || (!expand && is_parameter(str)))
-		strncat(s, str->pos, str->len);
+		ft_strncat(s, str->pos, str->len);
 	else if (str->kind == STR_SINGLE || (!expand && str->kind == STR_DOUBLE))
-		strncat(s, str->pos + 1, str->len - 2);
+		ft_strncat(s, str->pos + 1, str->len - 2);
 	else if (expand && is_parameter(str))
-		strncat(s, str->value, str->value_len);
+		ft_strncat(s, str->value, str->value_len);
 	else if (expand && str->kind == STR_DOUBLE)
 		strcat_expanded_double_quote(s, str);
 	return (joinstr(s, str->next, expand));
@@ -90,12 +90,12 @@ static void	strcat_expanded_double_quote(char *s, t_str *str)
 	while (param)
 	{
 		// plain text
-		strncat(s, p, param->pos - p);
+		ft_strncat(s, p, param->pos - p);
 		// parameter expansion
 		if (param->value)
-			strncat(s, param->value, param->value_len);
+			ft_strncat(s, param->value, param->value_len);
 		p = param->pos + param->len;
 		param = param->next;
 	}
-	strncat(s, p, (str->len - 1) - (p - str->pos));
+	ft_strncat(s, p, (str->len - 1) - (p - str->pos));
 }

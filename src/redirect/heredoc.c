@@ -6,11 +6,12 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/21 14:01:00 by susami            #+#    #+#             */
-/*   Updated: 2022/12/22 17:24:14 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/24 09:41:01 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <stdio.h>
 #include <readline/readline.h>
 #include <stdlib.h>
 

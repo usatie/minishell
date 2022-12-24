@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/24 09:30:33 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/24 09:46:34 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,8 @@
 # include <unistd.h>
 # include <stddef.h>
 # include <stdbool.h>
-# include "libft.h"
-
-// for printf debug
-# include <stdio.h>
-# include <string.h>
 # include <signal.h>
+# include "libft.h"
 
 typedef struct s_env			t_env;
 typedef struct s_token			t_token;
@@ -159,6 +155,7 @@ struct s_pipeline {
 };
 
 // error.c
+void		ft_perror(const char *s);
 void		fatal_exit(char *s) __attribute__((noreturn));
 void		err_exit(char *s) __attribute__((noreturn));
 

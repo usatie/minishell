@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 22:45:36 by susami            #+#    #+#             */
-/*   Updated: 2022/12/22 22:46:08 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/24 09:51:23 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,9 @@ char	*search_path(char *cmd)
 	i = 0;
 	while (paths[i])
 	{
-		strcpy(path, paths[i]);
-		strcat(path, "/");
-		strcat(path, cmd);
+		ft_strlcpy(path, paths[i], PATH_MAX);
+		ft_strlcat(path, "/", PATH_MAX);
+		ft_strlcat(path, cmd, PATH_MAX);
 		if (access(path, X_OK) == 0)
 			return (path);
 		i++;

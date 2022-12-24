@@ -6,11 +6,12 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 13:20:08 by susami            #+#    #+#             */
-/*   Updated: 2022/12/22 16:30:12 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/24 09:40:10 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <stdio.h>
 #include <readline/readline.h>
 
 static int	check_state(void);

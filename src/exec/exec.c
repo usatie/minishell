@@ -6,13 +6,14 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/21 22:53:54 by susami            #+#    #+#             */
-/*   Updated: 2022/12/23 12:53:54 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/24 09:50:40 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include <fcntl.h>
 #include "minishell.h"
+#include <stdio.h>
 #include <readline/readline.h>
 
 static int	open_redirect_srcfd(t_pipeline *pipelines);
@@ -39,7 +40,7 @@ static int	open_redirect_srcfd(t_pipeline *pipelines)
 			err_exit("Unexpected Redirect kind");
 		if (rd->srcfd < 0)
 		{
-			perror(rd->path);
+			ft_perror(rd->path);
 			return (-1);
 		}
 		rd = rd->next;

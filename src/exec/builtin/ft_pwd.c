@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 09:26:48 by susami            #+#    #+#             */
-/*   Updated: 2022/12/22 14:09:59 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/24 09:51:38 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	ft_pwd(char *argv[])
 		ft_putendl_fd(cwd, STDOUT_FILENO);
 		return (0);
 	}
-	perror("pwd");
+	ft_perror("pwd");
 	return (1);
 }
 
@@ -44,8 +44,8 @@ static bool	is_pwd_valid(char *pwd)
 	struct stat	st1;
 	struct stat	st2;
 
-	bzero(&st1, sizeof(struct stat));
-	bzero(&st2, sizeof(struct stat));
+	ft_bzero(&st1, sizeof(struct stat));
+	ft_bzero(&st2, sizeof(struct stat));
 	stat(".", &st1);
 	stat(pwd, &st2);
 	if (st1.st_ino == st2.st_ino)

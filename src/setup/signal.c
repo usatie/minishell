@@ -6,14 +6,14 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 13:10:41 by susami            #+#    #+#             */
-/*   Updated: 2022/12/21 11:39:22 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/24 09:39:55 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 #include <stdlib.h>
-#include <signal.h>
+#include <stdio.h>
 #include <readline/readline.h>
 
 static void	sigint_handler(int signum);
