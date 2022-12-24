@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 14:21:05 by susami            #+#    #+#             */
-/*   Updated: 2022/12/24 23:00:53 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/24 23:51:09 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,13 +74,11 @@ int	interpret(char *line)
 int	main(void)
 {
 	char		*line;
-	extern int	_rl_echo_control_chars;
 
 	dup_environ();
 	init_env(&g_env);
 	setup_rl();
 	setup_signal();
-	_rl_echo_control_chars = 0;
 	g_env.status = 0;
 	while (1)
 	{
