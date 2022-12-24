@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/24 09:46:34 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/25 07:20:26 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,6 @@ struct s_node {
 	t_node		*next;
 	t_token		*tok;
 
-	pid_t		pid;
 	// ND_PIPE, ND_REDIR_*
 	t_node		*lhs;
 	t_node		*rhs;
