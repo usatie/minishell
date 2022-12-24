@@ -191,7 +191,9 @@ assert 'export bar \n env | grep bar'
 assert 'export foobar \n export | grep foobar'
 
 ## unset
-assert 'export foo=bar\nunset foo\necho $foo'
+assert 'export foo=bar \n unset foo \n echo $foo'
+assert 'export foo=bar \n unset foo \n export | grep foo'
+assert 'export foo     \n unset foo \n export | grep foo'
 
 ## echo
 assert 'echo'
