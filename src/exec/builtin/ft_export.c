@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 09:25:42 by susami            #+#    #+#             */
-/*   Updated: 2022/12/23 11:27:15 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/24 23:41:59 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,10 @@ static void	export_single_assignment(char *string)
 	{
 		// If already exists, do nothing
 		if (getenv(string))
+		{
+			free(string);
 			return ;
+		}
 		// If not exists, add to nameonly environ
 		if (putenv_name(string) < 0)
 			fatal_exit("putenv_name()");

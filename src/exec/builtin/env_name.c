@@ -6,10 +6,11 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/23 11:26:50 by susami            #+#    #+#             */
-/*   Updated: 2022/12/23 11:27:07 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/24 23:41:21 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdlib.h>
 #include "minishell.h"
 
 int	putenv_name(char *name)
@@ -27,7 +28,11 @@ int	putenv_name(char *name)
 	}
 	// Already exists
 	if (environ_name[i])
+	{
+		free(environ_name[i]);
+		environ_name[i] = name;
 		return (0);
+	}
 	// Insert
 	environ_name = (char **)ft_reallocf(environ_name,
 			(i + 2) * sizeof(char *), i * sizeof(char *));
@@ -52,6 +57,7 @@ int	unsetenv_name(char *name)
 		if (ft_strcmp(environ_name[i], name) == 0)
 		{
 			j = i;
+			free(environ_name[i]);
 			while (environ_name[j])
 			{
 				environ_name[j] = environ_name[j + 1];
