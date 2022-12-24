@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 09:24:54 by susami            #+#    #+#             */
-/*   Updated: 2022/12/22 19:06:08 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/24 23:48:21 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,16 @@
 
 int	ft_unset(char **argv)
 {
-	if (ft_unsetenv(argv[1]) < 0)
-		return (1);
+	int		i;
+
+	i = 1;
+	while (argv[i])
+	{
+		if (ft_unsetenv(argv[i]) < 0)
+			return (1);
+		if (unsetenv_name(argv[i]) < 0)
+			return (1);
+		i++;
+	}
 	return (0);
 }
