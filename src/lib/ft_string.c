@@ -6,11 +6,10 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/21 15:38:04 by susami            #+#    #+#             */
-/*   Updated: 2022/12/22 21:26:16 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/24 09:58:55 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <ctype.h>
 #include "minishell.h"
 
 /*

@@ -6,12 +6,11 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 06:49:21 by susami            #+#    #+#             */
-/*   Updated: 2022/12/22 22:00:34 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/24 09:57:57 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include <string.h>
 #include "minishell.h"
 
 t_node	*new_node(t_node_kind kind, t_token *tok)

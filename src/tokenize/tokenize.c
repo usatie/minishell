@@ -6,13 +6,11 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 10:25:51 by susami            #+#    #+#             */
-/*   Updated: 2022/12/22 17:33:30 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/24 09:58:26 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include <string.h>
-#include <ctype.h>
 #include "minishell.h"
 
 static bool		consume_blank(char **rest, char *line);

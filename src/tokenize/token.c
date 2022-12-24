@@ -6,12 +6,11 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 07:10:22 by susami            #+#    #+#             */
-/*   Updated: 2022/12/22 17:24:14 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/24 09:58:15 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include <string.h>
 #include "minishell.h"
 
 t_token	*new_token(char *pos, size_t len, t_token_kind kind)
