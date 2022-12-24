@@ -6,10 +6,11 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 21:11:17 by susami            #+#    #+#             */
-/*   Updated: 2022/12/23 00:31:02 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/24 23:04:37 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdlib.h>
 #include <errno.h>
 #include "minishell.h"
 
@@ -18,6 +19,7 @@ void	internal_unsetenv(char **ep)
 	char	**sp;
 
 	sp = ep;
+	free(*ep);
 	while (*sp)
 	{
 		*sp = *(sp + 1);
