@@ -9,7 +9,7 @@ cleanup() {
 
 
 test_sigint() {
-	printf "%-50s:" "[test_sigint] Please press Ctrl-C 2 times"
+	printf "%-80s:" "[test_sigint] Please press Ctrl-C 2 times"
 
 	echo "int main() { while (1) ; }" | gcc -xc -o test_sigint -
 	echo "./test_sigint" | ./minishell 2>&- || actual=$?
@@ -23,7 +23,7 @@ test_sigint() {
 }
 
 assert() {
-	printf "%-50s:" "[$1]"
+	printf "%-80s:" "[$1]"
 
 	echo -e "$1" | ./minishell >out 2>/dev/null
 	actual=$?
@@ -211,6 +211,37 @@ assert 'exit hello'
 assert 'exit 1 2 3'
 assert 'exit 123abc'
 assert 'exit 9999999999999999999999'
+
+# Edge case
+## search_path
+### executable in current directory
+cat >hello.sh <<EOF
+#!/bin/bash
+echo hello
+EOF
+assert 'hello.sh'
+assert './hello.sh'
+chmod +x hello.sh
+assert 'hello.sh'
+assert './hello.sh'
+mv hello.sh ls
+assert 'export PATH=.:/bin \n ls src'
+assert 'export PATH=/bin:. \n ls src'
+rm -f ls
+### same name in two directories
+mkdir -p /tmp/a /tmp/b
+echo -e '#!/bin/bash'"\necho hello a" >/tmp/a/hello.sh
+echo -e '#!/bin/bash'"\necho hello b" >/tmp/b/hello.sh
+assert 'unset PATH \n export PATH=/tmp/a:/tmp/b \n hello.sh'
+assert 'unset PATH \n export PATH=/tmp/b:/tmp/a \n hello.sh'
+chmod +x /tmp/a/hello.sh
+assert 'unset PATH \n export PATH=/tmp/a:/tmp/b \n hello.sh'
+assert 'unset PATH \n export PATH=/tmp/b:/tmp/a \n hello.sh'
+chmod -x /tmp/a/hello.sh
+chmod +x /tmp/b/hello.sh
+assert 'unset PATH \n export PATH=/tmp/a:/tmp/b \n hello.sh'
+assert 'unset PATH \n export PATH=/tmp/b:/tmp/a \n hello.sh'
+rm -rf /tmp/a /tmp/b
 
 test_sigint
 

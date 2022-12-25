@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 14:21:05 by susami            #+#    #+#             */
-/*   Updated: 2022/12/24 23:51:09 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/25 12:34:05 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 
 t_env		g_env = {};
 
-void	dup_environ(void)
+void	init_environ(void)
 {
 	extern char	**environ;
 	int			i;
@@ -75,7 +75,7 @@ int	main(void)
 {
 	char		*line;
 
-	dup_environ();
+	init_environ();
 	init_env(&g_env);
 	setup_rl();
 	setup_signal();

@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/25 07:24:52 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/25 11:22:07 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,8 +155,10 @@ struct s_pipeline {
 
 // error.c
 void		ft_perror(const char *s);
+void		ft_custom_perror(const char *s, const char *error_msg);
 void		fatal_exit(char *s) __attribute__((noreturn));
 void		err_exit(char *s) __attribute__((noreturn));
+void		err_exit3(const char *s, const char *error_msg, int status);
 
 // tokenizer.c
 bool		startswith(const char *p, const char *q);
