@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 13:20:08 by susami            #+#    #+#             */
-/*   Updated: 2022/12/24 23:51:12 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/25 21:57:35 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,19 @@ void	setup_rl(void)
 
 static int	check_state(void)
 {
-	if (!g_env.sig)
-		return (0);
-	g_env.sig = 0;
-	write(STDERR_FILENO, "\n", 1);
-	rl_on_new_line(); // Regenerate the prompt on a newline
-	rl_replace_line("", 0); // Clear the previous text
-	rl_redisplay(); // Refresh the prompt
+	if (g_env.sig == 0)
+		;
+	else if (g_env.sig == SIGQUIT)
+		g_env.sig = 0;
+	else if (g_env.sig == SIGINT)
+	{
+		g_env.sig = 0;
+		write(STDERR_FILENO, "\n", 1);
+		rl_on_new_line(); // Regenerate the prompt on a newline
+		rl_replace_line("", 0); // Clear the previous text
+		rl_redisplay(); // Refresh the prompt
+	}
+	else
+		fatal_exit("Caught unexpected signal");
 	return (0);
 }
