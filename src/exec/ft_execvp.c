@@ -6,19 +6,20 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 23:55:55 by susami            #+#    #+#             */
-/*   Updated: 2022/12/25 12:20:28 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/25 15:18:31 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
+#include <sys/stat.h>
 #include "minishell.h"
 
-// ./hoge
-// /path/to/file
-// path/to/file
-static bool	contains_slash(const char *s)
+static bool	is_regular_file(const char *path)
 {
-	return (ft_strchr(s, '/') != NULL);
+	struct stat	path_stat;
+
+	stat(path, &path_stat);
+	return (S_ISREG(path_stat.st_mode));
 }
 
 void	ft_execvp(char *file, char *argv[])
@@ -35,11 +36,11 @@ void	ft_execvp(char *file, char *argv[])
 		exec_builtin(argv);
 		exit(0);
 	}
-	if (contains_slash(file))
+	if (file[0] == '.' || file[0] == '/')
 		path = file;
 	else
 		path = search_path(file);
-	if (path == NULL)
+	if (path == NULL || !is_regular_file(path))
 		err_exit3(file, "command not found", 127);
 	if (access(path, F_OK) < 0)
 		err_exit3(path, "No such file or directory", 127);
