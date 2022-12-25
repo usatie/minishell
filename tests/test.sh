@@ -180,6 +180,8 @@ assert 'pwd'
 assert 'cd\npwd'
 assert 'cd src\npwd'
 assert 'cd /etc\npwd'
+assert 'cd . \n pwd \n echo $PWD $OLDPWD'
+assert 'cd .. \n pwd \n echo $PWD $OLDPWD'
 
 ## env
 # assert 'env' # output doesn't match bash's
