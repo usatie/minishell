@@ -6,14 +6,23 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 22:45:36 by susami            #+#    #+#             */
-/*   Updated: 2022/12/25 12:22:01 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/25 14:55:22 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <limits.h>
 #include <stdlib.h>
+#include <sys/stat.h>
 #include "libft.h"
 #include "minishell.h"
+
+static bool	is_regular_file(const char *path)
+{
+	struct stat	path_stat;
+
+	stat(path, &path_stat);
+	return (S_ISREG(path_stat.st_mode));
+}
 
 static char	*search_x_path(char *cmd, char **paths)
 {
@@ -27,7 +36,7 @@ static char	*search_x_path(char *cmd, char **paths)
 		ft_strlcpy(path, paths[i], PATH_MAX);
 		ft_strlcat(path, "/", PATH_MAX);
 		ft_strlcat(path, cmd, PATH_MAX);
-		if (access(path, X_OK) == 0)
+		if (access(path, X_OK) == 0 && is_regular_file(path))
 			return (path);
 		i++;
 	}
@@ -47,7 +56,7 @@ static char	*search_r_path(char *cmd, char **paths)
 		ft_strlcpy(path, paths[i], PATH_MAX);
 		ft_strlcat(path, "/", PATH_MAX);
 		ft_strlcat(path, cmd, PATH_MAX);
-		if (access(path, R_OK) == 0)
+		if (access(path, R_OK) == 0 && is_regular_file(path))
 			return (path);
 		i++;
 	}
@@ -70,5 +79,7 @@ char	*search_path(char *cmd)
 	if (path)
 		return (path);
 	path = search_r_path(cmd, paths);
-	return (path);
+	if (path)
+		return (path);
+	return (NULL);
 }

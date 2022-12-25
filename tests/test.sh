@@ -232,16 +232,20 @@ rm -f ls
 mkdir -p /tmp/a /tmp/b
 echo -e '#!/bin/bash'"\necho hello a" >/tmp/a/hello.sh
 echo -e '#!/bin/bash'"\necho hello b" >/tmp/b/hello.sh
-assert 'unset PATH \n export PATH=/tmp/a:/tmp/b \n hello.sh'
-assert 'unset PATH \n export PATH=/tmp/b:/tmp/a \n hello.sh'
+assert 'export PATH=/tmp/a:/tmp/b \n hello.sh'
+assert 'export PATH=/tmp/b:/tmp/a \n hello.sh'
 chmod +x /tmp/a/hello.sh
-assert 'unset PATH \n export PATH=/tmp/a:/tmp/b \n hello.sh'
-assert 'unset PATH \n export PATH=/tmp/b:/tmp/a \n hello.sh'
+assert 'export PATH=/tmp/a:/tmp/b \n hello.sh'
+assert 'export PATH=/tmp/b:/tmp/a \n hello.sh'
 chmod -x /tmp/a/hello.sh
 chmod +x /tmp/b/hello.sh
-assert 'unset PATH \n export PATH=/tmp/a:/tmp/b \n hello.sh'
-assert 'unset PATH \n export PATH=/tmp/b:/tmp/a \n hello.sh'
+assert 'export PATH=/tmp/a:/tmp/b \n hello.sh'
+assert 'export PATH=/tmp/b:/tmp/a \n hello.sh'
 rm -rf /tmp/a /tmp/b
+
+assert '""'
+assert '..'
+# assert '.' # Bash's `.` is a builtin command
 
 test_sigint
 
