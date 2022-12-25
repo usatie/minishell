@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/25 11:22:07 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/26 08:48:50 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -212,7 +212,6 @@ bool		at_eof(const t_token *tok);
 
 // pipeline.c
 t_pipeline	*new_pipeline(void);
-t_pipeline	*connect_pipeline(t_pipeline *lhs, t_pipeline *rhs);
 
 // gen.c
 t_pipeline	*gen(t_node *node);
@@ -238,6 +237,7 @@ char		*search_path(char *cmd);
 // exec/ft_execvp.c
 void		ft_execvp(char *file, char *argv[]);
 // exec/pipe.c
+void		prepare_pipes_before_fork(t_pipeline *pipeline);
 void		prepare_pipes_child(t_pipeline *pipeline);
 void		prepare_pipes_parent(t_pipeline *pipeline);
 // exec/exec_pipelines.c

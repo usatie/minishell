@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/11 14:32:27 by susami            #+#    #+#             */
-/*   Updated: 2022/12/23 00:26:02 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/26 08:28:38 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,16 @@ static t_redirect	*gen_redirect(t_node *node);
 
 t_pipeline	*gen(t_node *node)
 {
+	t_pipeline	*pipeline;
+
 	if (node->kind == ND_CMD)
 		return (gen_pipeline(node));
 	else if (node->kind == ND_PIPE)
-		return (connect_pipeline(gen(node->lhs), gen(node->rhs)));
+	{
+		pipeline = gen(node->lhs);
+		pipeline->next = gen(node->rhs);
+		return (pipeline);
+	}
 	fatal_exit("Unexpected Node\n");
 }
 

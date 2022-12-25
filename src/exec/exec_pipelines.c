@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 10:26:01 by susami            #+#    #+#             */
-/*   Updated: 2022/12/25 22:11:31 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/26 08:43:59 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ static void	forkexec(t_pipeline *pipeline)
 {
 	if (!pipeline)
 		return ;
+	prepare_pipes_before_fork(pipeline);
 	pipeline->pid = ft_fork();
 	// child
 	if (pipeline->pid == 0)

@@ -35,7 +35,7 @@ SRCS      = src/minishell.c\
 			src/parse/simple_command.c\
 			src/parse/pipeline.c\
 			src/parse/redirection.c\
-			src/pipeline/pipeline.c\
+			src/gen/pipeline.c\
 			src/gen/gen.c\
 			src/expand/expand.c\
 			src/expand/expand_line.c\
