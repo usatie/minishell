@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 09:26:21 by susami            #+#    #+#             */
-/*   Updated: 2022/12/26 21:10:50 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/26 22:18:22 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,28 +81,28 @@ static void	setpwd(char *oldpwd, char *path)
 	char	newpath[PATH_MAX];
 
 	if (path[0] == '/')
-		ft_setenv("PWD", path, 1);
+		ft_strlcpy(newpath, "/", PATH_MAX);
 	else
-	{
 		ft_strlcpy(newpath, oldpwd, PATH_MAX);
-		while (*path)
+	while (*path)
+	{
+		if (*path == '/')
+			path++;
+		else if (consume(&path, path, "./"))
+			;
+		else if (ft_strcmp(path, ".") == 0)
+			path += 1;
+		else if (consume(&path, path, "../"))
+			delete_last(newpath);
+		else if (ft_strcmp(path, "..") == 0)
 		{
-			if (consume(&path, path, "/") || consume(&path, path, "./"))
-				;
-			else if (ft_strcmp(path, ".") == 0)
-				path += 1;
-			else if (consume(&path, path, "../"))
-				delete_last(newpath);
-			else if (ft_strcmp(path, "..") == 0)
-			{
-				path += 2;
-				delete_last(newpath);
-			}
-			else
-				append(newpath, &path, path);
+			path += 2;
+			delete_last(newpath);
 		}
-		ft_setenv("PWD", newpath, 1);
+		else
+			append(newpath, &path, path);
 	}
+	ft_setenv("PWD", newpath, 1);
 }
 
 // Delete the last element of the path
@@ -124,6 +124,29 @@ static void	delete_last(char *path)
 	path[last_slash_idx] = '\0';
 }
 
+bool	endswith(const char *p, const char *q)
+{
+	const char	*s1;
+	const char	*s2;
+
+	s1 = p;
+	s2 = q;
+	if (*p == '\0')
+		return (*q == '\0');
+	while (*p)
+		p++;
+	while (*q)
+		q++;
+	while (p != s1 && q != s2)
+	{
+		if (*p != *q)
+			return (false);
+		p--;
+		q--;
+	}
+	return (*p == *q);
+}
+
 static void	append(char *dst, char **rest, char *src)
 {
 	int	len;
@@ -131,7 +154,8 @@ static void	append(char *dst, char **rest, char *src)
 	len = 0;
 	while (src[len] && src[len] != '/')
 		len++;
-	ft_strlcat(dst, "/", PATH_MAX);
+	if (!endswith(dst, "/"))
+		ft_strlcat(dst, "/", PATH_MAX);
 	ft_strncat(dst, src, len);
 	*rest = src + len;
 }

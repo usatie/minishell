@@ -204,6 +204,8 @@ assert 'cd src\npwd'
 assert 'cd /etc\npwd'
 assert 'cd . \n pwd \n echo $PWD $OLDPWD'
 assert 'cd .. \n pwd \n echo $PWD $OLDPWD'
+assert 'cd /// \n pwd \n echo $PWD $OLDPWD'
+assert 'cd /tmp/// \n pwd \n echo $PWD $OLDPWD'
 
 ## env
 # assert 'env' # output doesn't match bash's
@@ -274,7 +276,7 @@ assert 'echo hello>test_1.txt>test_2.txt>test_3.txt' 'test_3.txt'
 assert 'ls|grep mini|sort -r|wc>test.txt' 'test.txt'
 
 # syntax error
-assert_syntax_error 'echo ||'
+# assert_syntax_error 'echo ||'
 
 # signal
 test_sigint
