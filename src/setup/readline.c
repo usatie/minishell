@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 13:20:08 by susami            #+#    #+#             */
-/*   Updated: 2022/12/25 21:57:35 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/26 11:10:20 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,6 @@ static int	check_state(void)
 {
 	if (g_env.sig == 0)
 		;
-	else if (g_env.sig == SIGQUIT)
-		g_env.sig = 0;
 	else if (g_env.sig == SIGINT)
 	{
 		g_env.sig = 0;

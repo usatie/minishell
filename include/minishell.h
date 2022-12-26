@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/26 08:48:50 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/26 11:10:12 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -267,6 +267,8 @@ bool		is_number(const char *s);
 
 // signal.c
 void		setup_signal(void);
+void		ignore_signal(int signum);
+void		default_signal(int signum);
 
 // readline.c
 void		setup_rl(void);

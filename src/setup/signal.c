@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 13:10:41 by susami            #+#    #+#             */
-/*   Updated: 2022/12/25 21:58:19 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/26 11:10:06 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,11 @@
 
 static void	handler(int signum);
 static void	setup_sigint(void);
-static void	setup_sigquit(void);
 
 void	setup_signal(void)
 {
 	setup_sigint();
-	setup_sigquit();
+	ignore_signal(SIGQUIT);
 }
 
 static void	handler(int signum)
@@ -42,13 +41,24 @@ static void	setup_sigint(void)
 		exit(1);
 }
 
-static void	setup_sigquit(void)
+void	ignore_signal(int signum)
 {
 	struct sigaction	sa_ignore;
 
-	sa_ignore.sa_handler = handler;
+	sa_ignore.sa_handler = SIG_IGN;
 	sa_ignore.sa_flags = 0;
 	sigemptyset(&sa_ignore.sa_mask);
-	if (sigaction(SIGQUIT, &sa_ignore, NULL) < 0)
+	if (sigaction(signum, &sa_ignore, NULL) < 0)
+		exit(1);
+}
+
+void	default_signal(int signum)
+{
+	struct sigaction	sa_ignore;
+
+	sa_ignore.sa_handler = SIG_DFL;
+	sa_ignore.sa_flags = 0;
+	sigemptyset(&sa_ignore.sa_mask);
+	if (sigaction(signum, &sa_ignore, NULL) < 0)
 		exit(1);
 }
