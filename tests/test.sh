@@ -22,6 +22,28 @@ test_sigint() {
 	cleanup
 }
 
+assert_syntax_error() {
+	printf "%-80s:" "[$1]"
+	echo -e "$1" | ./minishell >out 2>/dev/null
+	touch cmp
+	actual=$?
+	expected=258
+	diff out cmp && echo -n "diff OK" || terminate=1
+	if [ "$terminate" = "1" ]; then
+		echo "diff NG"
+		cleanup $2
+		exit
+	fi
+	if [ "$actual" = "$expected" ]; then
+		echo -n ", status OK"
+	else
+		echo ", status NG. Expected $expected, actual is $actual"
+		cleanup $2
+		exit
+	fi
+	cleanup
+}
+
 assert() {
 	printf "%-80s:" "[$1]"
 
@@ -251,6 +273,10 @@ assert '..'
 assert 'echo hello>test_1.txt>test_2.txt>test_3.txt' 'test_3.txt'
 assert 'ls|grep mini|sort -r|wc>test.txt' 'test.txt'
 
+# syntax error
+assert_syntax_error 'echo ||'
+
+# signal
 test_sigint
 
 echo "OK :D"
