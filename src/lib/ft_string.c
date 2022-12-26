@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/21 15:38:04 by susami            #+#    #+#             */
-/*   Updated: 2022/12/24 09:58:55 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/26 15:20:41 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,12 +58,14 @@ bool	is_alpha_num_under(char c)
 }
 
 // | & ; ( ) < > space tab
+// & ; ( ) is not supported
 bool	is_metachr(char c)
 {
-	return (ft_strchr("<>", c) || is_blank(c));
+	return (ft_strchr("|<>", c) || is_blank(c));
 }
 
 // || & && ; ;; ( ) | <newline>
+// || & && ; ;; ( ) is not supported
 bool	is_control_operator(const char *s)
 {
 	return (startswith(s, "&&")

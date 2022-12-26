@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 11:34:21 by susami            #+#    #+#             */
-/*   Updated: 2022/12/22 21:29:34 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/26 15:19:57 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,7 @@ t_str	*variable(char **rest, char *line)
 	char	*start;
 
 	start = line;
-	if (*line != '$')
-		fatal_exit("Expected $\n");
-	line++;
-	if (!is_alpha_under(*line))
-		fatal_exit("Expected alphabetic character or underscore.");
-	line++;
+	line += 2; // '$' + '[a-zA-z_]' 
 	while (is_alpha_num_under(*line))
 		line++;
 	str = new_str(STR_VAR, start, line - start, NULL);
@@ -42,9 +37,12 @@ t_str	*variable(char **rest, char *line)
 t_str	*special_parameter(char **rest, char *line)
 {
 	t_str	*str;
+	char	*start;
 
-	str = new_str(STR_SPECIAL_PARAM, line, 2, NULL);
-	*rest = line + 2;
+	start = line;
+	line += 2; // '$' + '?'
+	str = new_str(STR_SPECIAL_PARAM, start, 2, NULL);
+	*rest = line;
 	return (str);
 }
 
@@ -89,6 +87,7 @@ t_str	*double_quotes(char **rest, char *line)
 		else
 			line++;
 	}
+	// How to handle unclosed quote? -> treat it as plain text
 	if (*line != '"')
 	{
 		free_str(params);
@@ -100,20 +99,16 @@ t_str	*double_quotes(char **rest, char *line)
 	return (new_str(STR_DOUBLE, start, line - start, params));
 }
 
-// Read until next punctuator or space
+// Read until next quotes/parameters/metacharacter
 t_str	*plain_text(char **rest, char *line)
 {
 	t_str	*str;
 	char	*start;
 
 	start = line;
-	while (*line != '\0' && is_unquoted(line))
+	while (*line != '\0' && is_plain_text(line))
 		line++;
-	if (line - start > 0)
-	{
-		str = new_str(STR_PLAIN, start, line - start, NULL);
-		*rest = line;
-		return (str);
-	}
-	fatal_exit("Unexpected character\n");
+	str = new_str(STR_PLAIN, start, line - start, NULL);
+	*rest = line;
+	return (str);
 }

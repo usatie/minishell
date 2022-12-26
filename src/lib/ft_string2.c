@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 21:24:32 by susami            #+#    #+#             */
-/*   Updated: 2022/12/22 21:28:14 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/26 15:18:20 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,13 +112,13 @@ bool	is_special_param(const char *s)
 	return (*s == '$' && is_specialchr(s[1]));
 }
 
-bool	is_unquoted(const char *s)
+bool	is_plain_text(const char *s)
 {
 	return (*s != '\"'
 		&& *s != '\''
-		&& !is_metachr(*s)
 		&& !is_variable(s)
-		&& !is_control_operator(s));
+		&& !is_special_param(s)
+		&& !is_metachr(*s));
 }
 
 bool	is_number(const char *s)

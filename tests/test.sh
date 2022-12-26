@@ -248,6 +248,8 @@ rm -rf /tmp/a /tmp/b
 assert '""'
 assert '..'
 # assert '.' # Bash's `.` is a builtin command
+assert 'echo hello>test_1.txt>test_2.txt>test_3.txt' 'test_3.txt'
+assert 'ls|grep mini|sort -r|wc>test.txt' 'test.txt'
 
 test_sigint
 

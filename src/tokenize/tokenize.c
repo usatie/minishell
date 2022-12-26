@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 10:25:51 by susami            #+#    #+#             */
-/*   Updated: 2022/12/24 09:58:26 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/26 14:52:46 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ static t_token	*string(char **rest, char *line)
 
 	tok = new_token(line, 0, TK_STRING);
 	cur = &head;
-	while (*line && !is_blank(*line))
+	while (*line && !is_metachr(*line))
 	{
 		if (*line == '\'')
 			cur->next = single_quotes(&line, line);
