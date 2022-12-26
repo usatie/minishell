@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 14:21:05 by susami            #+#    #+#             */
-/*   Updated: 2022/12/25 12:34:05 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/26 21:52:09 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ t_env		g_env = {};
 void	init_environ(void)
 {
 	extern char	**environ;
+	char		**dup;
 	int			i;
 
 	i = 0;
@@ -35,6 +36,10 @@ void	init_environ(void)
 			fatal_exit("ft_strdup");
 		i++;
 	}
+	// To guarantee environ is allocated by this process
+	dup = malloc(sizeof(char *) * (i + 1));
+	ft_memmove(dup, environ, sizeof(char *) * (i + 1));
+	environ = dup;
 }
 
 void	init_env(t_env *e)

@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 09:26:21 by susami            #+#    #+#             */
-/*   Updated: 2022/12/25 21:45:57 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/26 21:10:50 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,11 @@ int	ft_cd(char *argv[])
 	char	*pwd;
 
 	path = argv[1];
-	if (!path)
+	if (path == NULL)
 		path = getenv("HOME");
-	if (!path)
+	if (path == NULL)
 	{
-		ft_perror("getenv");
+		ft_custom_perror("cd", "HOME not set");
 		return (1);
 	}
 	if (chdir(path) < 0)
@@ -57,8 +57,21 @@ int	ft_cd(char *argv[])
 	pwd = getenv("PWD");
 	if (pwd)
 		ft_setenv("OLDPWD", pwd, 1);
-	else if (getcwd(cwd, PATH_MAX))
+	else
+	{
+		if (getcwd(cwd, PATH_MAX) == NULL)
+		{
+			ft_perror("getcwd");
+			return (1);
+		}
 		ft_setenv("OLDPWD", cwd, 1);
+		pwd = ft_strdup(cwd);
+		if (pwd == NULL)
+		{
+			ft_perror("ft_strdup");
+			return (1);
+		}
+	}
 	setpwd(pwd, path);
 	return (0);
 }
