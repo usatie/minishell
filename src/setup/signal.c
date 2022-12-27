@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 13:10:41 by susami            #+#    #+#             */
-/*   Updated: 2022/12/27 15:59:05 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/27 16:33:53 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 #include <stdio.h>
 #include <readline/readline.h>
 
-static void	handler(int signum);
 static void	setup_sigint(void);
 
 void	setup_signal(void)

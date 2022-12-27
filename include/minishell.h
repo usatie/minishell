@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/27 17:32:33 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/27 17:33:28 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,13 @@ typedef enum e_redirect_kind	t_redirect_kind;
 extern t_env					g_env;
 
 struct s_env {
-	int				status;
-	char			status_str[12];
-	sig_atomic_t	sig;
-	bool			syntax_error;
-	bool			heredoc_interrupted;
-	char			**environ_name;
-	char			**environ;
+	int						status;
+	char					status_str[12];
+	volatile sig_atomic_t	sig;
+	bool					syntax_error;
+	bool					heredoc_interrupted;
+	char					**environ_name;
+	char					**environ;
 };
 
 enum e_token_kind {
