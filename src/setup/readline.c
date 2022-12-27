@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 13:20:08 by susami            #+#    #+#             */
-/*   Updated: 2022/12/26 11:10:20 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/27 16:42:08 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,6 @@ static int	check_state(void)
 		rl_redisplay(); // Refresh the prompt
 	}
 	else
-		fatal_exit("Caught unexpected signal");
+		impl_err_exit("check_state", "Caught unexpected signal");
 	return (0);
 }

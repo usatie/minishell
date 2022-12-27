@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/11 14:32:27 by susami            #+#    #+#             */
-/*   Updated: 2022/12/26 08:28:38 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/27 16:43:59 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@ t_pipeline	*gen(t_node *node)
 		pipeline->next = gen(node->rhs);
 		return (pipeline);
 	}
-	fatal_exit("Unexpected Node\n");
+	else
+		impl_err_exit("gen", "Unexpected Node kind");
 }
 
 static t_pipeline	*gen_pipeline(t_node *node)
@@ -86,5 +87,5 @@ static t_redirect	*gen_redirect(t_node *node)
 		return (rd);
 	}
 	else
-		fatal_exit("Unexpected Node Kind");
+		impl_err_exit("gen_redirect", "Unexpected Node kind");
 }

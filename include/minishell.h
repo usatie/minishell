@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/27 17:33:28 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/27 17:33:51 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,6 +160,8 @@ void		ft_custom_perror(const char *location, const char *error_msg);
 void		fatal_exit(char *s)
 			__attribute__((noreturn));
 void		err_exit(const char *location, const char *error_msg, int status)
+			__attribute__((noreturn));
+void		impl_err_exit(const char *location, const char *error_msg)
 			__attribute__((noreturn));
 
 // tokenizer.c

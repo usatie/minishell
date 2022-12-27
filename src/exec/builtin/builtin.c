@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 13:09:50 by susami            #+#    #+#             */
-/*   Updated: 2022/12/24 09:57:50 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/27 16:47:27 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int	exec_builtin(char **argv)
 	else if (ft_strcmp(argv[0], "echo") == 0)
 		status = ft_echo(argv);
 	else
-		fatal_exit("Unknown Builtin");
+		impl_err_exit("exec_builtin", "Unknown Builtin");
 	// Restore stdin
 	ft_dup2(tmpfd, STDIN_FILENO);
 	return (status);

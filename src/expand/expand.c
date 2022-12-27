@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 06:45:04 by susami            #+#    #+#             */
-/*   Updated: 2022/12/27 09:26:15 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/27 16:45:15 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ static void	expand_special_parameter(t_str *s)
 		s->value_len = ft_strlen(s->value);
 	}
 	else
-		fatal_exit("Unexpected special parameter");
+		impl_err_exit("expand_special_parameter", "Unexpected t_str");
 }
 
 void	expand_str(t_str *s)

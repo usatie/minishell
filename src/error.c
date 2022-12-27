@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/09 15:03:49 by susami            #+#    #+#             */
-/*   Updated: 2022/12/27 16:09:04 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/27 16:48:38 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "minishell.h"
 
 #define PERROR_PREFIX "minishell: "
+#define IMPL_ERROR_PREFIX "Implementation Error: "
 
 void	ft_perror(const char *s)
 {
@@ -34,6 +35,13 @@ void	ft_custom_perror(const char *location, const char *error_msg)
 void	fatal_exit(char *s)
 {
 	ft_perror(s);
+	exit(1);
+}
+
+void	impl_err_exit(const char *location, const char *error_msg)
+{
+	write(STDERR_FILENO, IMPL_ERROR_PREFIX, sizeof(IMPL_ERROR_PREFIX));
+	ft_custom_perror(location, error_msg);
 	exit(1);
 }
 
