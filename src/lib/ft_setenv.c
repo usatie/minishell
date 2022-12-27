@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 21:09:53 by susami            #+#    #+#             */
-/*   Updated: 2022/12/22 21:10:13 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/27 09:26:16 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	ft_setenv(const char *name, const char *value, int overwrite)
 		errno = EINVAL;
 		return (-1);
 	}
-	if (getenv(name) != NULL && overwrite == 0)
+	if (ft_getenv(name) != NULL && overwrite == 0)
 		return (0);
 	ft_unsetenv(name);
 	size = ft_strlen(name) + ft_strlen(value) + 2;

@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 09:26:21 by susami            #+#    #+#             */
-/*   Updated: 2022/12/26 22:18:22 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/27 09:26:16 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	ft_cd(char *argv[])
 
 	path = argv[1];
 	if (path == NULL)
-		path = getenv("HOME");
+		path = ft_getenv("HOME");
 	if (path == NULL)
 	{
 		ft_custom_perror("cd", "HOME not set");
@@ -54,7 +54,7 @@ int	ft_cd(char *argv[])
 		ft_perror("cd");
 		return (1);
 	}
-	pwd = getenv("PWD");
+	pwd = ft_getenv("PWD");
 	if (pwd)
 		ft_setenv("OLDPWD", pwd, 1);
 	else

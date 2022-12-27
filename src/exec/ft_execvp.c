@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 23:55:55 by susami            #+#    #+#             */
-/*   Updated: 2022/12/25 15:18:31 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/27 09:30:40 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,7 @@ static bool	is_regular_file(const char *path)
 
 void	ft_execvp(char *file, char *argv[])
 {
-	extern char	**environ;
-	char		*path;
+	char	*path;
 
 	// Empty command
 	if (file == NULL)
@@ -47,6 +46,6 @@ void	ft_execvp(char *file, char *argv[])
 	if (access(path, X_OK) < 0)
 		err_exit3(path, "Permission denied", 126);
 	// Execute
-	execve(path, argv, environ);
+	execve(path, argv, g_env.environ);
 	fatal_exit(path);
 }

@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 06:45:04 by susami            #+#    #+#             */
-/*   Updated: 2022/12/24 09:37:27 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/27 09:26:15 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static void	expand_variable(t_str *s)
 	if (s->value)
 		return ;
 	name = ft_strndup(s->pos + 1, s->len - 1);
-	s->value = getenv(name);
+	s->value = ft_getenv(name);
 	if (s->value)
 		s->value_len = ft_strlen(s->value);
 	free(name);

@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/26 15:15:55 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/27 09:25:03 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ struct s_env {
 	bool			syntax_error;
 	bool			heredoc_interrupted;
 	char			**environ_name;
+	char			**environ;
 };
 
 enum e_token_kind {
@@ -250,6 +251,7 @@ void		ft_dup2(int oldfd, int newfd);
 int			ft_setenv(const char *name, const char *value, int overwrite);
 int			ft_unsetenv(const char *name);
 int			ft_putenv(char *string);
+char		*ft_getenv(const char *name);
 int			stashfd(int fd);
 bool		is_valid_fd(int fd);
 

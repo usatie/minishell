@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 09:25:42 by susami            #+#    #+#             */
-/*   Updated: 2022/12/24 23:41:59 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/27 09:32:12 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,13 @@
 
 static void	print_all_variables(void)
 {
-	extern char	**environ;
-	int			i;
+	int		i;
 
 	i = 0;
-	while (environ[i])
+	while (g_env.environ[i])
 	{
 		ft_putstr_fd("declare -x ", STDOUT_FILENO);
-		ft_putendl_fd(environ[i], STDOUT_FILENO);
+		ft_putendl_fd(g_env.environ[i], STDOUT_FILENO);
 		i++;
 	}
 	i = 0;
@@ -46,7 +45,7 @@ static void	export_single_assignment(char *string)
 	if (name_end == NULL)
 	{
 		// If already exists, do nothing
-		if (getenv(string))
+		if (ft_getenv(string))
 		{
 			free(string);
 			return ;

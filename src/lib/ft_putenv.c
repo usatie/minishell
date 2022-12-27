@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 21:56:29 by susami            #+#    #+#             */
-/*   Updated: 2022/12/23 08:48:37 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/27 09:33:05 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,13 @@
 
 static int	find_environ_idx(char *name, size_t name_len)
 {
-	extern char	**environ;
-	int			i;
+	int		i;
 
 	i = 0;
-	while (environ[i])
+	while (g_env.environ[i])
 	{
-		if (ft_strncmp(environ[i], name, name_len) == 0
-			&& environ[i][name_len] == '=')
+		if (ft_strncmp(g_env.environ[i], name, name_len) == 0
+			&& g_env.environ[i][name_len] == '=')
 			break ;
 		i++;
 	}
@@ -31,8 +30,9 @@ static int	find_environ_idx(char *name, size_t name_len)
 
 static int	internal_putenv(char *string, int i)
 {
-	extern char	**environ;
+	char	**environ;
 
+	environ = g_env.environ;
 	if (environ[i])
 	{
 		free(environ[i]);
@@ -46,6 +46,7 @@ static int	internal_putenv(char *string, int i)
 			return (-1);
 		environ[i] = string;
 		environ[i + 1] = NULL;
+		g_env.environ = environ;
 	}
 	return (0);
 }

@@ -1,27 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_env.c                                           :+:      :+:    :+:   */
+/*   ft_getenv.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/16 09:24:31 by susami            #+#    #+#             */
-/*   Updated: 2022/12/27 09:41:19 by susami           ###   ########.fr       */
+/*   Created: 2022/12/27 09:21:07 by susami            #+#    #+#             */
+/*   Updated: 2022/12/27 09:43:29 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "libft.h"
 
-int	ft_env(char **argv)
+char	*ft_getenv(const char *name)
 {
-	char	**environ;
-	int		i;
+	char	**ep;
+	size_t	name_len;
 
-	(void)argv;
-	environ = g_env.environ;
-	i = 0;
-	while (environ[i])
-		ft_putendl_fd(environ[i++], STDOUT_FILENO);
-	return (0);
+	ep = g_env.environ;
+	name_len = ft_strlen(name);
+	while (*ep)
+	{
+		if (ft_strncmp(name, *ep, name_len) == 0 && (*ep)[name_len] == '=')
+			return (*ep + name_len + 1);
+		ep++;
+	}
+	return (NULL);
 }

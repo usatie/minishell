@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 14:21:05 by susami            #+#    #+#             */
-/*   Updated: 2022/12/26 21:52:09 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/27 09:40:55 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@
 
 t_env		g_env = {};
 
-void	init_environ(void)
+// Never return NULL
+char	**environ_dup(void)
 {
 	extern char	**environ;
 	char		**dup;
@@ -30,16 +31,20 @@ void	init_environ(void)
 
 	i = 0;
 	while (environ[i])
+		i++;
+	dup = ft_calloc(i + 1, sizeof(char *));
+	if (dup == NULL)
+		fatal_exit("ft_calloc");
+	i = 0;
+	while (environ[i])
 	{
-		environ[i] = ft_strdup(environ[i]);
-		if (environ[i] == NULL)
+		dup[i] = ft_strdup(environ[i]);
+		if (dup[i] == NULL)
 			fatal_exit("ft_strdup");
 		i++;
 	}
-	// To guarantee environ is allocated by this process
-	dup = malloc(sizeof(char *) * (i + 1));
-	ft_memmove(dup, environ, sizeof(char *) * (i + 1));
-	environ = dup;
+	dup[i] = NULL;
+	return (dup);
 }
 
 void	init_env(t_env *e)
@@ -48,6 +53,7 @@ void	init_env(t_env *e)
 	e->environ_name = ft_calloc(1, sizeof(char *));
 	if (e->environ_name == NULL)
 		fatal_exit("ft_calloc");
+	e->environ = environ_dup();
 }
 
 int	interpret(char *line)
@@ -80,7 +86,6 @@ int	main(void)
 {
 	char		*line;
 
-	init_environ();
 	init_env(&g_env);
 	setup_rl();
 	setup_signal();

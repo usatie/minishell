@@ -12,6 +12,7 @@ SRCS      = src/minishell.c\
 			src/lib/ft_putenv.c\
 			src/lib/ft_setenv.c\
 			src/lib/ft_unsetenv.c\
+			src/lib/ft_getenv.c\
 			src/lib/ft_string.c\
 			src/lib/ft_string2.c\
 			src/lib/is_valid_fd.c\

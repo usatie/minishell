@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 09:26:48 by susami            #+#    #+#             */
-/*   Updated: 2022/12/24 09:51:38 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/27 09:26:16 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	ft_pwd(char *argv[])
 	char		*pwd;
 
 	(void)argv;
-	pwd = getenv("PWD");
+	pwd = ft_getenv("PWD");
 	if (pwd && is_pwd_valid(pwd))
 	{
 		ft_putendl_fd(pwd, STDOUT_FILENO);

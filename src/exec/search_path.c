@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 22:45:36 by susami            #+#    #+#             */
-/*   Updated: 2022/12/25 15:17:29 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/27 09:43:44 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ char	*search_path(char *cmd)
 	char	*envpath;
 	char	**paths;
 
-	envpath = getenv("PATH");
+	envpath = ft_getenv("PATH");
 	if (envpath == NULL)
 		return (NULL);
 	paths = ft_split(envpath, ':');
