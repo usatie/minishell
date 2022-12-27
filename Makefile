@@ -17,6 +17,7 @@ SRCS      = src/minishell.c\
 			src/lib/ft_string2.c\
 			src/lib/is_valid_fd.c\
 			src/lib/stashfd.c\
+			src/lib/filepath.c\
 			src/destructor/free_str.c\
 			src/destructor/free_tok.c\
 			src/destructor/free_node.c\
