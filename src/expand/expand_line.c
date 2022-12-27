@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/21 15:35:03 by susami            #+#    #+#             */
-/*   Updated: 2022/12/24 09:58:44 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/27 09:50:10 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,11 @@ t_str	*line_to_str(char *line)
 char	*expand_line(char *line)
 {
 	t_str	*str;
+	char	*expanded;
 
 	str = line_to_str(line);
 	expand_str(str);
-	return (str_to_word(str, true));
+	expanded = str_to_word(str, true);
+	free_str(str);
+	return (expanded);
 }
