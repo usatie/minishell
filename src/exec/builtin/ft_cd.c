@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 09:26:21 by susami            #+#    #+#             */
-/*   Updated: 2022/12/27 17:04:44 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/27 19:07:16 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,12 @@
 #include <limits.h>
 #include "minishell.h"
 
+static int	getpwd(char *dst, size_t dstsize);
+static int	get_cd_target_path(char *dst, size_t dstsize, char *arg);
+static void	append_path(char *dst, size_t dstsize, char *path);
 static void	delete_last(char *path);
-static void	append(char *dst, char **rest, char *src);
+static void	append(char *dst, size_t dstsize, char **rest, char *src);
 static bool	consume(char **rest, char *path, const char *elem);
-static void	setpwd(char *oldpwd, char *path);
 
 /*
 cd [-L|-P] [dir]
@@ -37,67 +39,81 @@ cd [-L|-P] [dir]
 */
 int	ft_cd(char *argv[])
 {
-	char	cwd[PATH_MAX];
 	char	path[PATH_MAX];
-	char	*pwd;
+	char	pwd[PATH_MAX];
+	char	newpwd[PATH_MAX];
 
-	if (argv[1] == NULL)
-	{
-		if (ft_getenv("HOME") == NULL)
-		{
-			ft_custom_perror("cd", "HOME not set");
-			return (1);
-		}
-		ft_strlcpy(path, ft_getenv("HOME"), PATH_MAX);
-	}
-	else if (ft_strcmp(argv[1], "-") == 0)
-	{
-		if (ft_getenv("OLDPWD") == NULL)
-		{
-			ft_custom_perror("cd", "OLDPWD not set");
-			return (1);
-		}
-		ft_strlcpy(path, ft_getenv("OLDPWD"), PATH_MAX);
-		ft_putendl_fd(path, STDOUT_FILENO);
-	}
-	else
-		ft_strlcpy(path, argv[1], PATH_MAX);
+	if (get_cd_target_path(path, PATH_MAX, argv[1]) < 0)
+		return (1);
+	if (getpwd(pwd, PATH_MAX) < 0)
+		return (1);
 	if (chdir(path) < 0)
 	{
 		ft_perror("cd");
-		return (1);
+		return (-1);
 	}
+	if (ft_setenv("OLDPWD", pwd, 1) < 0)
+		fatal_exit("ft_setenv");
+	// Initialize newpwd
+	if (path[0] == '/')
+		ft_strlcpy(newpwd, "/", PATH_MAX);
+	else
+		ft_strlcpy(newpwd, pwd, PATH_MAX);
+	// Append path to newpwd
+	append_path(newpwd, PATH_MAX, path);
+	if (ft_setenv("PWD", newpwd, 1) < 0)
+		fatal_exit("ft_setenv");
+	return (0);
+}
+
+static int	getpwd(char *dst, size_t dstsize)
+{
+	char	cwd[PATH_MAX];
+	char	*pwd;
+
 	pwd = ft_getenv("PWD");
-	if (pwd)
-	{
-		if (ft_setenv("OLDPWD", pwd, 1) < 0)
-			fatal_exit("ft_setenv");
-	}
+	if (pwd != NULL)
+		ft_strlcpy(dst, pwd, dstsize);
 	else
 	{
 		if (getcwd(cwd, PATH_MAX) == NULL)
 		{
 			ft_perror("getcwd");
-			return (1);
+			return (-1);
 		}
-		if (ft_setenv("OLDPWD", cwd, 1) < 0)
-			fatal_exit("ft_setenv");
-		pwd = ft_strdup(cwd);
-		if (pwd == NULL)
-			fatal_exit("ft_strdup");
+		ft_strlcpy(dst, cwd, dstsize);
 	}
-	setpwd(pwd, path);
 	return (0);
 }
 
-static void	setpwd(char *oldpwd, char *path)
+static int	get_cd_target_path(char *dst, size_t dstsize, char *arg)
 {
-	char	newpath[PATH_MAX];
-
-	if (path[0] == '/')
-		ft_strlcpy(newpath, "/", PATH_MAX);
+	if (arg == NULL)
+	{
+		if (ft_getenv("HOME") == NULL)
+		{
+			ft_custom_perror("cd", "HOME not set");
+			return (-1);
+		}
+		ft_strlcpy(dst, ft_getenv("HOME"), dstsize);
+	}
+	else if (ft_strcmp(arg, "-") == 0)
+	{
+		if (ft_getenv("OLDPWD") == NULL)
+		{
+			ft_custom_perror("cd", "OLDPWD not set");
+			return (-1);
+		}
+		ft_strlcpy(dst, ft_getenv("OLDPWD"), dstsize);
+		ft_putendl_fd(dst, STDOUT_FILENO);
+	}
 	else
-		ft_strlcpy(newpath, oldpwd, PATH_MAX);
+		ft_strlcpy(dst, arg, dstsize);
+	return (0);
+}
+
+static void	append_path(char *dst, size_t dstsize, char *path)
+{
 	while (*path)
 	{
 		if (*path == '/')
@@ -107,17 +123,15 @@ static void	setpwd(char *oldpwd, char *path)
 		else if (ft_strcmp(path, ".") == 0)
 			path += 1;
 		else if (consume(&path, path, "../"))
-			delete_last(newpath);
+			delete_last(dst);
 		else if (ft_strcmp(path, "..") == 0)
 		{
 			path += 2;
-			delete_last(newpath);
+			delete_last(dst);
 		}
 		else
-			append(newpath, &path, path);
+			append(dst, dstsize, &path, path);
 	}
-	if (ft_setenv("PWD", newpath, 1) < 0)
-		fatal_exit("ft_setenv");
 }
 
 // Delete the last element of the path
@@ -162,7 +176,7 @@ bool	endswith(const char *p, const char *q)
 	return (*p == *q);
 }
 
-static void	append(char *dst, char **rest, char *src)
+static void	append(char *dst, size_t dstsize, char **rest, char *src)
 {
 	int	len;
 
@@ -170,7 +184,7 @@ static void	append(char *dst, char **rest, char *src)
 	while (src[len] && src[len] != '/')
 		len++;
 	if (!endswith(dst, "/"))
-		ft_strlcat(dst, "/", PATH_MAX);
+		ft_strlcat(dst, "/", dstsize);
 	ft_strncat(dst, src, len);
 	*rest = src + len;
 }

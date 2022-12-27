@@ -207,6 +207,7 @@ assert 'cd .. \n pwd \n echo $PWD $OLDPWD'
 assert 'cd /// \n pwd \n echo $PWD $OLDPWD'
 assert 'cd /tmp/// \n pwd \n echo $PWD $OLDPWD'
 assert 'cd /tmp \n cd /etc \n cd - \n cd - \n cd - \n cd - \n'
+assert 'cd .. \n cd minishell/ \n unset PWD \n cd src/ \n cd .. \n cd -'
 
 ## env
 # assert 'env' # output doesn't match bash's
