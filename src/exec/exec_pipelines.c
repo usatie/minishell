@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 10:26:01 by susami            #+#    #+#             */
-/*   Updated: 2022/12/27 15:02:57 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/27 16:24:17 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,7 @@ static void	wait_pipelines(t_pipeline *pipelines, int *stat_loc)
 		{
 			if (errno == EINTR)
 				continue ;
-			else
-				fatal_exit("waitpid()");
+			fatal_exit("waitpid");
 		}
 		else if (wait_result == last_pid)
 			*stat_loc = status;

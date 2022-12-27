@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 21:51:40 by susami            #+#    #+#             */
-/*   Updated: 2022/12/24 09:40:44 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/27 16:19:16 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ char	*str_to_word(t_str *str, bool expand)
 
 	s = ft_calloc(wordlen(str, expand) + 1, sizeof(char));
 	if (s == NULL)
-		fatal_exit("malloc()");
+		fatal_exit("ft_calloc");
 	return (joinstr(s, str, expand));
 }
 

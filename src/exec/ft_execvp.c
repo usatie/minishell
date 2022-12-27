@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 23:55:55 by susami            #+#    #+#             */
-/*   Updated: 2022/12/27 16:08:10 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/27 16:22:58 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,5 +44,5 @@ void	ft_execvp(char *file, char *argv[])
 		err_exit(path, "Permission denied", 126);
 	// Execute
 	execve(path, argv, g_env.environ);
-	fatal_exit(path);
+	fatal_exit("execve");
 }

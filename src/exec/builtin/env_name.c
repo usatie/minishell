@@ -6,14 +6,14 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/23 11:26:50 by susami            #+#    #+#             */
-/*   Updated: 2022/12/24 23:41:21 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/27 16:56:45 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include "minishell.h"
 
-int	putenv_name(char *name)
+void	putenv_name(char *name)
 {
 	char	**environ_name;
 	int		i;
@@ -31,20 +31,19 @@ int	putenv_name(char *name)
 	{
 		free(environ_name[i]);
 		environ_name[i] = name;
-		return (0);
+		return ;
 	}
 	// Insert
 	environ_name = (char **)ft_reallocf(environ_name,
 			(i + 2) * sizeof(char *), i * sizeof(char *));
 	if (environ_name == NULL)
-		return (-1);
+		fatal_exit("ft_reallocf");
 	environ_name[i] = name;
 	environ_name[i + 1] = NULL;
 	g_env.environ_name = environ_name;
-	return (0);
 }
 
-int	unsetenv_name(char *name)
+void	unsetenv_name(char *name)
 {
 	char	**environ_name;
 	int		i;
@@ -67,5 +66,4 @@ int	unsetenv_name(char *name)
 		else
 			i++;
 	}
-	return (0);
 }

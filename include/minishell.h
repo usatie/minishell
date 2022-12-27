@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/27 16:10:49 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/27 17:32:33 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -233,8 +233,8 @@ int			ft_unset(char *argv[]);
 int			ft_env(char **argv);
 int			ft_exit(char **argv);
 // builtin/env_name.c
-int			putenv_name(char *name);
-int			unsetenv_name(char *name);
+void		putenv_name(char *name);
+void		unsetenv_name(char *name);
 
 // exec/search_path.c
 char		*search_path(char *cmd);

@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/09 08:48:46 by susami            #+#    #+#             */
-/*   Updated: 2022/12/22 21:51:56 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/27 16:19:28 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ t_str	*new_str(t_str_kind kind, char *pos, size_t len, t_str *params)
 
 	s = ft_calloc(sizeof(t_str), 1);
 	if (s == NULL)
-		fatal_exit("ft_calloc()");
+		fatal_exit("ft_calloc");
 	s->pos = pos;
 	s->len = len;
 	s->kind = kind;

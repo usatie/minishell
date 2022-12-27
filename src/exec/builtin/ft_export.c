@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 09:25:42 by susami            #+#    #+#             */
-/*   Updated: 2022/12/27 09:32:12 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/27 17:31:21 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,18 +51,17 @@ static void	export_single_assignment(char *string)
 			return ;
 		}
 		// If not exists, add to nameonly environ
-		if (putenv_name(string) < 0)
-			fatal_exit("putenv_name()");
+		putenv_name(string);
 		return ;
 	}
 	name = ft_strndup(string, name_end - string);
 	if (name == NULL)
-		fatal_exit("strndup()");
+		fatal_exit("ft_strndup");
 	unsetenv_name(name);
 	free(name);
 	// export name=value
 	if (ft_putenv(string) < 0)
-		fatal_exit("ft_putenv()");
+		fatal_exit("ft_putenv");
 	return ;
 }
 
@@ -75,7 +74,7 @@ static void	export_all(char **argv)
 	while (argv[i])
 	{
 		assignment = ft_strdup(argv[i]);
-		if (!assignment)
+		if (assignment == NULL)
 			fatal_exit("ft_strdup");
 		export_single_assignment(assignment);
 		i++;

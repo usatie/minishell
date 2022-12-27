@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 09:26:21 by susami            #+#    #+#             */
-/*   Updated: 2022/12/27 10:26:15 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/27 17:04:44 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,10 @@ int	ft_cd(char *argv[])
 	}
 	pwd = ft_getenv("PWD");
 	if (pwd)
-		ft_setenv("OLDPWD", pwd, 1);
+	{
+		if (ft_setenv("OLDPWD", pwd, 1) < 0)
+			fatal_exit("ft_setenv");
+	}
 	else
 	{
 		if (getcwd(cwd, PATH_MAX) == NULL)
@@ -77,13 +80,11 @@ int	ft_cd(char *argv[])
 			ft_perror("getcwd");
 			return (1);
 		}
-		ft_setenv("OLDPWD", cwd, 1);
+		if (ft_setenv("OLDPWD", cwd, 1) < 0)
+			fatal_exit("ft_setenv");
 		pwd = ft_strdup(cwd);
 		if (pwd == NULL)
-		{
-			ft_perror("ft_strdup");
-			return (1);
-		}
+			fatal_exit("ft_strdup");
 	}
 	setpwd(pwd, path);
 	return (0);
@@ -115,7 +116,8 @@ static void	setpwd(char *oldpwd, char *path)
 		else
 			append(newpath, &path, path);
 	}
-	ft_setenv("PWD", newpath, 1);
+	if (ft_setenv("PWD", newpath, 1) < 0)
+		fatal_exit("ft_setenv");
 }
 
 // Delete the last element of the path

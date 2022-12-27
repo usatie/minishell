@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/21 14:01:00 by susami            #+#    #+#             */
-/*   Updated: 2022/12/24 09:41:01 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/27 16:20:22 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	read_heredoc(const char *delimiter, bool is_delim_quoted)
 		rl_event_hook = check_state;
 	// Open pipe
 	if (pipe(pfd) < 0)
-		fatal_exit("pipe()");
+		fatal_exit("pipe");
 	// Read from stdin, Write to pipe
 	while (!g_env.heredoc_interrupted)
 	{

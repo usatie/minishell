@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 23:58:13 by susami            #+#    #+#             */
-/*   Updated: 2022/12/26 08:49:09 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/27 16:21:54 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	prepare_pipes_before_fork(t_pipeline *pipeline)
 	if (pipeline->next == NULL)
 		return ;
 	if (pipe(pipeline->outpipe) < 0)
-		fatal_exit("pipe()");
+		fatal_exit("pipe");
 	cpy_pipe(pipeline->next->inpipe, pipeline->outpipe);
 }
 
