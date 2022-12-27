@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/21 15:16:43 by susami            #+#    #+#             */
-/*   Updated: 2022/12/26 08:47:58 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/27 15:02:39 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,4 +25,20 @@ t_pipeline	*new_pipeline(void)
 	pipeline->outpipe[0] = -1;
 	pipeline->outpipe[1] = STDOUT_FILENO;
 	return (pipeline);
+}
+
+int	pipeline_len(t_pipeline *pipeline)
+{
+	if (pipeline == NULL)
+		return (0);
+	return (1 + pipeline_len(pipeline->next));
+}
+
+pid_t	pipeline_last_pid(t_pipeline *pipeline)
+{
+	if (pipeline == NULL)
+		return (-1);
+	while (pipeline->next)
+		pipeline = pipeline->next;
+	return (pipeline->pid);
 }

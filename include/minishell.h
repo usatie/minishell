@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/27 09:25:03 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/27 15:02:49 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -213,6 +213,8 @@ bool		at_eof(const t_token *tok);
 
 // pipeline.c
 t_pipeline	*new_pipeline(void);
+int			pipeline_len(t_pipeline *pipeline);
+pid_t		pipeline_last_pid(t_pipeline *pipeline);
 
 // gen.c
 t_pipeline	*gen(t_node *node);

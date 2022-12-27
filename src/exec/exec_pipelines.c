@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 10:26:01 by susami            #+#    #+#             */
-/*   Updated: 2022/12/26 11:10:55 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/27 15:02:57 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,18 +55,25 @@ static void	forkexec(t_pipeline *pipeline)
 
 static void	wait_pipelines(t_pipeline *pipelines, int *stat_loc)
 {
-	t_pipeline	*cur;
+	int			status;
+	int			num_pipelines;
+	pid_t		last_pid;
+	pid_t		wait_result;
 
-	cur = pipelines;
-	while (cur)
+	num_pipelines = pipeline_len(pipelines);
+	last_pid = pipeline_last_pid(pipelines);
+	while (num_pipelines > 0)
 	{
-		if (waitpid(cur->pid, stat_loc, 0) < 0)
+		wait_result = wait(&status);
+		if (wait_result < 0)
 		{
 			if (errno == EINTR)
 				continue ;
 			else
 				fatal_exit("waitpid()");
 		}
-		cur = cur->next;
+		else if (wait_result == last_pid)
+			*stat_loc = status;
+		num_pipelines--;
 	}
 }
