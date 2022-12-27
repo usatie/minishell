@@ -206,6 +206,7 @@ assert 'cd . \n pwd \n echo $PWD $OLDPWD'
 assert 'cd .. \n pwd \n echo $PWD $OLDPWD'
 assert 'cd /// \n pwd \n echo $PWD $OLDPWD'
 assert 'cd /tmp/// \n pwd \n echo $PWD $OLDPWD'
+assert 'cd /tmp \n cd /etc \n cd - \n cd - \n cd - \n cd - \n'
 
 ## env
 # assert 'env' # output doesn't match bash's

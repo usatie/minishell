@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 09:26:21 by susami            #+#    #+#             */
-/*   Updated: 2022/12/27 09:26:16 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/27 10:26:15 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,17 +38,30 @@ cd [-L|-P] [dir]
 int	ft_cd(char *argv[])
 {
 	char	cwd[PATH_MAX];
-	char	*path;
+	char	path[PATH_MAX];
 	char	*pwd;
 
-	path = argv[1];
-	if (path == NULL)
-		path = ft_getenv("HOME");
-	if (path == NULL)
+	if (argv[1] == NULL)
 	{
-		ft_custom_perror("cd", "HOME not set");
-		return (1);
+		if (ft_getenv("HOME") == NULL)
+		{
+			ft_custom_perror("cd", "HOME not set");
+			return (1);
+		}
+		ft_strlcpy(path, ft_getenv("HOME"), PATH_MAX);
 	}
+	else if (ft_strcmp(argv[1], "-") == 0)
+	{
+		if (ft_getenv("OLDPWD") == NULL)
+		{
+			ft_custom_perror("cd", "OLDPWD not set");
+			return (1);
+		}
+		ft_strlcpy(path, ft_getenv("OLDPWD"), PATH_MAX);
+		ft_putendl_fd(path, STDOUT_FILENO);
+	}
+	else
+		ft_strlcpy(path, argv[1], PATH_MAX);
 	if (chdir(path) < 0)
 	{
 		ft_perror("cd");
