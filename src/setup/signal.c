@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 13:10:41 by susami            #+#    #+#             */
-/*   Updated: 2022/12/26 11:10:06 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/27 15:59:05 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static void	setup_sigint(void)
 	sa.sa_flags = 0;
 	sa.sa_handler = handler;
 	if (sigaction(SIGINT, &sa, NULL) < 0)
-		exit(1);
+		fatal_exit("sicaction");
 }
 
 void	ignore_signal(int signum)
@@ -49,7 +49,7 @@ void	ignore_signal(int signum)
 	sa_ignore.sa_flags = 0;
 	sigemptyset(&sa_ignore.sa_mask);
 	if (sigaction(signum, &sa_ignore, NULL) < 0)
-		exit(1);
+		fatal_exit("sicaction");
 }
 
 void	default_signal(int signum)
@@ -60,5 +60,5 @@ void	default_signal(int signum)
 	sa_ignore.sa_flags = 0;
 	sigemptyset(&sa_ignore.sa_mask);
 	if (sigaction(signum, &sa_ignore, NULL) < 0)
-		exit(1);
+		fatal_exit("sicaction");
 }

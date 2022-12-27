@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/21 22:53:54 by susami            #+#    #+#             */
-/*   Updated: 2022/12/24 09:50:40 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/27 16:01:23 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static int	open_redirect_srcfd(t_pipeline *pipelines)
 		else if (rd->kind == RD_HEREDOC)
 			rd->srcfd = read_heredoc(rd->delimiter, rd->is_delim_quoted);
 		else
-			err_exit("Unexpected Redirect kind");
+			fatal_exit("Unexpected Redirect kind");
 		if (rd->srcfd < 0)
 		{
 			ft_perror(rd->path);

@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 23:55:55 by susami            #+#    #+#             */
-/*   Updated: 2022/12/27 09:30:40 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/27 16:08:10 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,20 +31,17 @@ void	ft_execvp(char *file, char *argv[])
 		exit(0);
 	// Builtin
 	if (isbuiltin(file))
-	{
-		exec_builtin(argv);
-		exit(0);
-	}
+		exit(exec_builtin(argv));
 	if (file[0] == '.' || file[0] == '/')
 		path = file;
 	else
 		path = search_path(file);
 	if (path == NULL || !is_regular_file(path))
-		err_exit3(file, "command not found", 127);
+		err_exit(file, "command not found", 127);
 	if (access(path, F_OK) < 0)
-		err_exit3(path, "No such file or directory", 127);
+		err_exit(path, "No such file or directory", 127);
 	if (access(path, X_OK) < 0)
-		err_exit3(path, "Permission denied", 126);
+		err_exit(path, "Permission denied", 126);
 	// Execute
 	execve(path, argv, g_env.environ);
 	fatal_exit(path);

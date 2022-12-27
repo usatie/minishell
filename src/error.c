@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/09 15:03:49 by susami            #+#    #+#             */
-/*   Updated: 2022/12/25 11:21:47 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/27 16:09:04 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,10 @@ void	ft_perror(const char *s)
 	perror(s);
 }
 
-void	ft_custom_perror(const char *s, const char *error_msg)
+void	ft_custom_perror(const char *location, const char *error_msg)
 {
 	write(STDERR_FILENO, PERROR_PREFIX, sizeof(PERROR_PREFIX));
-	write(STDERR_FILENO, s, ft_strlen(s));
+	write(STDERR_FILENO, location, ft_strlen(location));
 	write(STDERR_FILENO, ": ", 2);
 	write(STDERR_FILENO, error_msg, ft_strlen(error_msg));
 	write(STDERR_FILENO, "\n", 1);
@@ -37,14 +37,8 @@ void	fatal_exit(char *s)
 	exit(1);
 }
 
-void	err_exit(char *s)
+void	err_exit(const char *location, const char *error_msg, int status)
 {
-	ft_perror(s);
-	exit(127);
-}
-
-void	err_exit3(const char *s, const char *error_msg, int status)
-{
-	ft_custom_perror(s, error_msg);
+	ft_custom_perror(location, error_msg);
 	exit(status);
 }
