@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/27 22:06:18 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/28 14:47:51 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -298,5 +298,8 @@ void		free_pipeline(t_pipeline *pipeline);
 
 // exec.c
 int			exec(t_pipeline *pipelines);
+
+// env.c
+void		init_env(t_env *e);
 
 #endif

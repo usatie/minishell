@@ -8,6 +8,7 @@ LIBFT     = libft/libft.a
 LIBS      = -lreadline -L$(RLDIR)/lib -lft -L libft          # linker flags
 SRCS      = src/minishell.c\
             src/error.c\
+            src/env.c\
 			src/lib/ft_syscall.c\
 			src/lib/ft_putenv.c\
 			src/lib/ft_setenv.c\
