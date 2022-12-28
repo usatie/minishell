@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 10:25:51 by susami            #+#    #+#             */
-/*   Updated: 2022/12/26 14:52:46 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/27 22:07:02 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ t_token	*tokenize(char *line)
 	t_token	head;
 	t_token	*cur;
 
+	g_env.tokenize_error = false;
 	head.next = NULL;
 	cur = &head;
 	while (*line)

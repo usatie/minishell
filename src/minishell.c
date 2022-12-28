@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 14:21:05 by susami            #+#    #+#             */
-/*   Updated: 2022/12/27 09:40:55 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/28 07:50:44 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,37 @@ void	init_env(t_env *e)
 	e->environ = environ_dup();
 }
 
+#define TOKENIZE_ERROR 258
+#define SYNTAX_ERROR 258
+
+void	newinterpret(char *line, int *stat_loc)
+{
+	t_token		*tok;
+	t_node		*node;
+	t_pipeline	*pipelines;
+
+	tok = tokenize(line);
+	if (g_env.tokenize_error)
+		*stat_loc = TOKENIZE_ERROR;
+	else if (at_eof(tok))
+		*stat_loc = g_env.status;
+	else
+	{
+		node = parse(tok);
+		if (g_env.syntax_error)
+			*stat_loc = SYNTAX_ERROR;
+		else
+		{
+			expand(node);
+			pipelines = gen(node);
+			*stat_loc = exec(pipelines);
+			free_pipeline(pipelines);
+		}
+		free_node(node);
+	}
+	free_tok(tok);
+}
+
 int	interpret(char *line)
 {
 	int			status;
@@ -97,7 +128,7 @@ int	main(void)
 			break ;
 		if (*line)
 			add_history(line);
-		g_env.status = interpret(line);
+		newinterpret(line, &g_env.status);
 		free(line);
 	}
 	return (g_env.status);

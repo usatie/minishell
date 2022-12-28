@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/27 17:33:51 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/27 22:06:18 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ struct s_env {
 	int						status;
 	char					status_str[12];
 	volatile sig_atomic_t	sig;
+	bool					tokenize_error;
 	bool					syntax_error;
 	bool					heredoc_interrupted;
 	char					**environ_name;

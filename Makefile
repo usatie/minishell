@@ -29,6 +29,7 @@ SRCS      = src/minishell.c\
 			src/tokenize/str.c\
 			src/tokenize/str_to_word.c\
 			src/tokenize/str_tokenize.c\
+            src/tokenize/error.c\
             src/parse/parse.c\
 			src/parse/node.c\
 			src/parse/util.c\
