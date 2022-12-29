@@ -217,6 +217,12 @@ assert 'env | grep "USER"'
 assert 'export foo=bar\nenv | grep "foo=bar"'
 assert 'export bar \n env | grep bar'
 assert 'export foobar \n export | grep foobar'
+assert 'export ""'
+assert 'export 1'
+assert 'export $'
+assert 'export ?'
+assert 'export ='
+assert 'export =='
 
 ## unset
 assert 'export foo=bar \n unset foo \n echo $foo'
@@ -273,12 +279,21 @@ rm -rf /tmp/a /tmp/b
 
 assert '""'
 assert '..'
+# assert '.' # . is a builtin command in bash
+assert './'
+assert '/'
+assert '/etc'
+assert '/etc/'
+assert '////'
 # assert '.' # Bash's `.` is a builtin command
 assert 'echo hello>test_1.txt>test_2.txt>test_3.txt' 'test_3.txt'
 assert 'ls|grep mini|sort -r|wc>test.txt' 'test.txt'
 
 # syntax error
 # assert_syntax_error 'echo ||'
+assert 'echo |'
+assert 'echo | |'
+assert '| | |'
 
 # signal
 test_sigint
