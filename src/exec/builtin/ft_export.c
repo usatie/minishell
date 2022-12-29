@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 09:25:42 by susami            #+#    #+#             */
-/*   Updated: 2022/12/27 17:31:21 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/29 16:58:52 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,22 @@ static void	print_all_variables(void)
 	}
 }
 
+static bool	is_identifier(char *s)
+{
+	if (!is_alpha_under(*s))
+		return (false);
+	s++;
+	while (*s)
+	{
+		if (!is_alpha_num_under(*s))
+			return (false);
+		s++;
+	}
+	return (true);
+}
+
 // Assignment string should be allocated and should not be freed.
-static void	export_single_assignment(char *string)
+static int	export_single_assignment(char *string)
 {
 	char	*name;
 	char	*name_end;
@@ -44,41 +58,60 @@ static void	export_single_assignment(char *string)
 	name_end = ft_strchr(string, '=');
 	if (name_end == NULL)
 	{
+		if (!is_identifier(string))
+		{
+			free(string);
+			ft_custom_perror("export", "not a valid identifier");
+			return (-1);
+		}
 		// If already exists, do nothing
 		if (ft_getenv(string))
 		{
 			free(string);
-			return ;
+			return (0);
 		}
 		// If not exists, add to nameonly environ
 		putenv_name(string);
-		return ;
+		return (0);
 	}
+	// export name=value
 	name = ft_strndup(string, name_end - string);
+	if (!is_identifier(name))
+	{
+		free(string);
+		free(name);
+		ft_custom_perror("export", "not a valid identifier");
+		return (-1);
+	}
 	if (name == NULL)
 		fatal_exit("ft_strndup");
 	unsetenv_name(name);
 	free(name);
-	// export name=value
 	if (ft_putenv(string) < 0)
 		fatal_exit("ft_putenv");
-	return ;
+	return (0);
 }
 
-static void	export_all(char **argv)
+static int	export_all(char **argv)
 {
 	char	*assignment;
+	bool	error;
 	int		i;
 
+	error = false;
 	i = 1;
 	while (argv[i])
 	{
 		assignment = ft_strdup(argv[i]);
 		if (assignment == NULL)
 			fatal_exit("ft_strdup");
-		export_single_assignment(assignment);
+		if (export_single_assignment(assignment) < 0)
+			error = true;
 		i++;
 	}
+	if (error)
+		return (-1);
+	return (0);
 }
 
 int	ft_export(char **argv)
@@ -86,6 +119,9 @@ int	ft_export(char **argv)
 	if (argv[1] == NULL)
 		print_all_variables();
 	else
-		export_all(argv);
+	{
+		if (export_all(argv) < 0)
+			return (1);
+	}
 	return (0);
 }

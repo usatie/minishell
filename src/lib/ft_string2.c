@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 21:24:32 by susami            #+#    #+#             */
-/*   Updated: 2022/12/26 15:18:20 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/29 16:49:26 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ Special Parameters
 // * @ # ? - $ ! 0 _
 bool	is_specialchr(char c)
 {
-	return (ft_strchr("?", c));
+	return (c != '\0' && ft_strchr("?", c));
 }
 
 bool	is_special_param(const char *s)

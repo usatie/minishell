@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/21 15:38:04 by susami            #+#    #+#             */
-/*   Updated: 2022/12/26 15:20:41 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/29 16:47:11 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ bool	is_alpha_num_under(char c)
 // & ; ( ) is not supported
 bool	is_metachr(char c)
 {
-	return (ft_strchr("|<>", c) || is_blank(c));
+	return ((c != '\0' && ft_strchr("|<>", c)) || is_blank(c));
 }
 
 // || & && ; ;; ( ) | <newline>
