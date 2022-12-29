@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 16:06:35 by susami            #+#    #+#             */
-/*   Updated: 2022/12/28 14:47:51 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/29 22:13:25 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,6 +164,9 @@ void		err_exit(const char *location, const char *error_msg, int status)
 			__attribute__((noreturn));
 void		impl_err_exit(const char *location, const char *error_msg)
 			__attribute__((noreturn));
+
+// tokenize/error.c
+void		tokenize_error(char *msg, char **rest, char *line);
 
 // tokenizer.c
 bool		startswith(const char *p, const char *q);

@@ -6,7 +6,7 @@
 /*   By: susami <susami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 11:34:21 by susami            #+#    #+#             */
-/*   Updated: 2022/12/26 15:19:57 by susami           ###   ########.fr       */
+/*   Updated: 2022/12/29 23:05:23 by susami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,13 +56,10 @@ t_str	*single_quotes(char **rest, char *line)
 	line++; // skip the opening quote
 	while (*line && *line != '\'')
 		line++;
-	if (*line != '\'')
-	{
-		str = new_str(STR_PLAIN, start, line - start, NULL);
-		*rest = line;
-		return (str);
-	}
-	line++;
+	if (*line == '\'')
+		line++;
+	else
+		tokenize_error("Unclosed single quote", &line, line);
 	str = new_str(STR_SINGLE, start, line - start, NULL);
 	*rest = line;
 	return (str);
@@ -87,14 +84,10 @@ t_str	*double_quotes(char **rest, char *line)
 		else
 			line++;
 	}
-	// How to handle unclosed quote? -> treat it as plain text
-	if (*line != '"')
-	{
-		free_str(params);
-		*rest = line;
-		return (new_str(STR_PLAIN, start, line - start, NULL));
-	}
-	line++;
+	if (*line == '"')
+		line++;
+	else
+		tokenize_error("Unclosed double quote", &line, line);
 	*rest = line;
 	return (new_str(STR_DOUBLE, start, line - start, params));
 }
